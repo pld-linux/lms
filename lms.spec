@@ -1,13 +1,13 @@
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
-Version:	1.3.6
-Release:	0.6
+Version:	1.5.0
+Release:	0.1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/devel/%{name}-%{version}.tar.gz
-# Source0-md5:	81cd6c52cd34ad00bae970cee461adf0
+# Source0-md5:	2775bd6d1a962bc289b73b224100b7ed
 Source1:	%{name}.conf
 URL:		http://lms.rulez.pl/
 BuildRequires:	libgadu-devel
@@ -139,12 +139,12 @@ cd ..
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/httpd/httpd.conf,%{_sysconfdir},%{_lmsvar}/{backups,templates_c},/usr/lib/lms}
-install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts,config_templates,contrib}
+install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts,contrib}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
-cp -r lib modules templates config_templates $RPM_BUILD_ROOT%{_lmsdir}
+cp -r lib modules templates $RPM_BUILD_ROOT%{_lmsdir}
 install bin/* $RPM_BUILD_ROOT%{_lmsdir}/scripts
 #cp -r contrib $RPM_BUILD_ROOT%{_lmsdir}
 
@@ -199,7 +199,6 @@ fi
 %defattr(644,root,root,755)
 %dir %{_lmsdir}/scripts
 %attr(755,root,root) %{_lmsdir}/scripts/*
-%{_lmsdir}/config_templates
 
 %files sqlpanel
 %defattr(644,root,root,755)
