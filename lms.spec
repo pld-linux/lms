@@ -27,8 +27,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 This is a package of applications in PHP and Perl for managing LANs.
 It's using MySQL or PostgreSQL. The main goal is to get the best 
-service of users at provider's level.
-The main features in LMS are:
+service of users at provider's level. The main features in LMS are:
 - database of users (name, surname, address, telefon number,
   commentary);
 - database of computers (IP, MAC);
@@ -44,10 +43,10 @@ The main features in LMS are:
 "LMS" jest skrótem od "LAN Management System". Jest to zestaw
 aplikacji w PHP i Perlu, u³atwiaj±cych zarz±dzanie sieciami
 osiedlowymi (popularnie zwanymi Amatorskimi Sieciami Komputerowymi),
-opartych o bazê danych MySQL lub PostgreSQL. G³ówne za³o¿enia to 
-uzyskanie jako¶ci us³ug oraz obs³ugi u¿ytkowników na poziomie 
-providera z prawdziwego zdarzenia. 
-Najbardziej podstawowe cechy LMS to:
+opartych o bazê danych MySQL lub PostgreSQL. G³ówne za³o¿enia to
+uzyskanie jako¶ci us³ug oraz obs³ugi u¿ytkowników na poziomie
+providera z prawdziwego zdarzenia. Najbardziej podstawowe cechy LMS
+to:
 - baza danych u¿ytkowników (imiê, nazwisko, adres, numer telefonu,
   uwagi);
 - baza danych komputerów (adres IP, adres MAC);
