@@ -138,7 +138,7 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/httpd/httpd.conf,%{_sysconfdir},%{_lmsvar}/{backups,templates_c},/usr/lib/lms}
+install -d $RPM_BUILD_ROOT{/etc/httpd/,%{_sysconfdir},%{_lmsvar}/{backups,templates_c},/usr/lib/lms}
 install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts,contrib,config_templates}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
@@ -149,7 +149,7 @@ install bin/* $RPM_BUILD_ROOT%{_lmsdir}/scripts
 #cp -r contrib $RPM_BUILD_ROOT%{_lmsdir}
 
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/httpd.conf/99_%{name}.conf
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/99_%{name}.conf
 
 # sqlpanel
 install contrib/sqlpanel/sql.php $RPM_BUILD_ROOT%{_lmsdir}/modules
