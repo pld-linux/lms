@@ -10,7 +10,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	1.5.0
-Release:	0.7.1
+Release:	0.7.2
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -192,7 +192,7 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
+%post almsd
 if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
 	echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
 	if [ -f /var/lock/subsys/httpd ]; then
@@ -212,7 +212,7 @@ else
 	echo "Run \"/etc/rc.d/init.d/almsd start\" to start almsd daemon."
 fi
 
-%preun
+%preun almds
 if [ "$1" = "0" ]; then
 	umask 027
 	if [ -d /etc/httpd/httpd.conf ]; then
