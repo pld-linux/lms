@@ -2,7 +2,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	1.3.5
-Release:	0.1
+Release:	0.3
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -10,12 +10,13 @@ Source0:	http://lms.rulez.pl/download/devel/%{name}-%{version}.tar.gz
 # Source0-md5:	fb3f05c48b0ca434cc68e8c2acd0a43f
 Source1:	%{name}.conf
 URL:		http://lms.rulez.pl/
+BuildRequires:	libgadu-devel
+BuildRequires:	mysql-devel
 Requires:	php
 Requires:	php-posix
 Requires:	php-pcre
 Requires:	webserver
 Requires:	Smarty >= 2.5.0
-BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/%{name}
@@ -66,7 +67,6 @@ Summary(pl):	LAN Managment System - skrypty
 Requires:	perl-Net-SMTP-Server
 Requires:	perl-Config-IniFiles
 Requires:	perl-DBI
-BuildArch:	noarch
 Group:		Networking/Utilities
 
 %description scripts
@@ -81,26 +81,73 @@ comiesiêcznych op³at, powiadamiania u¿ytkowników o ich zad³u¿eniu oraz
 ich automagicznego od³±czania. Mo¿esz tak¿e zbudowaæ prawdopodobnie
 ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc;
 
+%package sqlpanel
+Summary:	LAN Managment System - sqlpanel module
+Summary(pl):	LAN Managment System - modu³ sqlpanel
+Requires:	%{name}
+Group:		Networking/Utilities
+
+%description sqlpanel
+SQL-panel module allows you to execute SQL queries and directly modify data.
+
+%description sqlpanel -l pl
+Modu³ 'SQL - panel' daje mo¿liwo¶æ bezpo¶redniego dostêpu
+do bazy danych poprzez zadawanie zapytañ SQL. Wyniki wy¶wietlane s±
+w formie tabeli. Ponadto podawany jest czas wykonania zapytania.
+
+%package user
+Summary:	LAN Managment System - simple user interface
+Summary(pl):	LAN Managment System - prosty interfejs u¿ytkownika
+Requires:	%{name}
+Group:		Networking/Utilities
+
+%description user
+Simple user interface.
+
+%description user -l pl
+Prosty interfejs u¿ytkownika.
+
+%package almsd
+Summary:	LAN Managment System - almsd
+Requires:	%{name}
+Group:		Networking/Utilities
+
+%description almsd
+TODO
+
 %prep
 %setup -q -n %{name}
 
+%build
+cd daemon
+./configure
+make CC='%{__cc}' CFLAGS='%{rpmcflags} -DUSE_MYSQL -I../..'
+cd ..
+
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/httpd/httpd.conf,%{_sysconfdir},%{_lmsvar}/{backups,templates_c}}
-install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc},scripts,config_templates,contrib}
-
-#cp -r * $RPM_BUILD_ROOT%{_lmsdir}
+install -d $RPM_BUILD_ROOT{/etc/httpd/httpd.conf,%{_sysconfdir},%{_lmsvar}/{backups,templates_c},/usr/lib/lms}
+install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts,config_templates,contrib}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
 cp -r lib modules templates config_templates $RPM_BUILD_ROOT%{_lmsdir}
 install bin/* $RPM_BUILD_ROOT%{_lmsdir}/scripts
-cp -r contrib $RPM_BUILD_ROOT%{_lmsdir}
+#cp -r contrib $RPM_BUILD_ROOT%{_lmsdir}
 
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
-
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/httpd.conf/99_%{name}.conf
+
+# sqlpanel
+install contrib/sqlpanel/sql.php $RPM_BUILD_ROOT%{_lmsdir}/modules
+install contrib/sqlpanel/*.html $RPM_BUILD_ROOT%{_lmsdir}/templates
+
+# user
+install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
+
+# daemon
+install daemon/almsd daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -128,12 +175,32 @@ fi
 #
 %dir %{_lmsdir}
 %{_lmsdir}/www
+%exclude %{_lmsdir}/www/user
 %{_lmsdir}/lib
 %{_lmsdir}/modules
+%exclude %{_lmsdir}/modules/sql.php
 %{_lmsdir}/templates
+%exclude %{_lmsdir}/templates/sql.html
+%exclude %{_lmsdir}/templates/sqlprint.html
 
 %files scripts
 %defattr(644,root,root,755)
 %dir %{_lmsdir}/scripts
 %attr(755,root,root) %{_lmsdir}/scripts/*
 %{_lmsdir}/config_templates
+
+%files sqlpanel
+%defattr(644,root,root,755)
+%{_lmsdir}/modules/sql.php
+%{_lmsdir}/templates/sql.html
+%{_lmsdir}/templates/sqlprint.html
+
+%files user
+%defattr(644,root,root,755)
+%{_lmsdir}/www/user
+
+%files almsd
+%defattr(644,root,root,755)
+%dir /usr/lib/lms
+%attr(755,root,root) /usr/lib/lms/almsd
+/usr/lib/lms/*.so
