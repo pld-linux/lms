@@ -1,8 +1,8 @@
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Siec± Lokaln±
 Name:		lms
-Version:	1.0pre7
-Release:	0.2
+Version:	1.0pre8
+Release:	0.1
 License:	GPL
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{name}-%{version}.tar.gz
@@ -19,7 +19,7 @@ Requires:	perl-Config-IniFiles
 Requires:	perl-DBI
 Requires:	perl-DBD-mysql
 Requires:	perl-DBD-Pg
-Requires:	Smarty
+Requires:	Smarty >= 2.4.2
 Requires:	adodb
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
