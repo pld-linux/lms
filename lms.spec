@@ -6,7 +6,6 @@
 # - fix lms-amd64.patch
 # - almsd description
 # - cosmetics (sort in %%files and %%install)
-# - lms.init and lms.sysconfig for almsd
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
@@ -18,6 +17,8 @@ Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/devel/%{name}-%{version}.tar.gz
 # Source0-md5:	2775bd6d1a962bc289b73b224100b7ed
 Source1:	%{name}.conf
+Source2:	%{name}.init
+Source3:	%{name}.sysconfig
 Patch0:         %{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 URL:		http://lms.rulez.pl/
@@ -76,10 +77,10 @@ Najbardziej podstawowe cechy LMS to:
 %package scripts
 Summary:	LAN Managment System - scripts
 Summary(pl):	LAN Managment System - skrypty
+Group:		Networking/Utilities
 Requires:	perl-Net-SMTP-Server
 Requires:	perl-Config-IniFiles
 Requires:	perl-DBI
-Group:		Networking/Utilities
 
 %description scripts
 This package contains scripts to integrate LMS with your system,
@@ -96,8 +97,8 @@ ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc;
 %package sqlpanel
 Summary:	LAN Managment System - sqlpanel module
 Summary(pl):	LAN Managment System - modu³ sqlpanel
-Requires:	%{name}
 Group:		Networking/Utilities
+Requires:	%{name}
 
 %description sqlpanel
 SQL-panel module allows you to execute SQL queries and directly modify data.
@@ -110,8 +111,8 @@ w formie tabeli. Ponadto podawany jest czas wykonania zapytania.
 %package user
 Summary:	LAN Managment System - simple user interface
 Summary(pl):	LAN Managment System - prosty interfejs u¿ytkownika
-Requires:	%{name}
 Group:		Networking/Utilities
+Requires:	%{name}
 
 %description user
 Simple user interface.
@@ -122,6 +123,7 @@ Prosty interfejs u¿ytkownika.
 %package almsd
 Summary:	LAN Managment System - almsd
 Group:		Networking/Utilities
+Requires:	%{name}
 
 %description almsd
 TODO
@@ -134,7 +136,7 @@ TODO
 %endif
 
 %build
-%if %{without almsd}
+%if %{with almsd}
 
 cd daemon
 
@@ -156,9 +158,11 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},/etc/httpd/,%{_sysconfdir},%{_lmsvar}/{backups,templates_c},/usr/lib/lms}
-install -d $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
-
+install -d $RPM_BUILD_ROOT%{_sbindir} \
+           $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd,lms} \
+           $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},/usr/lib/lms} \
+	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
+	   
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
@@ -176,8 +180,11 @@ install contrib/sqlpanel/*.html $RPM_BUILD_ROOT%{_lmsdir}/templates
 install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 
 # daemon
-%if %{without almsd}
-install daemon/almsd-* daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
+%if %{with almsd}
+install daemon/almsd-* $RPM_BUILD_ROOT%{_sbindir}
+install daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 %endif
 
 %clean
@@ -255,10 +262,12 @@ echo
 %defattr(644,root,root,755)
 %{_lmsdir}/www/user
 
-%if %{without almsd}
+%if %{with almsd}
 %files almsd
 %defattr(644,root,root,755)
-%dir /usr/lib/lms
-%attr(755,root,root) /usr/lib/lms/almsd*
-/usr/lib/lms/*.so
+#%dir /usr/lib/lms
+%attr(755,root,root) %{_sbindir}/almsd-*
+%attr(755,root,root) /usr/lib/lms/*.so
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %endif
