@@ -9,7 +9,8 @@ Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/devel/%{name}-%{version}.tar.gz
 # Source0-md5:	2775bd6d1a962bc289b73b224100b7ed
 Source1:	%{name}.conf
-Patch0:		%{name}-amd64.patch
+Patch0:         %{name}-PLD.patch
+Patch1:		%{name}-amd64.patch
 URL:		http://lms.rulez.pl/
 BuildRequires:	libgadu-devel
 BuildRequires:	mysql-devel
@@ -118,8 +119,9 @@ TODO
 
 %prep
 %setup -q -n %{name}
-%ifarch amd64
 %patch0 -p1
+%ifarch amd64
+%patch1 -p1
 %endif
 
 %build
