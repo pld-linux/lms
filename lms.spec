@@ -1,7 +1,7 @@
 # TODO:
 # - fix lms-amd64.patch
 # - almsd description
-# - cosmetics (sort in %files and %install)
+# - cosmetics (sort in %%files and %%install)
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
