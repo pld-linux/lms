@@ -20,7 +20,6 @@ Source2:	%{name}.init
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
-Patch2:		%{name}-calendar.patch
 Patch3:		%{name}-makedhcpconf.patch
 Patch4:		%{name}-traffic.patch
 Patch5:		%{name}-pinger.patch
@@ -32,6 +31,7 @@ URL:		http://lms.rulez.pl/
 %{?with_almsd:Requires(post,preun):	/sbin/chkconfig}
 Requires:	php
 Requires:	php-gd
+Requires:	php-iconv
 Requires:	php-posix
 Requires:	php-pcre
 Requires:	webserver
@@ -146,7 +146,6 @@ wybranych us³ug.
 %ifarch amd64
 %patch1 -p1
 %endif
-#patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
@@ -178,13 +177,12 @@ install -d $RPM_BUILD_ROOT%{_sbindir} \
 	   $RPM_BUILD_ROOT%{_sysconfdir} \
 	   $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd} \
 	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},/usr/lib/lms} \
-	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user,calendar}
+	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
 cp -r lib modules templates sample $RPM_BUILD_ROOT%{_lmsdir}
-mv $RPM_BUILD_ROOT%{_lmsdir}/templates/calendar.html $RPM_BUILD_ROOT%{_lmsdir}/www/calendar
 install bin/* $RPM_BUILD_ROOT%{_sbindir}
 
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
