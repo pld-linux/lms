@@ -10,7 +10,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	1.5.1
-Release:	0.5
+Release:	0.6
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -21,6 +21,7 @@ Source2:	%{name}.init
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
+Patch2:		%{name}-calendar.patch
 URL:		http://lms.rulez.pl/
 %{?with_almsd:BuildRequires:	libgadu-devel}
 %{?with_almsd:BuildRequires:	mysql-devel}
@@ -136,6 +137,7 @@ TODO
 %ifarch amd64
 %patch1 -p1
 %endif
+%patch2 -p1
 
 %build
 %if %{with almsd}
@@ -164,12 +166,13 @@ install -d $RPM_BUILD_ROOT%{_sbindir} \
 	   $RPM_BUILD_ROOT%{_sysconfdir} \
 	   $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd} \
 	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},/usr/lib/lms} \
-	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
+	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user,calendar}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
 cp -r lib modules templates sample $RPM_BUILD_ROOT%{_lmsdir}
+mv $RPM_BUILD_ROOT%{_lmsdir}/templates/calendar.html $RPM_BUILD_ROOT%{_lmsdir}/www/calendar
 install bin/* $RPM_BUILD_ROOT%{_sbindir}
 
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
