@@ -40,9 +40,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 This is a package of applications in PHP and Perl for managing LANs.
-It's using MySQL or PostgreSQL. The main goal is to get the best 
-service of users at provider's level.
-The main features in LMS are:
+It's using MySQL or PostgreSQL. The main goal is to get the best
+service of users at provider's level. The main features in LMS are:
 - database of users (name, surname, address, telefon number,
   commentary);
 - database of computers (IP, MAC);
@@ -58,10 +57,10 @@ The main features in LMS are:
 "LMS" jest skrótem od "LAN Management System". Jest to zestaw
 aplikacji w PHP i Perlu, u³atwiaj±cych zarz±dzanie sieciami
 osiedlowymi (popularnie zwanymi Amatorskimi Sieciami Komputerowymi),
-opartych o bazê danych MySQL lub PostgreSQL. G³ówne za³o¿enia to 
-uzyskanie jako¶ci us³ug oraz obs³ugi u¿ytkowników na poziomie 
-providera z prawdziwego zdarzenia. 
-Najbardziej podstawowe cechy LMS to:
+opartych o bazê danych MySQL lub PostgreSQL. G³ówne za³o¿enia to
+uzyskanie jako¶ci us³ug oraz obs³ugi u¿ytkowników na poziomie
+providera z prawdziwego zdarzenia. Najbardziej podstawowe cechy LMS
+to:
 - baza danych u¿ytkowników (imiê, nazwisko, adres, numer telefonu,
   uwagi);
 - baza danych komputerów (adres IP, adres MAC);
@@ -103,12 +102,13 @@ Group:		Networking/Utilities
 Requires:	%{name}
 
 %description sqlpanel
-SQL-panel module allows you to execute SQL queries and directly modify data.
+SQL-panel module allows you to execute SQL queries and directly modify
+data.
 
 %description sqlpanel -l pl
-Modu³ 'SQL - panel' daje mo¿liwo¶æ bezpo¶redniego dostêpu
-do bazy danych poprzez zadawanie zapytañ SQL. Wyniki wy¶wietlane s±
-w formie tabeli. Ponadto podawany jest czas wykonania zapytania.
+Modu³ 'SQL - panel' daje mo¿liwo¶æ bezpo¶redniego dostêpu do bazy
+danych poprzez zadawanie zapytañ SQL. Wyniki wy¶wietlane s± w formie
+tabeli. Ponadto podawany jest czas wykonania zapytania.
 
 %package user
 Summary:	LAN Managment System - simple user interface
@@ -161,10 +161,10 @@ cd ..
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sbindir} \
-           $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd,lms} \
-           $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},/usr/lib/lms} \
+	   $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd,lms} \
+	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},/usr/lib/lms} \
 	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
-	   
+
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
@@ -217,23 +217,23 @@ fi
 if [ "$1" = "0" ]; then
 	umask 027
 	if [ -d /etc/httpd/httpd.conf ]; then
-	    rm -f /etc/httpd/httpd.conf/99_%{name}.conf
+		rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 	else
 		grep -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
 			/etc/httpd/httpd.conf.tmp
 		mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
 	fi
 	if [ -f /var/lock/subsys/httpd ]; then
-	    /usr/sbin/apachectl restart 1>&2
+		/usr/sbin/apachectl restart 1>&2
 	fi
 fi
 
 %preun almsd
 if [ "$1" = "0" ]; then
-        if [ -f /var/lock/subsys/lmsd ]; then
-                /etc/rc.d/init.d/lmsd stop >&2
-        fi
-        /sbin/chkconfig --del lmsd
+	if [ -f /var/lock/subsys/lmsd ]; then
+		/etc/rc.d/init.d/lmsd stop >&2
+	fi
+	/sbin/chkconfig --del lmsd
 fi
 
 %triggerpostun -- %{name} <= 1.0.4
@@ -250,7 +250,7 @@ echo
 %attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*.ini
 %config(noreplace) %verify(not size mtime md5) /etc/httpd/%{name}.conf
 #
-%dir %{_lmsvar} 
+%dir %{_lmsvar}
 %attr(770,root,http) %{_lmsvar}/backups
 %attr(770,root,http) %{_lmsvar}/templates_c
 #
