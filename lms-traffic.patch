@@ -1,6 +1,6 @@
 --- lms/modules/traffic.php.orig	2004-11-01 13:19:21.403404075 +0100
 +++ lms/modules/traffic.php	2004-11-01 13:21:32.709210849 +0100
-@@ -27,28 +27,34 @@
+@@ -27,29 +27,30 @@
  
  $bars = 1;
  
@@ -9,34 +9,34 @@
  	$_SESSION['trafficorder'] = $_POST['order'];
 +	$_SESSION['trafficnet'] = $_POST['net'];
 +}
++
++$net = isset($_SESSION['trafficnet']) ?  $_SESSION['trafficnet'] : 0;
++$order = isset($_SESSION['trafficorder']) ? $_SESSION['trafficorder'] : 'download';
  	
  switch($_GET['bar'])
  {
  	case 'hour':
--		$traffic = $LMS->Traffic( '?NOW?-(60*60)', '?NOW?', 0,
-+		$traffic = $LMS->Traffic( '?NOW?-(60*60)', '?NOW?',
-+			isset($_SESSION['trafficnet']) ?  $_SESSION['trafficnet'] : 0,
- 			isset($_SESSION['trafficorder']) ? $_SESSION['trafficorder'] : 'download');
+-		$traffic = $LMS->Traffic( time()-(60*60), time(), 0,
+-			isset($_SESSION['trafficorder']) ? $_SESSION['trafficorder'] : 'download');
++		$traffic = $LMS->Traffic( time()-(60*60), time(), $net, $order );
  	break;
  
  	case 'day':
--		$traffic = $LMS->Traffic( '?NOW?-(60*60*24)','?NOW?',  0,
-+		$traffic = $LMS->Traffic( '?NOW?-(60*60*24)','?NOW?',
-+			isset($_SESSION['trafficnet']) ?  $_SESSION['trafficnet'] : 0,
- 			isset($_SESSION['trafficorder']) ? $_SESSION['trafficorder'] : 'download');
+-		$traffic = $LMS->Traffic( time()-(60*60*24), time(),  0,
+-			isset($_SESSION['trafficorder']) ? $_SESSION['trafficorder'] : 'download');
++		$traffic = $LMS->Traffic( time()-(60*60*24), time(), $net, $order );
  	break;
  
  	case 'month':
--		$traffic = $LMS->Traffic( '?NOW?-(60*60*24*30)', '?NOW?', 0,
-+		$traffic = $LMS->Traffic( '?NOW?-(60*60*24*30)', '?NOW?',
-+			isset($_SESSION['trafficnet']) ?  $_SESSION['trafficnet'] : 0,
- 			isset($_SESSION['trafficorder']) ? $_SESSION['trafficorder'] : 'download');
+-		$traffic = $LMS->Traffic( time()-(60*60*24*30), time(), 0,
+-			isset($_SESSION['trafficorder']) ? $_SESSION['trafficorder'] : 'download');
++		$traffic = $LMS->Traffic( time()-(60*60*24*30), time(), $net, $order );
  	break;
  
  	case 'year':
--		$traffic = $LMS->Traffic( '?NOW?-(60*60*24*365)', '?NOW?', 0,
-+		$traffic = $LMS->Traffic( '?NOW?-(60*60*24*365)', '?NOW?',
-+			isset($_SESSION['trafficnet']) ?  $_SESSION['trafficnet'] : 0,
- 			isset($_SESSION['trafficorder']) ? $_SESSION['trafficorder'] : 'download');
+-		$traffic = $LMS->Traffic( time()-(60*60*24*365), time(), 0,
+-			isset($_SESSION['trafficorder']) ? $_SESSION['trafficorder'] : 'download');
++		$traffic = $LMS->Traffic( time()-(60*60*24*365), time(), $net, $order );
  	break;
  
+ 	case 'user':
