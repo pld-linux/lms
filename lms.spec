@@ -6,7 +6,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	1.5.0
-Release:	0.3
+Release:	0.4
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -203,7 +203,7 @@ fi
 
 %triggerpostun -- %{name} <= 1.0.4
 echo "WARNING!!!"
-echo "_READ_ and upgrade LMS database:
+echo "_READ_ and upgrade LMS database:"
 echo "MySQL: /usr/share/doc/%{name}-%{version}/UPGRADE-1.0-1.5.mysql.gz"
 echo "PostgreSQL: /usr/share/doc/%{name}-%{version}/UPGRADE-1.0-1.5.pgsql.gz"
 echo
