@@ -7,7 +7,7 @@
 -$_CONFIG['directories']['sys_dir'] = (! $_CONFIG['directories']['sys_dir'] ? getcwd() : $_CONFIG['directories']['sys_dir']);
 -$_CONFIG['directories']['backup_dir'] = (! $_CONFIG['directories']['backup_dir'] ? $_CONFIG['directories']['sys_dir'].'/backups' : $_CONFIG['directories']['backup_dir']);
 +$_CONFIG['directories']['sys_dir'] = (! $_CONFIG['directories']['sys_dir'] ? '/usr/share/lms' : $_CONFIG['directories']['sys_dir']);
-+$_CONFIG['directories']['backup_dir'] = (! $_CONFIG['directories']['backup_dir'] ? $_CONFIG['directories']['sys_dir'].'/var/lib/lms/backups' : $_CONFIG['directories']['backup_dir']);
++$_CONFIG['directories']['backup_dir'] = (! $_CONFIG['directories']['backup_dir'] ? '/var/lib/lms/backups' : $_CONFIG['directories']['backup_dir']);
  $_CONFIG['directories']['lib_dir'] = (! $_CONFIG['directories']['lib_dir'] ? $_CONFIG['directories']['sys_dir'].'/lib' : $_CONFIG['directories']['lib_dir']);
  $_CONFIG['directories']['modules_dir'] = (! $_CONFIG['directories']['modules_dir'] ? $_CONFIG['directories']['sys_dir'].'/modules' : $_CONFIG['directories']['modules_dir']);
  $_CONFIG['directories']['config_templates_dir'] = (! $_CONFIG['directories']['config_templates_dir'] ? $_CONFIG['directories']['sys_dir'].'/config_templates' : $_CONFIG['directories']['config_templates_dir']);
