@@ -149,7 +149,7 @@ install bin/* $RPM_BUILD_ROOT%{_lmsdir}/scripts
 #cp -r contrib $RPM_BUILD_ROOT%{_lmsdir}
 
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/99_%{name}.conf
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
 
 # sqlpanel
 install contrib/sqlpanel/sql.php $RPM_BUILD_ROOT%{_lmsdir}/modules
@@ -167,13 +167,31 @@ install config_templates/*.tpl $RPM_BUILD_ROOT%{_lmsdir}/config_templates
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ -f /var/lock/subsys/httpd ]; then
-	/usr/sbin/apachectl graceful 1>&2
+if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
+	echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
+	if [ -f /var/lock/subsys/httpd ]; then
+		/usr/sbin/apachectl restart 1>&2
+	fi
+elif [ -d /etc/httpd/httpd.conf ]; then
+	ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
+	if [ -f /var/lock/subsys/httpd ]; then
+		/usr/sbin/apachectl restart 1>&2
+	fi
 fi
 
-%postun
-if [ -f /var/lock/subsys/httpd ]; then
-	/usr/sbin/apachectl graceful 1>&2
+%preun
+if [ "$1" = "0" ]; then
+	umask 027
+	if [ -d /etc/httpd/httpd.conf ]; then
+	    rm -f /etc/httpd/httpd.conf/99_%{name}.conf
+	else
+		grep -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
+			/etc/httpd/httpd.conf.tmp
+		mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
+	fi
+	if [ -f /var/lock/subsys/httpd ]; then
+	    /usr/sbin/apachectl restart 1>&2
+	fi
 fi
 
 %files
@@ -181,7 +199,7 @@ fi
 %doc doc/{AUTHORS,ChangeLog*,README,TODO,UPGRADE*,lms*}
 %dir %{_sysconfdir}
 %attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*.ini
-%config(noreplace) %verify(not size mtime md5) /etc/httpd/httpd.conf/99_%{name}.conf
+%config(noreplace) %verify(not size mtime md5) /etc/httpd/%{name}.conf
 #
 %dir %{_lmsvar} 
 %attr(770,root,http) %{_lmsvar}/backups
