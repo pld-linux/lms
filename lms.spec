@@ -6,8 +6,9 @@
 # - fix lms-amd64.patch
 # - almsd description
 # - cosmetics (sort in %%files and %%install)
-# - fix pinger.c (daeminmodules/pinger)
+# - fix pinger.c (daemon/modules/pinger)
 # - contrib stuff
+# - samples
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
