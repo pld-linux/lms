@@ -1,13 +1,13 @@
 Summary:	LAN Managment System
-Summary(pl):	System Zarz±dzania Siec± Lokaln±
+Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
-Version:	1.0.3
+Version:	1.0.4
 Release:	1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{name}-%{version}.tar.gz
-# Source0-md5:	652d5e675cd5e10cc736a4a644aeb106
+# Source0-md5:	1481b7b7b8c14a739ce38f14c1fd2aeb
 Patch0:		%{name}-PLD.patch
 URL:		http://lms.rulez.pl/
 Requires:	php
@@ -26,9 +26,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 This is a package of applications in PHP and Perl for managing LANs.
-It's using MySQL (for now) but PostgreSQL will be supported in near
-future. The main goal is to get the best service of users at
-provider's level.
+It's using MySQL or PostgreSQL. The main goal is to get the best 
+service of users at provider's level.
 The main features in LMS are:
 - database of users (name, surname, address, telefon number,
   commentary);
@@ -36,21 +35,18 @@ The main features in LMS are:
 - easy-ridden financial system and funds of network;
 - different subscriptions;
 - sending warnings to users;
-- autogenerating dhcpd.conf;
-- autogenerating firewall rules (ipchains/iptables);
-- autogenerating idents for ident daemon;
 - many levels of access for LMS administrators;
-- integration with LinuxStat package;
-- autogenerating ARP rules (ether auth);
-- autogenerating DNS files.
+- autogenerating ipchains, iptables, dhcpd, ethers file, oidentd,
+  openbsd packet filter configuration files/scripts;
+- autogenerating almost any kind of config file using templates;
 
 %description -l pl
 "LMS" jest skrótem od "LAN Management System". Jest to zestaw
 aplikacji w PHP i Perlu, u³atwiaj±cych zarz±dzanie sieciami
 osiedlowymi (popularnie zwanymi Amatorskimi Sieciami Komputerowymi),
-opartych o bazê danych MySQL (docelowo, do wyboru, MySQL lub
-PostgreSQL). G³ówne za³o¿enia to uzyskanie jako¶ci us³ug oraz obs³ugi
-u¿ytkowników na poziomie providera z prawdziwego zdarzenia.
+opartych o bazê danych MySQL lub PostgreSQL. G³ówne za³o¿enia to 
+uzyskanie jako¶ci us³ug oraz obs³ugi u¿ytkowników na poziomie 
+providera z prawdziwego zdarzenia. 
 Najbardziej podstawowe cechy LMS to:
 - baza danych u¿ytkowników (imiê, nazwisko, adres, numer telefonu,
   uwagi);
@@ -60,14 +56,11 @@ Najbardziej podstawowe cechy LMS to:
 - ró¿ne taryfy abonamentowe;
 - wysy³anie poczt± elektroniczn± upomnieñ do u¿ytkowników;
 - automatyczne naliczanie op³at miesiêcznych;
-- generowanie dhcpd.conf;
-- generowanie regu³ firewalla (ipchains/iptables);
-- generowanie identów dla demona oidentd;
 - ró¿ne poziomy dostêpu do funkcji LMS dla administratorów;
-- generowanie wpisów ARP (blokada adresów IP po ARP);
-- generowanie wpisów do DNS.
+- generowanie regu³ i plików konfiguracyjnych dla ipchains, iptables,
+  dhcpd, oidentd, packet filtra openbsd, wpisów /etc/ethers
 - generowanie praktycznie ka¿dego pliku konfiguracyjnego na podstawie
-  danych w bazie.
+  danych w bazie przy u¿yciu prostych szablonów;
 
 %package scripts
 Summary:	LAN Managment System - scripts
@@ -88,7 +81,7 @@ lms-mgc.
 Ten pakiet zawiera skrypty do zintegrowania LMS z systemem, naliczania
 comiesiêcznych op³at, powiadamiania u¿ytkowników o ich zad³u¿eniu oraz
 ich automagicznego od³±czania. Mo¿esz tak¿e zbudowaæ prawdopodobnie
-ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc.
+ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc;
 
 %prep
 %setup -q -n %{name}
