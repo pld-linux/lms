@@ -92,3 +92,25 @@
  $_CONFIG['directories']['smarty_templates_dir'] = (! $_CONFIG['directories']['smarty_templates_dir'] ? $_CONFIG['directories']['sys_dir'].'/templates' : $_CONFIG['directories']['smarty_templates_dir']);
  
  foreach(lms_parse_ini_file($_CONFIG['directories']['lib_dir'].'/config_defaults.ini', TRUE) as $section => $values)
+--- lsm/modules/accountadd.php	2005-03-05 11:03:13.000000000 +0100
++++ lms/modules/accountadd.php	2005-03-07 14:17:47.048620236 +0100
+@@ -75,7 +75,7 @@
+ 				array(	$account['ownerid'], 
+ 					$account['login'], 
+ 					crypt($account['passwd1']), 
+-					'/home/'.$account['login'],
++					'/home/users/'.$account['login'],
+ 					$account['expdate'],
+ 					$account['domainid'],
+ 					$account['type']
+--- lsm/modules/accountedit.php	2005-03-05 11:03:13.000000000 +0100
++++ lms/modules/accountedit.php	2005-03-07 14:18:03.834859599 +0100
+@@ -112,7 +112,7 @@
+ 			$LMS->DB->Execute('UPDATE passwd SET ownerid = ?, login = ?, home = ?, expdate = ?, domainid = ?, type = ? WHERE id = ?', 
+ 				array(	$account['ownerid'], 
+ 					$account['login'], 
+-					'/home/'.$account['login'],
++					'/home/users/'.$account['login'],
+ 					$account['expdate'],
+ 					$account['domainid'],
+ 					$account['type'],
