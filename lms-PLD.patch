@@ -9,7 +9,7 @@
  
 -$_SYSTEM_DIR = (! $_CONFIG[directories]['sys_dir'] ? getcwd() : $_CONFIG[directories]['sys_dir']);
 -$_BACKUP_DIR = (! $_CONFIG[directories]['backup_dir'] ? $_SYSTEM_DIR.'/backups' : $_CONFIG[directories]['backup_dir']);
-+$_SYSTEM_DIR = (! $_CONFIG[directories]['sys_dir'] ? '/usr/lib/lms' : $_CONFIG[directories]['sys_dir']);
++$_SYSTEM_DIR = (! $_CONFIG[directories]['sys_dir'] ? '/usr/share/lms' : $_CONFIG[directories]['sys_dir']);
 +$_BACKUP_DIR = (! $_CONFIG[directories]['backup_dir'] ? '/var/lib/lms/backups' : $_CONFIG[directories]['backup_dir']);
  $_LIB_DIR = (! $_CONFIG[directories]['lib_dir'] ? $_SYSTEM_DIR.'/lib' : $_CONFIG[directories]['lib_dir']);
  $_MODULES_DIR = (! $_CONFIG[directories]['modules_dir'] ? $_SYSTEM_DIR.'/modules' : $_CONFIG[directories]['modules_dir']);
@@ -34,3 +34,23 @@
  $_DBNAME = (! $_CONFIG['database']['database'] ? 'lms' : $_CONFIG['database']['database']);
  
 Only in lms: index.php~
+--- lms/sample/lms.ini~	Sun Aug  8 02:54:14 2004
++++ lms/sample/lms.ini	Sun Aug  8 02:54:14 2004
+@@ -166,7 +166,7 @@
+ ; lib_dir.
+ ; http://smarty.php.net
+ 
+-; smarty_dir		= /usr/lib/php/Smarty
++; smarty_dir		= /usr/share/pear/Smarty
+ 
+ ; Katalog kompilacji Smartyego. Miejsce gdzie Smarty psuje nasze
+ ; templejty. Domy¶lnie to templates_c w katalogu sysdir.
+@@ -182,7 +182,7 @@
+ ; podkatalog adodb w lib_dir.
+ ; http://php.weblogs.com/ADOdb
+ ;
+-; adodb_dir		= /usr/lib/php/adodb
++; adodb_dir		= /usr/share/pear/adodb
+ 
+ ; ---------------------------------------------------------------------------
+ ; Konfiguracja skryptu do powiadamiania - lms-notify
