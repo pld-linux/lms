@@ -7,6 +7,7 @@ License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{name}-%{version}.tar.gz
+# Source0-md5:	976fe1c627369c01e9868e326c11de09
 Patch0:		%{name}-PLD.patch
 URL:		http://lms.rulez.pl/
 Requires:	php
