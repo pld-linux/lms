@@ -30,7 +30,7 @@ It's using MySQL (for now) but PostgreSQL will be supported in near
 future. The main goal is to get the best service of users at
 provider's level.
 The main features in LMS are:
-- database of users (name, surname, address, telefon number, 
+- database of users (name, surname, address, telefon number,
   commentary);
 - database of computers (IP, MAC);
 - easy-ridden financial system and funds of network;
