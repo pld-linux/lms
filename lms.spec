@@ -2,7 +2,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	1.0.4
-Release:	1
+Release:	2
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -21,7 +21,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_lmsdir		/home/services/httpd/html/%{name}
 %define		_sharedstatedir	/var/lib
-# when spec'll be finished, this sould go to RA-branch
+# when spec'll be finished, this should go to RA-branch
 # because sharedstatedir is already defined at rpm macros from HEAD
 
 %description
@@ -90,18 +90,17 @@ ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc;
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_lmsdir}/img
-install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
 install -d $RPM_BUILD_ROOT%{_bindir}
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 install -d $RPM_BUILD_ROOT%{_sharedstatedir}/%{name}/{backups,templates_c}
-install -d $RPM_BUILD_ROOT%{_libexecdir}/%{name}/{lib,modules,templates}
+install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/{lib,modules,templates}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}
 install bin/* $RPM_BUILD_ROOT%{_bindir}
-install lib/* $RPM_BUILD_ROOT%{_libexecdir}/%{name}/lib
+install lib/* $RPM_BUILD_ROOT%{_datadir}/%{name}/lib
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/img
-install modules/* $RPM_BUILD_ROOT%{_libexecdir}/%{name}/modules
-install templates/* $RPM_BUILD_ROOT%{_libexecdir}/%{name}/templates
+install modules/* $RPM_BUILD_ROOT%{_datadir}/%{name}/modules
+install templates/* $RPM_BUILD_ROOT%{_datadir}/%{name}/templates
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
 %clean
@@ -111,15 +110,15 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc doc/* sample/*.ini sample/*txt sample/rc.reminder_1st sample/crontab-entry
 %dir %{_lmsdir}
-%dir %{_libexecdir}/%{name}
+%dir %{_datadir}/%{name}
 %dir %{_sharedstatedir}/%{name}
 %attr(770,root,http) %{_sharedstatedir}/%{name}/templates_c
 %attr(770,root,http) %{_sharedstatedir}/%{name}/backups
 %{_lmsdir}/*.php
 %{_lmsdir}/img
-%{_libexecdir}/%{name}/lib
-%{_libexecdir}/%{name}/modules
-%{_libexecdir}/%{name}/templates
+%{_datadir}/%{name}/lib
+%{_datadir}/%{name}/modules
+%{_datadir}/%{name}/templates
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/*.ini
 
