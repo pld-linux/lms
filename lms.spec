@@ -3,7 +3,6 @@
 %bcond_without	almsd		# without almsd daemon
 #
 # TODO:
-# - fix lms-amd64.patch
 # - almsd description
 # - cosmetics (sort in %%files and %%install)
 # - fix pinger.c (daemon/modules/pinger)
