@@ -7,7 +7,7 @@
 # chkconfig:	2345 90 15
 # description:	almsd daemon for LMS
 # processname:	almsd
-# config:	/etc/sysconfig/lms
+# config:	/etc/sysconfig/almsd
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -16,7 +16,7 @@
 . /etc/sysconfig/network
 
 # Get service config
-[ -f /etc/sysconfig/lms ] && . /etc/sysconfig/lms
+[ -f /etc/sysconfig/almsd ] && . /etc/sysconfig/almsd
 
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
