@@ -1,0 +1,3 @@
+# almsd database type
+ALMSD_DATABASE_TYPE="mysql"
+# ALMSD_DATABASE_TYPE="pgsql"
