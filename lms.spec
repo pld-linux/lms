@@ -86,6 +86,8 @@ install -d $RPM_BUILD_ROOT%{_localstatedir}/backup
 install *.php $RPM_BUILD_ROOT%{_lmsdir}
 install bin/* $RPM_BUILD_ROOT%{_bindir}
 install lib/* $RPM_BUILD_ROOT%{_lmsdir}/lib
+install img/* $RPM_BUILD_ROOT%{_lmsdir}/img
+install modules/* $RPM_BUILD_ROOT%{_lmsdir}/modules
 install templates/* $RPM_BUILD_ROOT%{_lmsdir}/templates
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
