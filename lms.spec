@@ -114,7 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc doc sample/*.ini sample/*txt sample/rc.reminder_1st sample/crontab-entry
+%doc doc/* sample/*.ini sample/*txt sample/rc.reminder_1st sample/crontab-entry
 %dir %{_lmsdir}
 %dir %{_libexecdir}/%{name}
 %dir %{_sharedstatedir}/%{name}
