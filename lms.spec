@@ -3,7 +3,6 @@
 %bcond_without	almsd		# without almsd daemon
 #
 # TODO:
-# - almsd description
 # - cosmetics (sort in %%files and %%install)
 # - contrib split
 Summary:	LAN Managment System
@@ -125,11 +124,18 @@ Simple user interface.
 Prosty interfejs u¿ytkownika.
 
 %package almsd
-Summary:	LAN Managment System - almsd
+Summary:	LAN Managment System - LMS system backend
+Summary(pl):	LAN Managment System - backend systemu LMS
 Group:		Networking/Utilities
 
 %description almsd
-TODO
+A program to manage the server by creating configuration files based
+upon LMS database and restarting selected services.
+
+%description almsd -l pl
+Program zarz±dzaj±cy serwerem poprzez tworzenie plików
+konfiguracyjnych na podstawie bazy danych LMS'a i restartowanie
+wybranych us³ug.
 
 %prep
 %setup -q -n %{name}
