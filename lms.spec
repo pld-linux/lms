@@ -19,6 +19,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_lmsdir		/home/services/httpd/html/%{name}
 %define		_sharedstatedir	/var/lib
+# when spec'll be finished, this sould go to RA-branch
+# becouse sharedstatedir is already defined at rpm macros from HEAD
 
 %description
 This is a package of applications in PHP and Perl for managing LANs.
