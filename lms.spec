@@ -185,7 +185,7 @@ install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 %if %{with almsd}
 install daemon/almsd-* $RPM_BUILD_ROOT%{_sbindir}
 install daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/lmsd
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 %endif
 
@@ -206,11 +206,11 @@ elif [ -d /etc/httpd/httpd.conf ]; then
 fi
 
 %post almsd
-/sbin/chkconfig --add almsd
-if [ -f /var/lock/subsys/almsd ]; then
-	/etc/rc.d/init.d/almsd restart >&2
+/sbin/chkconfig --add lmsd
+if [ -f /var/lock/subsys/lmsd ]; then
+	/etc/rc.d/init.d/lmsd restart >&2
 else
-	echo "Run \"/etc/rc.d/init.d/almsd start\" to start almsd daemon."
+	echo "Run \"/etc/rc.d/init.d/lmsd start\" to start almsd daemon."
 fi
 
 %preun
@@ -230,10 +230,10 @@ fi
 
 %preun almsd
 if [ "$1" = "0" ]; then
-        if [ -f /var/lock/subsys/almsd ]; then
-                /etc/rc.d/init.d/almsd stop >&2
+        if [ -f /var/lock/subsys/lmsd ]; then
+                /etc/rc.d/init.d/lmsd stop >&2
         fi
-        /sbin/chkconfig --del almsd
+        /sbin/chkconfig --del lmsd
 fi
 
 %triggerpostun -- %{name} <= 1.0.4
@@ -283,9 +283,8 @@ echo
 %if %{with almsd}
 %files almsd
 %defattr(644,root,root,755)
-#%dir /usr/lib/lms
 %attr(755,root,root) %{_sbindir}/almsd-*
 %attr(755,root,root) /usr/lib/lms/*.so
-%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/lmsd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %endif
