@@ -1,18 +1,18 @@
 diff -urP lms.orig/index.php lms/index.php
---- lms.orig/index.php	Tue Apr 15 00:56:57 2003
-+++ lms/index.php	Tue Apr 15 00:57:20 2003
+--- lms.orig/index.php	Fri Jun 13 00:31:55 2003
++++ lms/index.php	Fri Jun 13 00:37:20 2003
 @@ -53,14 +53,14 @@
  									
  // Define directories and configuration vars
  
 -$_SYSTEM_DIR = (! $_CONFIG[directories]['sys_dir'] ? getcwd() : $_CONFIG[directories]['sys_dir']);
--$_BACKUP_DIR = (! $_CONFIG[directories]['backup_dir'] ? $_SYSTEM_DIR."/backups/" : $_CONFIG[directories]['backup_dir']);
--$_LIB_DIR = (! $_CONFIG[directories]['lib_dir'] ? $_SYSTEM_DIR."/lib/" : $_CONFIG[directories]['lib_dir']);
--$_MODULES_DIR = (! $_CONFIG[directories]['modules_dir'] ? $_SYSTEM_DIR."/modules/" : $_CONFIG[directories]['modules_dir']);
--$_SMARTY_DIR = (! $_CONFIG[directories]['smarty_dir'] ? $_LIB_DIR."/Smarty/" : $_CONFIG[directories]['smarty_dir']);
--$_SMARTY_COMPILE_DIR = (! $_CONFIG[directories]['smarty_compile_dir'] ? $_SYSTEM_DIR."/templates_c" : $_CONFIG[directories]['smarty_compile_dir']);
--$_SMARTY_TEMPLATES_DIR = (! $_CONFIG[directories]['smarty_templates_dir'] ? $_SYSTEM_DIR."/templates" : $_CONFIG[directories]['smarty_templates_dir']);
--$_ADODB_DIR = (! $_CONFIG[directories]['adodb_dir'] ? $_LIB_DIR."/adodb/" : $_CONFIG[directories]['adodb_dir']);
+-$_BACKUP_DIR = (! $_CONFIG[directories]['backup_dir'] ? $_SYSTEM_DIR.'/backups' : $_CONFIG[directories]['backup_dir']);
+-$_LIB_DIR = (! $_CONFIG[directories]['lib_dir'] ? $_SYSTEM_DIR.'/lib' : $_CONFIG[directories]['lib_dir']);
+-$_MODULES_DIR = (! $_CONFIG[directories]['modules_dir'] ? $_SYSTEM_DIR.'/modules' : $_CONFIG[directories]['modules_dir']);
+-$_SMARTY_DIR = (! $_CONFIG[directories]['smarty_dir'] ? $_LIB_DIR.'/Smarty' : $_CONFIG[directories]['smarty_dir']);
+-$_SMARTY_COMPILE_DIR = (! $_CONFIG[directories]['smarty_compile_dir'] ? $_SYSTEM_DIR.'/templates_c' : $_CONFIG[directories]['smarty_compile_dir']);
+-$_SMARTY_TEMPLATES_DIR = (! $_CONFIG[directories]['smarty_templates_dir'] ? $_SYSTEM_DIR.'/templates' : $_CONFIG[directories]['smarty_templates_dir']);
+-$_ADODB_DIR = (! $_CONFIG[directories]['adodb_dir'] ? $_LIB_DIR.'/adodb' : $_CONFIG[directories]['adodb_dir']);
 +$_SYSTEM_DIR = (! $_CONFIG[directories]['sys_dir'] ? '/usr/lib/lms/' : $_CONFIG[directories]['sys_dir']);
 +$_BACKUP_DIR = (! $_CONFIG[directories]['backup_dir'] ? '/var/lib/lms/backups/' : $_CONFIG[directories]['backup_dir']);
 +$_LIB_DIR = (! $_CONFIG[directories]['lib_dir'] ? $_SYSTEM_DIR.'/lib/' : $_CONFIG[directories]['lib_dir']);
@@ -26,10 +26,10 @@ diff -urP lms.orig/index.php lms/index.php
  
 @@ -76,7 +76,7 @@
  
- $_DBTYPE = (! $_CONFIG[database]['type'] ? "mysql" : $_CONFIG[database]['type']);
- $_DBHOST = (! $_CONFIG[database]['host'] ? "localhost" : $_CONFIG[database]['host']);
--$_DBUSER = (! $_CONFIG[database]['user'] ? "root" : $_CONFIG[database]['user']);
-+$_DBUSER = (! $_CONFIG[database]['user'] ? "mysql" : $_CONFIG[database]['user']);
- $_DBPASS = (! $_CONFIG[database]['password'] ? "" : $_CONFIG[database]['password']);
- $_DBNAME = (! $_CONFIG[database]['database'] ? "lms" : $_CONFIG[database]['database']);
+ $_DBTYPE = (! $_CONFIG[database]['type'] ? 'mysql' : $_CONFIG[database]['type']);
+ $_DBHOST = (! $_CONFIG[database]['host'] ? 'localhost' : $_CONFIG[database]['host']);
+-$_DBUSER = (! $_CONFIG[database]['user'] ? 'root' : $_CONFIG[database]['user']);
++$_DBUSER = (! $_CONFIG[database]['user'] ? 'mysql' : $_CONFIG[database]['user']);
+ $_DBPASS = (! $_CONFIG[database]['password'] ? '' : $_CONFIG[database]['password']);
+ $_DBNAME = (! $_CONFIG[database]['database'] ? 'lms' : $_CONFIG[database]['database']);
  
