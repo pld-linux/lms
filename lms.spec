@@ -1,13 +1,13 @@
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Siec± Lokaln±
 Name:		lms
-Version:	1.0.1
+Version:	1.0.2
 Release:	1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
-# Source0-md5:	a1de45fcfbb12c8a1e4eda988b84b78d
 Source0:	http://lms.rulez.pl/download/%{name}-%{version}.tar.gz
+# Source0-md5:	b0010c9f4a37f54eb02576a95d1c89c6
 Patch0:		%{name}-PLD.patch
 URL:		http://lms.rulez.pl/
 Requires:	php
