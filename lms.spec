@@ -11,12 +11,12 @@ Requires:	php
 Requires:	webserver
 Requires:	mysql
 Requires:	perl-POSIX
-Requires:	perl-GetOpt-Long
-Requires:	perl-Net-SMTP
+Requires:	perl-Getopt-Long
+Requires:	perl-Net-SMTP-Server
 Requires:	perl-Config-IniFiles
 Requires:	perl-DBI
 Requires:	perl-DBD-mysql
-Requires:	perl-DBD-pg
+Requires:	perl-DBD-Pg
 Requires:	Smarty
 Requires:	ADOdb
 BuildArch:	noarch
