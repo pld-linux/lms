@@ -1,0 +1,26 @@
+--- lms/bin/lms-makedhcpconf.orig       2004-10-26 08:13:40.000000000 +0200
++++ lms/bin/lms-makedhcpconf    2004-10-26 08:19:44.000000000 +0200
+@@ -137,6 +137,7 @@
+ my $cperm = $ini->val('dhcp','config_permission') || '0600';
+ my $olddhcpd = $ini->val('dhcp','ignore_ddns') || '';
+ my $logfacility = $ini->val('dhcp','log_facility') || '';
++my $authoritative = $ini->val('dhcp','authoritative') || 1;
+
+ my $dbhost = $ini->val('database', 'host') || 'localhost';
+ my $dbuser = $ini->val('database', 'user') || 'root';
+@@ -226,6 +227,14 @@
+ 		print DHCPDCONF "\tsubnet $row->{'address'} netmask $row->{'mask'} { # Network: $key (ID:$row->{'id'})\n";
+ 		print DHCPDCONF "\t\tdefault-lease-time $ndeflease;\n";
+ 		print DHCPDCONF "\t\tmax-lease-time $nmaxlease;\n";
++		if($authoritative)
++		{
++		        print DHCPDCONF "\t\tauthoritative;\n";
++		}
++		else
++		{
++		        print DHCPDCONF "\t\tnot authoritative;\n";
++		}
+ 		if($row->{'dhcpstart'} && $row->{'dhcpend'})
+ 		{
+ 			print DHCPDCONF "\t\trange $row->{'dhcpstart'} $row->{'dhcpend'};\n";
+
