@@ -22,7 +22,7 @@ Patch1:		%{name}-amd64.patch
 URL:		http://lms.rulez.pl/
 %{?with_almsd:BuildRequires:	libgadu-devel}
 %{?with_almsd:BuildRequires:	mysql-devel}
-%{?with_almsdl:BuildRequires:	postgresql-devel}
+%{?with_almsd:BuildRequires:	postgresql-devel}
 Requires:	php
 Requires:	php-posix
 Requires:	php-pcre
@@ -133,8 +133,7 @@ TODO
 %endif
 
 %build
-%if %{with almsd}
-%endif
+%if %{without almsd}
 
 cd daemon
 
@@ -176,7 +175,9 @@ install contrib/sqlpanel/*.html $RPM_BUILD_ROOT%{_lmsdir}/templates
 install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 
 # daemon
+%if %{without almsd}
 install daemon/almsd-* daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -253,8 +254,10 @@ echo
 %defattr(644,root,root,755)
 %{_lmsdir}/www/user
 
+%if %{without almsd}
 %files almsd
 %defattr(644,root,root,755)
 %dir /usr/lib/lms
 %attr(755,root,root) /usr/lib/lms/almsd*
 /usr/lib/lms/*.so
+%endif
