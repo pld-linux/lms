@@ -1,0 +1,174 @@
+diff -ur lms-cvs.orig/lib/LMS.class.php lms-cvs/lib/LMS.class.php
+--- lms-cvs.orig/lib/LMS.class.php	2005-02-02 21:09:04.226695078 +0100
++++ lms-cvs/lib/LMS.class.php	2005-02-02 21:08:30.677015322 +0100
+@@ -1221,6 +1221,12 @@
+ 		return $this->DB->GetOne('SELECT ownerid FROM nodes WHERE id=?', array($id));
+ 	}
+ 
++	function NodeAssignmentUpdate($nodedata)
++	{
++		$this->SetTS('nodesassignments');
++		return $this->DB->Execute('UPDATE nodesassignments SET assignmentid=? WHERE nodeid=?',array($nodedata['assignment'],$nodedata['id']));
++	}
++
+ 	function NodeUpdate($nodedata)
+ 	{
+ 		$this->SetTS('nodes');
+@@ -1272,7 +1278,17 @@
+ 	{
+ 		return $this->DB->GetOne('SELECT name FROM nodes WHERE ipaddr=inet_aton(?)', array($ipaddr));
+ 	}
++ 	
++	function GetNodeAssignment($id)
++	{
++		return $this->DB->GetOne('SELECT assignmentid FROM nodesassignments WHERE nodeid=?',array($id));
++	}
+ 
++	function GetNodeTariff($id)
++	{
++		return $this->DB->GetOne('SELECT name FROM tariffs LEFT JOIN assignments ON (tariffs.id=assignments.tariffid) WHERE assignments.id=?',array($id));
++	}
++	
+ 	function GetNode($id)
+ 	{
+ 		if($result = $this->DB->GetRow('SELECT id, name, ownerid, ipaddr, inet_ntoa(ipaddr) AS ip, mac, access, warning, creationdate, moddate, creatorid, modid, netdev, lastonline, info FROM nodes WHERE id=?', array($id)))
+@@ -1296,6 +1312,8 @@
+ 			$result['netname'] = $this->GetNetworkName($result['netid']);
+ 			$result['producer'] = get_producer($result['mac']);
+ 			$result['devicename'] = $this->GetNetDevName($result['netdevid']);
++			$result['assignment'] = $this->GetNodeAssignment($id);
++			$result['tariff'] = $this->GetNodeTariff($result['assignment']);
+ 			return $result;
+ 		}else
+ 			return FALSE;
+@@ -1488,6 +1506,12 @@
+ 			return $this->DB->Execute('UPDATE nodes SET access=0 WHERE netdev=? AND ownerid=0', array($netdev));
+ 	}
+ 	
++	function NodeAssignmentAdd($nodedata)
++	{
++		$this->SetTS('nodesassignments');
++		return $this->DB->Execute('INSERT INTO nodesassignments (nodeid,assignmentid) VALUES (?,?)',array($nodedata['id'], $nodedata['assignment']));
++	}
++
+ 	function NodeAdd($nodedata)
+ 	{
+ 		$this->SetTS('nodes');
+diff -ur lms-cvs.orig/modules/nodeadd.php lms-cvs/modules/nodeadd.php
+--- lms-cvs.orig/modules/nodeadd.php	2005-02-02 21:11:40.954932764 +0100
++++ lms-cvs/modules/nodeadd.php	2005-02-01 20:51:45.000000000 +0100
+@@ -81,7 +81,8 @@
+ 
+ 	if(!$error)
+ 	{
+-		$nodeid = $LMS->NodeAdd($nodedata);
++		$nodeid=$LMS->NodeAdd($nodedata);
++		$LMS->NodeAssignmentAdd($nodedata);
+ 		if($nodedata['reuse']=='')
+ 		{
+ 			header('Location: ?m=nodeinfo&id='.$nodeid);
+diff -ur lms-cvs.orig/modules/nodeedit.php lms-cvs/modules/nodeedit.php
+--- lms-cvs.orig/modules/nodeedit.php	2005-02-02 21:11:41.036919912 +0100
++++ lms-cvs/modules/nodeedit.php	2005-02-01 20:51:45.000000000 +0100
+@@ -130,6 +130,8 @@
+ 
+ 	if(!$error)
+ 	{
++		if ($nodeinfo['assignment']) $LMS->NodeAssignmentUpdate($nodeedit);
++		else $LMS->NodeAssignmentAdd($nodeedit);
+ 		$LMS->NodeUpdate($nodeedit);
+ 		header('Location: ?m=nodeinfo&id='.$nodeedit['id']);
+ 	}
+diff -ur lms-cvs.orig/templates/nodeaddbox.html lms-cvs/templates/nodeaddbox.html
+--- lms-cvs.orig/templates/nodeaddbox.html	2005-01-31 22:09:20.000000000 +0100
++++ lms-cvs/templates/nodeaddbox.html	2005-02-01 20:52:10.000000000 +0100
+@@ -35,6 +35,22 @@
+ 	</TR>
+ 	<TR CLASS="LIGHT">
+ 		<TD WIDTH="1%" CLASS="FLEFT">
++		<IMG SRC="img/money.gif" BORDER="0" ALT=""></A>
++		</TD>
++		<TD WIDTH="1%" NOWRAP>
++			<B>Taryfa:</B>
++		</TD>
++		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
++			<SELECT SIZE="1" NAME="nodeedit[assignment]" {tip text="Wybierz taryfê z listy" trigger="assigment"}>
++				<OPTION VALUE="0" {if ! $nodeinfo.assignment}SELECTED{/if}>--- Brak ---</OPTION>
++				{section name="assignment" loop=$assignments}
++				<OPTION VALUE="{$assignments[assignment].id}" {if $nodeinfo.assignment == $assignments[assignment].id} SELECTED {/if}>{$assignments[assignment].name} ({$assignments[assignment].id})</OPTION>
++				{/section}
++			</SELECT>
++		</TD>
++	</TR>
++	<TR CLASS="LIGHT">
++		<TD WIDTH="1%" CLASS="FLEFT">
+ 			<IMG SRC="img/{if ! $nodedata.access}no{/if}access.gif" BORDER="0" ALT="">
+ 		</TD>
+ 		<TD WIDTH="1%" NOWRAP>
+diff -ur lms-cvs.orig/templates/nodeeditbox.html lms-cvs/templates/nodeeditbox.html
+--- lms-cvs.orig/templates/nodeeditbox.html	2005-01-07 21:26:18.000000000 +0100
++++ lms-cvs/templates/nodeeditbox.html	2005-01-14 22:10:19.000000000 +0100
+@@ -49,6 +49,20 @@
+ 	</TR>
+ 	<TR CLASS="LIGHT">
+ 		<TD WIDTH="1%" CLASS="FLEFT">
++			<IMG SRC="img/money.gif" BORDER="0" ALT=""></A>
++		</TD>
++		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
++			<SELECT SIZE="1" NAME="nodeedit[assignment]" {tip text="Wybierz taryfê z listy" trigger="assigment"}>
++				<OPTION VALUE="0" {if ! $nodeinfo.assignment}SELECTED{/if}>--- Brak ---</OPTION>
++				{section name="assignment" loop=$assignments}
++				<OPTION VALUE="{$assignments[assignment].id}" {if $nodeinfo.assignment == $assignments[assignment].id} SELECTED {/if}>{$assignments[assignment].name} ({$assignments[assignment].id})</OPTION>
++				{/section}
++
++			</SELECT>
++		</TD>
++	</TR>
++	<TR CLASS="LIGHT">
++		<TD WIDTH="1%" CLASS="FLEFT">
+ 			<IMG SRC="img/{if ! $nodeinfo.access}no{/if}access.gif" BORDER="0" ALT="">
+ 		</TD>
+ 		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
+diff -ur lms-cvs.orig/templates/nodeinfobox.html lms-cvs/templates/nodeinfobox.html
+--- lms-cvs.orig/templates/nodeinfobox.html	2005-01-20 18:53:16.000000000 +0100
++++ lms-cvs/templates/nodeinfobox.html	2005-02-02 21:18:44.702467494 +0100
+@@ -57,6 +57,14 @@
+ 	</TR>
+ 	<TR CLASS="LIGHT">
+ 		<TD WIDTH="1%" CLASS="FLEFT">
++			<IMG SRC="img/money.gif" BORDER="0" ALT=""></A>
++		</TD>
++		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
++			<B>{if $nodeinfo.assignment}{$nodeinfo.tariff} ({$nodeinfo.assignment|string_format:"%04d"}){else}BRAK{/if}</B>
++		</TD>
++	</TR>	
++	<TR CLASS="LIGHT">
++		<TD WIDTH="1%" CLASS="FLEFT">
+ 			<A HREF="?m=nodeset&id={$nodeinfo.id}"><IMG SRC="img/{if ! $nodeinfo.access}no{/if}access.gif" BORDER="0" ALT=""></A>
+ 		</TD>
+ 		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
+@@ -108,8 +116,8 @@
+ 	<TR CLASS="LIGHT">
+ 		<TD WIDTH="100%" CLASS="FBOTTOMU" COLSPAN="3" ALIGN="RIGHT">
+ 			<A HREF="?m=userinfo&id={$nodeinfo.ownerid}">{t}All nodes{/t} <IMG SRC="img/cancel.gif" BORDER="0" ALT="" ALIGN="absmiddle"></A>
+-			<A HREF="?m=nodedel&id={$nodeinfo.id}" onClick="return confirmLink(this, '{t 0=$nodeinfo.name|upper}Are you sure, you want to remove node \'$0\' from database?{/t}')">{t}Delete{/t} <IMG SRC="img/delete.gif" BORDER="0" ALT="" ALIGN="absmiddle"></A>
+-			<A HREF="?m=nodeedit&id={$nodeinfo.id}" ACCESSKEY="E">{t}Edit{/t} <IMG SRC="img/edit.gif" BORDER="0" ALT="" ALIGN="absmiddle"></A>
+-		</TD>
+-	</TR>	
++			<A HREF="?m=nodedel&id={$nodeinfo.id}" onClick="return confirmLink(this, '{t}{$nodeinfo.name|upper}Are you sure, you want to remove node \'$0\' from database?{/t}')">{t}Delete{/t} <IMG SRC="img/delete.gif" BORDER="0" ALT="" ALIGN="absmiddle"></A>
++		<A HREF="?m=nodeedit&id={$nodeinfo.id}" ACCESSKEY="E">{t}Edit{/t} <IMG SRC="img/edit.gif" BORDER="0" ALT="" ALIGN="absmiddle"></A>
++	</TD>
++</TR>	
+ </TABLE>
+diff -ur lms-cvs.orig/templates/userassignments.html lms-cvs/templates/userassignments.html
+--- lms-cvs.orig/templates/userassignments.html	2005-01-31 22:09:24.000000000 +0100
++++ lms-cvs/templates/userassignments.html	2005-02-01 20:52:11.000000000 +0100
+@@ -27,7 +27,7 @@
+ 					{if !$a.tariffid}
+ 					<TD WIDTH="8%" COLSPAN="8"><B>{t}Suspending of all liabilities{/t}</B></TD>
+ 					{else}
+-					<TD WIDTH="1%" NOWRAP OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'"><B><A HREF="?m=tariffinfo&id={$a.tariffid}">{$a.name}</A></B></TD>
++					<TD WIDTH="1%" NOWRAP OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'"><B><A HREF="?m=tariffinfo&id={$a.tariffid}">{$a.name} ({$a.id|string_format:"%04d"})</A></B></TD>
+ 					<TD WIDTH="1%" NOWRAP ALIGN="RIGHT" OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'">{$a.value|money_format}</TD>
+ 					<TD WIDTH="1%" NOWRAP OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'">{$a.period} ({$a.at})</TD>
+ 					<TD WIDTH="1%" NOWRAP ALIGN="RIGHT" OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'">{$a.downrate|default:"-"} kbps</TD>
