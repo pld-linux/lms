@@ -6,7 +6,7 @@
 # - cosmetics (sort in %%files and %%install)
 # - contrib split
 %define		lmsver		1.4
-%define		lmssubver	2
+%define		lmssubver	3
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
