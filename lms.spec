@@ -1,13 +1,13 @@
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Siec± Lokaln±
 Name:		lms
-Version:	1.0pre10
+Version:	1.0.0
 Release:	0.1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
+# Source0-md5:	f5fd004f7288287fb0158265b2654b3d
 Source0:	http://lms.rulez.pl/download/%{name}-%{version}.tar.gz
-# Source0-md5:	976fe1c627369c01e9868e326c11de09
 Patch0:		%{name}-PLD.patch
 URL:		http://lms.rulez.pl/
 Requires:	php
@@ -64,9 +64,10 @@ Najbardziej podstawowe cechy LMS to:
 - generowanie regu³ firewalla (ipchains/iptables);
 - generowanie identów dla demona oidentd;
 - ró¿ne poziomy dostêpu do funkcji LMS dla administratorów;
-- integracja z pakietem LinuxStat;
 - generowanie wpisów ARP (blokada adresów IP po ARP);
 - generowanie wpisów do DNS.
+- generowanie praktycznie ka¿dego pliku konfiguracyjnego na podstawie
+  danych w bazie.
 
 %package scripts
 Summary:	LAN Managment System - scripts
