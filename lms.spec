@@ -5,7 +5,6 @@
 # TODO:
 # - almsd description
 # - cosmetics (sort in %%files and %%install)
-# - fix pinger.c (daemon/modules/pinger)
 # - contrib split
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
