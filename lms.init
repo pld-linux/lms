@@ -1,0 +1,65 @@
+#!/bin/sha
+#
+# Startup script for lms (almsd)
+#
+# Adam Nowotny <domelu@pld-linux.org>
+#
+# chkconfig:	2345 90 15
+# description:	almsd daemon for LMS
+# processname:	almsd
+# config:	/etc/sysconfig/lms
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
+		msg_network_down almsd
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+# Get service config
+if [ -f /etc/sysconfig/lms ]; then
+	. /etc/sysconfig/lms
+fi
+
+RETVAL=0
+case "$1" in
+  start)
+	if [ ! -f /var/lock/subsys/lms ]; then
+		msg_starting lms
+		daemon "almsd-$ALMSD_DATABASE_TYPE -b > /dev/null 2>&1 &"
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/lms
+	else
+		msg_already_running lms
+	fi
+	;;
+  stop)
+	if [ -f /var/lock/subsys/lms ]; then
+		msg_stopping lms
+		killproc almsd-$ALMSD_DATABASE_TYPE
+		sleep 1
+		rm -f /var/lock/subsys/lms >/dev/null 2>&1
+	else
+		msg_not_running lms
+	fi
+	;;
+  restart)
+	$0 stop
+	$0 start
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart}"
+	exit 3
+esac
+
+exit $RETVAL
