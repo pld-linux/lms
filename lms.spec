@@ -2,7 +2,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	1.3.6
-Release:	0.1
+Release:	0.6
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -12,6 +12,7 @@ Source1:	%{name}.conf
 URL:		http://lms.rulez.pl/
 BuildRequires:	libgadu-devel
 BuildRequires:	mysql-devel
+BuildRequires:	postgresql-devel
 Requires:	php
 Requires:	php-posix
 Requires:	php-pcre
@@ -119,8 +120,20 @@ TODO
 
 %build
 cd daemon
-./configure
-make CC='%{__cc}' CFLAGS='%{rpmcflags} -DUSE_MYSQL -I../..'
+
+./configure --with-mysql
+make \
+	CC='%{__cc}' CFLAGS='%{rpmcflags} -DUSE_MYSQL -I../..'
+mv almsd almsd-mysql
+
+rm db.o
+
+./configure --with-pgsql
+make almsd \
+	CC='%{__cc}' \
+	CFLAGS='%{rpmcflags} -DUSE_PGSQL -I../..'
+mv almsd almsd-pgsql
+
 cd ..
 
 %install
@@ -146,7 +159,7 @@ install contrib/sqlpanel/*.html $RPM_BUILD_ROOT%{_lmsdir}/templates
 install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 
 # daemon
-install daemon/almsd daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
+install daemon/almsd-* daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -201,5 +214,5 @@ fi
 %files almsd
 %defattr(644,root,root,755)
 %dir /usr/lib/lms
-%attr(755,root,root) /usr/lib/lms/almsd
+%attr(755,root,root) /usr/lib/lms/almsd*
 /usr/lib/lms/*.so
