@@ -8,13 +8,13 @@
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
-Version:	1.5.3
+Version:	1.5.4
 Release:	0.1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/devel/%{name}-%{version}.tar.gz
-# Source0-md5:	4f8fbb8ab81fcfec02f5e498306077de
+# Source0-md5:	084cb54ef31a84834b37a8742988669b
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
@@ -146,7 +146,7 @@ wybranych us³ug.
 %ifarch amd64
 %patch1 -p1
 %endif
-%patch2 -p1
+#patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
@@ -195,7 +195,7 @@ install contrib/sqlpanel/sql.php $RPM_BUILD_ROOT%{_lmsdir}/modules
 install contrib/sqlpanel/*.html $RPM_BUILD_ROOT%{_lmsdir}/templates
 
 # user
-install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
+cp -r contrib/customer $RPM_BUILD_ROOT%{_lmsdir}/www/user
 
 # daemon
 %if %{with almsd}
