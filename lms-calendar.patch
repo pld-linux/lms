@@ -1,0 +1,11 @@
+--- lms/img/calendar.js.old	2004-10-26 22:23:15.000000000 +0200
++++ lms/img/calendar.js	2004-10-26 23:11:56.311398169 +0200
+@@ -55,7 +55,7 @@
+ 		var dir = '';
+ 
+ 	var obj_calwindow = window.open(
+-		dir+'templates/calendar.html?datetime=' + this.dt_current.valueOf()+ '&id=' + this.id,
++		dir+'calendar/calendar.html?datetime=' + this.dt_current.valueOf()+ '&id=' + this.id,
+ 		'Calendar', 'width=200,height='+(this.time_comp ? 215 : 190)+
+ 		',status=no,resizable=no,top=200,left=200,dependent=yes,alwaysRaised=yes'
+ 	);
