@@ -101,7 +101,7 @@ ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc;
 Summary:	LAN Managment System - sqlpanel module
 Summary(pl):	LAN Managment System - modu³ sqlpanel
 Group:		Networking/Utilities
-Requires:	%{name}
+Requires:	%{name} = %{version}-%{release}
 
 %description sqlpanel
 SQL-panel module allows you to execute SQL queries and directly modify
@@ -116,7 +116,7 @@ tabeli. Ponadto podawany jest czas wykonania zapytania.
 Summary:	LAN Managment System - simple user interface
 Summary(pl):	LAN Managment System - prosty interfejs u¿ytkownika
 Group:		Networking/Utilities
-Requires:	%{name}
+Requires:	%{name} = %{version}-%{release}
 
 %description user
 Simple user interface.
