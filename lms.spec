@@ -11,14 +11,11 @@ Vendor:		Rulez.PL
 Requires:	php
 Requires:	php-posix
 Requires:	webserver
-Requires:	mysql
 Requires:	perl-Net-SMTP-Server
 Requires:	perl-Config-IniFiles
 Requires:	perl-DBI
-Requires:	perl-DBD-mysql
-Requires:	perl-DBD-Pg
 Requires:	Smarty >= 2.4.2
-Requires:	adodb
+Requires:	adodb >= 2.90
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
