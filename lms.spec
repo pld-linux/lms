@@ -107,4 +107,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_lmsdir}/modules
 %{_lmsdir}/templates
 %{_localstatedir}
+%dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/*.ini
