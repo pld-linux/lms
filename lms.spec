@@ -210,7 +210,7 @@ echo
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{AUTHORS,ChangeLog*,README,TODO,lms*}
+%doc doc/{AUTHORS,ChangeLog*,README,TODO,UPGRADE*,lms*}
 %dir %{_sysconfdir}
 %attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*.ini
 %config(noreplace) %verify(not size mtime md5) /etc/httpd/%{name}.conf
