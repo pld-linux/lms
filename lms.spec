@@ -1,3 +1,5 @@
+# TODO:
+# - fix lms-amd64.patch
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
