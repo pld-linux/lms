@@ -5,18 +5,18 @@
 # TODO:
 # - cosmetics (sort in %%files and %%install)
 # - contrib split
-%define		lmsver		1.4
+%define		lmsver		1.5
 %define		lmssubver	3
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	1
+Release:	0.1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	3f94f69e5b9b8c14ca883cbe5d1c7b68
+# Source0-md5:	
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
@@ -301,7 +301,7 @@ echo
 %if %{with almsd}
 %files almsd
 %defattr(644,root,root,755)
-%doc daemon/{lms.ini.sample,TODO}
+%doc daemon/lms.ini.sample
 %attr(755,root,root) %{_sbindir}/almsd-*
 %attr(755,root,root) /usr/lib/lms/*.so
 %attr(754,root,root) /etc/rc.d/init.d/lmsd
