@@ -136,8 +136,9 @@ A program to manage the server by creating configuration files based
 upon LMS database and restarting selected services.
 
 %description almsd -l pl
-Program zarz±dzaj±cy serwerem poprzez tworzenie plików konfiguracyjnych
-na podstawie bazy danych LMS'a i restartowanie wybranych us³ug.
+Program zarz±dzaj±cy serwerem poprzez tworzenie plików
+konfiguracyjnych na podstawie bazy danych LMS'a i restartowanie
+wybranych us³ug.
 
 %prep
 %setup -q -n %{name}
