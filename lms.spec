@@ -156,12 +156,12 @@ cd ..
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/httpd/,%{_sysconfdir},%{_lmsvar}/{backups,templates_c},/usr/lib/lms}
-install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts,contrib}
+install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
-cp -r lib config_templates contrib modules templates $RPM_BUILD_ROOT%{_lmsdir}
+cp -r lib config_templates modules templates $RPM_BUILD_ROOT%{_lmsdir}
 install bin/* $RPM_BUILD_ROOT%{_lmsdir}/scripts
 
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
