@@ -19,7 +19,7 @@ Source0:	http://lms.rulez.pl/download/devel/%{name}-%{version}.tar.gz
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
-Patch0:         %{name}-PLD.patch
+Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 URL:		http://lms.rulez.pl/
 %{?with_almsd:BuildRequires:	libgadu-devel}
@@ -40,9 +40,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 This is a package of applications in PHP and Perl for managing LANs.
-It's using MySQL or PostgreSQL. The main goal is to get the best 
-service of users at provider's level.
-The main features in LMS are:
+It's using MySQL or PostgreSQL. The main goal is to get the best
+service of users at provider's level. The main features in LMS are:
 - database of users (name, surname, address, telefon number,
   commentary);
 - database of computers (IP, MAC);
@@ -58,10 +57,10 @@ The main features in LMS are:
 "LMS" jest skrótem od "LAN Management System". Jest to zestaw
 aplikacji w PHP i Perlu, u³atwiaj±cych zarz±dzanie sieciami
 osiedlowymi (popularnie zwanymi Amatorskimi Sieciami Komputerowymi),
-opartych o bazê danych MySQL lub PostgreSQL. G³ówne za³o¿enia to 
-uzyskanie jako¶ci us³ug oraz obs³ugi u¿ytkowników na poziomie 
-providera z prawdziwego zdarzenia. 
-Najbardziej podstawowe cechy LMS to:
+opartych o bazê danych MySQL lub PostgreSQL. G³ówne za³o¿enia to
+uzyskanie jako¶ci us³ug oraz obs³ugi u¿ytkowników na poziomie
+providera z prawdziwego zdarzenia. Najbardziej podstawowe cechy LMS
+to:
 - baza danych u¿ytkowników (imiê, nazwisko, adres, numer telefonu,
   uwagi);
 - baza danych komputerów (adres IP, adres MAC);
@@ -103,12 +102,13 @@ Group:		Networking/Utilities
 Requires:	%{name}
 
 %description sqlpanel
-SQL-panel module allows you to execute SQL queries and directly modify data.
+SQL-panel module allows you to execute SQL queries and directly modify
+data.
 
 %description sqlpanel -l pl
-Modu³ 'SQL - panel' daje mo¿liwo¶æ bezpo¶redniego dostêpu
-do bazy danych poprzez zadawanie zapytañ SQL. Wyniki wy¶wietlane s±
-w formie tabeli. Ponadto podawany jest czas wykonania zapytania.
+Modu³ 'SQL - panel' daje mo¿liwo¶æ bezpo¶redniego dostêpu do bazy
+danych poprzez zadawanie zapytañ SQL. Wyniki wy¶wietlane s± w formie
+tabeli. Ponadto podawany jest czas wykonania zapytania.
 
 %package user
 Summary:	LAN Managment System - simple user interface
@@ -143,14 +143,14 @@ TODO
 cd daemon
 
 ./configure --with-mysql
-make \
+%{__make} \
 	CC='%{__cc}' CFLAGS='%{rpmcflags} -DUSE_MYSQL -I../..'
 mv almsd almsd-mysql
 
 rm db.o
 
 ./configure --with-pgsql
-make almsd \
+%{__make} almsd \
 	CC='%{__cc}' \
 	CFLAGS='%{rpmcflags} -DUSE_PGSQL -I../..'
 mv almsd almsd-pgsql
@@ -162,9 +162,9 @@ cd ..
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sbindir} \
            $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd,lms} \
-           $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},/usr/lib/lms} \
+$RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},%{_prefix}/lib/lms} \
 	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
-	   
+
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
@@ -184,7 +184,7 @@ install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 # daemon
 %if %{with almsd}
 install daemon/almsd-* $RPM_BUILD_ROOT%{_sbindir}
-install daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
+install daemon/modules/*/*.so $RPM_BUILD_ROOT%{_prefix}/lib/lms
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 %endif
@@ -248,7 +248,7 @@ echo
 %attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*.ini
 %config(noreplace) %verify(not size mtime md5) /etc/httpd/%{name}.conf
 #
-%dir %{_lmsvar} 
+%dir %{_lmsvar}
 %attr(770,root,http) %{_lmsvar}/backups
 %attr(770,root,http) %{_lmsvar}/templates_c
 #
@@ -283,7 +283,7 @@ echo
 %defattr(644,root,root,755)
 #%dir /usr/lib/lms
 %attr(755,root,root) %{_sbindir}/almsd-*
-%attr(755,root,root) /usr/lib/lms/*.so
+%attr(755,root,root) %{_prefix}/lib/lms/*.so
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %endif
