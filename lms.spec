@@ -1,7 +1,7 @@
 # TODO:
 # - fix lms-amd64.patch
 # - tigger (upgrade from old 1.0.4)
-# - almsd and upgrade description
+# - almsd description
 # - cosmetics (sort in %files and %install)
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
@@ -122,18 +122,6 @@ Group:		Networking/Utilities
 %description almsd
 TODO
 
-%package upgrade
-Summary:	LAN Managment System - upgrade
-Summary(pl):	LAN Managment System - aktualizacja
-Requires:	%{name}
-Group:		Networking/Utilities
-
-%description upgrade
-TODO
-
-%description upgrade -l pl
-TODO
-
 %prep
 %setup -q -n %{name}
 %patch0 -p1
@@ -162,7 +150,7 @@ cd ..
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/httpd/,%{_sysconfdir},%{_lmsvar}/{backups,templates_c},/usr/lib/lms}
-install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts,contrib,upgrade}
+install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts,contrib}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
@@ -182,9 +170,6 @@ install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 
 # daemon
 install daemon/almsd-* daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
-
-# upgrade
-install doc/UPGRADE-* $RPM_BUILD_ROOT%{_lmsdir}/upgrade
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -259,7 +244,3 @@ fi
 %dir /usr/lib/lms
 %attr(755,root,root) /usr/lib/lms/almsd*
 /usr/lib/lms/*.so
-
-%files upgrade
-%defattr(644,root,root,755)
-%{_lmsdir}/upgrade/UPGRADE*
