@@ -102,7 +102,7 @@ ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc;
 Summary:	LAN Managment System - sqlpanel module
 Summary(pl):	LAN Managment System - modu³ sqlpanel
 Group:		Networking/Utilities
-Requires:	%{name}
+Requires:	%{name} = %{version}-%{release}
 
 %description sqlpanel
 SQL-panel module allows you to execute SQL queries and directly modify
@@ -117,7 +117,7 @@ tabeli. Ponadto podawany jest czas wykonania zapytania.
 Summary:	LAN Managment System - simple user interface
 Summary(pl):	LAN Managment System - prosty interfejs u¿ytkownika
 Group:		Networking/Utilities
-Requires:	%{name}
+Requires:	%{name} = %{version}-%{release}
 
 %description user
 Simple user interface.
@@ -129,10 +129,11 @@ Prosty interfejs u¿ytkownika.
 Summary:	LAN Managment System - LMS system backend
 Summary(pl):	LAN Managment System - backend systemu LMS
 Group:		Networking/Utilities
-Requires:	%{name}
+Requires:	%{name} = %{version}-%{release}
 
 %description almsd
-TODO
+A program to manage the server by creating configuration files based
+upon LMS database and restarting selected services.
 
 %description almsd -l pl
 Program zarz±dzaj±cy serwerem poprzez tworzenie plików konfiguracyjnych
