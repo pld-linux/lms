@@ -12,7 +12,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	0.1
+Release:	1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
