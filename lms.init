@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Startup script for lms (almsd)
+# Startup script for LMS (almsd)
 #
 # Adam Nowotny <domelu@pld-linux.org>
 #
@@ -33,23 +33,23 @@ fi
 RETVAL=0
 case "$1" in
   start)
-	if [ ! -f /var/lock/subsys/lms ]; then
-		msg_starting lms
-		daemon "almsd-$ALMSD_DATABASE_TYPE -b > /dev/null 2>&1 &"
+	if [ ! -f /var/lock/subsys/almsd ]; then
+		msg_starting almsd
+		daemon almsd-$ALMSD_DATABASE_TYPE -b
 		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/lms
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/almsd
 	else
-		msg_already_running lms
+		msg_already_running almsd
 	fi
 	;;
   stop)
-	if [ -f /var/lock/subsys/lms ]; then
-		msg_stopping lms
+	if [ -f /var/lock/subsys/almsd ]; then
+		msg_stopping almsd
 		killproc almsd-$ALMSD_DATABASE_TYPE
 		sleep 1
-		rm -f /var/lock/subsys/lms >/dev/null 2>&1
+		rm -f /var/lock/subsys/almsd >/dev/null 2>&1
 	else
-		msg_not_running lms
+		msg_not_running almsd
 	fi
 	;;
   restart)
