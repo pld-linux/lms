@@ -1,6 +1,5 @@
 # TODO:
 # - fix lms-amd64.patch
-# - tigger (upgrade from old 1.0.4)
 # - almsd description
 # - cosmetics (sort in %files and %install)
 Summary:	LAN Managment System
@@ -201,6 +200,13 @@ if [ "$1" = "0" ]; then
 	    /usr/sbin/apachectl restart 1>&2
 	fi
 fi
+
+%triggerpostun -- %{name} <= 1.0.4
+echo "WARNING!!!"
+echo "_READ_ and upgrade LMS database:
+echo "MySQL: /usr/share/doc/%{name}-%{version}/UPGRADE-1.0-1.5.mysql.gz"
+echo "PostgreSQL: /usr/share/doc/%{name}-%{version}/UPGRADE-1.0-1.5.pgsql.gz"
+echo
 
 %files
 %defattr(644,root,root,755)
