@@ -139,7 +139,7 @@ cd ..
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/httpd/httpd.conf,%{_sysconfdir},%{_lmsvar}/{backups,templates_c},/usr/lib/lms}
-install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts,contrib}
+install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts,contrib,config_templates}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
@@ -160,6 +160,8 @@ install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 
 # daemon
 install daemon/almsd-* daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
+
+install config_templates/*.tpl $RPM_BUILD_ROOT%{_lmsdir}/config_templates
 
 %clean
 rm -rf $RPM_BUILD_ROOT
