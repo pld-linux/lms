@@ -1,28 +1,26 @@
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
-Version:	1.0.4
-Release:	1
+Version:	1.3.5
+Release:	0.1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
-Source0:	http://lms.rulez.pl/download/%{name}-%{version}.tar.gz
-# Source0-md5:	1481b7b7b8c14a739ce38f14c1fd2aeb
-Patch0:		%{name}-PLD.patch
+Source0:	http://lms.rulez.pl/download/devel/%{name}-%{version}.tar.gz
+# Source0-md5:	fb3f05c48b0ca434cc68e8c2acd0a43f
+Source1:	%{name}.conf
 URL:		http://lms.rulez.pl/
 Requires:	php
 Requires:	php-posix
 Requires:	php-pcre
 Requires:	webserver
 Requires:	Smarty >= 2.5.0
-Requires:	adodb >= 2.90
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_lmsdir		/home/services/httpd/html/%{name}
-%define		_sharedstatedir	/var/lib
-# when spec'll be finished, this sould go to RA-branch
-# because sharedstatedir is already defined at rpm macros from HEAD
+%define		_sysconfdir	/etc/%{name}
+%define		_lmsdir		%{_datadir}/%{name}
+%define		_lmsvar		/var/lib/%{name}
 
 %description
 This is a package of applications in PHP and Perl for managing LANs.
@@ -85,45 +83,57 @@ ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc;
 
 %prep
 %setup -q -n %{name}
-%patch0 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_lmsdir}/img
-install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
-install -d $RPM_BUILD_ROOT%{_bindir}
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-install -d $RPM_BUILD_ROOT%{_sharedstatedir}/%{name}/{backups,templates_c}
-install -d $RPM_BUILD_ROOT%{_libexecdir}/%{name}/{lib,modules,templates}
+install -d $RPM_BUILD_ROOT{/etc/httpd/httpd.conf,%{_sysconfdir},%{_lmsvar}/{backups,templates_c}}
+install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc},scripts,config_templates,contrib}
 
-install *.php $RPM_BUILD_ROOT%{_lmsdir}
-install bin/* $RPM_BUILD_ROOT%{_bindir}
-install lib/* $RPM_BUILD_ROOT%{_libexecdir}/%{name}/lib
-install img/* $RPM_BUILD_ROOT%{_lmsdir}/img
-install modules/* $RPM_BUILD_ROOT%{_libexecdir}/%{name}/modules
-install templates/* $RPM_BUILD_ROOT%{_libexecdir}/%{name}/templates
-install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+#cp -r * $RPM_BUILD_ROOT%{_lmsdir}
+
+install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
+install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
+cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
+cp -r lib modules templates config_templates $RPM_BUILD_ROOT%{_lmsdir}
+install bin/* $RPM_BUILD_ROOT%{_lmsdir}/scripts
+cp -r contrib $RPM_BUILD_ROOT%{_lmsdir}
+
+install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
+
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/httpd.conf/99_%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+if [ -f /var/lock/subsys/httpd ]; then
+	/usr/sbin/apachectl graceful 1>&2
+fi
+
+%postun
+if [ -f /var/lock/subsys/httpd ]; then
+	/usr/sbin/apachectl graceful 1>&2
+fi
+
 %files
 %defattr(644,root,root,755)
-%doc doc/* sample/*.ini sample/*txt sample/rc.reminder_1st sample/crontab-entry
+%doc doc/{AUTHORS,ChangeLog*,README,TODO,UPGRADE*,lms*}
+%dir %{_sysconfdir}
+%attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*.ini
+%config(noreplace) %verify(not size mtime md5) /etc/httpd/httpd.conf/99_%{name}.conf
+#
+%dir %{_lmsvar} 
+%attr(770,root,http) %{_lmsvar}/backups
+%attr(770,root,http) %{_lmsvar}/templates_c
+#
 %dir %{_lmsdir}
-%dir %{_libexecdir}/%{name}
-%dir %{_sharedstatedir}/%{name}
-%attr(770,root,http) %{_sharedstatedir}/%{name}/templates_c
-%attr(770,root,http) %{_sharedstatedir}/%{name}/backups
-%{_lmsdir}/*.php
-%{_lmsdir}/img
-%{_libexecdir}/%{name}/lib
-%{_libexecdir}/%{name}/modules
-%{_libexecdir}/%{name}/templates
-%dir %{_sysconfdir}/%{name}
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/*.ini
+%{_lmsdir}/www
+%{_lmsdir}/lib
+%{_lmsdir}/modules
+%{_lmsdir}/templates
 
 %files scripts
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/lms-*
-%doc sample/*.ini
+%dir %{_lmsdir}/scripts
+%attr(755,root,root) %{_lmsdir}/scripts/*
+%{_lmsdir}/config_templates
