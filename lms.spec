@@ -29,6 +29,7 @@ URL:		http://lms.rulez.pl/
 %{?with_almsd:PreReq:		rc-scripts}
 %{?with_almsd:Requires(post,preun):	/sbin/chkconfig}
 Requires:	php
+Requires:	php-gd
 Requires:	php-posix
 Requires:	php-pcre
 Requires:	webserver
