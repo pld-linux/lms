@@ -11,6 +11,7 @@ Patch0:		%{name}-PLD.patch
 URL:		http://lms.rulez.pl/
 Requires:	php
 Requires:	php-posix
+Requires:	php-pcre
 Requires:	webserver
 Requires:	Smarty >= 2.5.0
 Requires:	adodb >= 2.90
