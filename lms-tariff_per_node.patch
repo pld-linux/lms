@@ -89,11 +89,11 @@ diff -ur lms-cvs.orig/templates/nodeaddbox.html lms-cvs/templates/nodeaddbox.htm
 +		<IMG SRC="img/money.gif" BORDER="0" ALT=""></A>
 +		</TD>
 +		<TD WIDTH="1%" NOWRAP>
-+			<B>Taryfa:</B>
++			<B>{t}Tariff:{/t}</B>
 +		</TD>
 +		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
-+			<SELECT SIZE="1" NAME="nodeedit[assignment]" {tip text="Wybierz taryfê z listy" trigger="assigment"}>
-+				<OPTION VALUE="0" {if ! $nodeinfo.assignment}SELECTED{/if}>--- Brak ---</OPTION>
++			<SELECT SIZE="1" NAME="nodeedit[assignment]" {tip text="Pick tariff from list" trigger="assigment"}>
++				<OPTION VALUE="0" {if ! $nodeinfo.assignment}SELECTED{/if}>{t}none{/t}</OPTION>
 +				{section name="assignment" loop=$assignments}
 +				<OPTION VALUE="{$assignments[assignment].id}" {if $nodeinfo.assignment == $assignments[assignment].id} SELECTED {/if}>{$assignments[assignment].name} ({$assignments[assignment].id})</OPTION>
 +				{/section}
@@ -115,8 +115,8 @@ diff -ur lms-cvs.orig/templates/nodeeditbox.html lms-cvs/templates/nodeeditbox.h
 +			<IMG SRC="img/money.gif" BORDER="0" ALT=""></A>
 +		</TD>
 +		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
-+			<SELECT SIZE="1" NAME="nodeedit[assignment]" {tip text="Wybierz taryfê z listy" trigger="assigment"}>
-+				<OPTION VALUE="0" {if ! $nodeinfo.assignment}SELECTED{/if}>--- Brak ---</OPTION>
++			<SELECT SIZE="1" NAME="nodeedit[assignment]" {tip text="Pick tariff from list" trigger="assigment"}>
++				<OPTION VALUE="0" {if ! $nodeinfo.assignment}SELECTED{/if}>{t}none{/t}</OPTION>
 +				{section name="assignment" loop=$assignments}
 +				<OPTION VALUE="{$assignments[assignment].id}" {if $nodeinfo.assignment == $assignments[assignment].id} SELECTED {/if}>{$assignments[assignment].name} ({$assignments[assignment].id})</OPTION>
 +				{/section}
@@ -139,7 +139,7 @@ diff -ur lms-cvs.orig/templates/nodeinfobox.html lms-cvs/templates/nodeinfobox.h
 +			<IMG SRC="img/money.gif" BORDER="0" ALT=""></A>
 +		</TD>
 +		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
-+			<B>{if $nodeinfo.assignment}{$nodeinfo.tariff} ({$nodeinfo.assignment|string_format:"%04d"}){else}BRAK{/if}</B>
++			<B>{if $nodeinfo.assignment}{$nodeinfo.tariff}({$nodeinfo.assignment|string_format:"%04d"}){else}{t}none{/t}{/if}</B>
 +		</TD>
 +	</TR>	
 +	<TR CLASS="LIGHT">
@@ -172,3 +172,105 @@ diff -ur lms-cvs.orig/templates/userassignments.html lms-cvs/templates/userassig
  					<TD WIDTH="1%" NOWRAP ALIGN="RIGHT" OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'">{$a.value|money_format}</TD>
  					<TD WIDTH="1%" NOWRAP OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'">{$a.period} ({$a.at})</TD>
  					<TD WIDTH="1%" NOWRAP ALIGN="RIGHT" OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'">{$a.downrate|default:"-"} kbps</TD>
+--- lms/bin/lms-traffic-htbiptlimits	2005-02-16 10:00:11.000000000 +0100
++++ lms/bin/lms-traffic-htbiptlimits	2005-02-19 08:58:07.000000000 +0100
+@@ -173,6 +173,7 @@
+ 	exit 1;
+ }
+ 
++system("cp $outfile $outfile.sav");
+ open(OUTFILE, ">$outfile") or die("Fatal error: Unable to write $outfile, exiting.\n");
+ 
+ my @local_ports_list = split(' ',$local_ports);
+@@ -251,13 +252,13 @@
+ 	my $prefix = mask2prefix($row->{'mask'});
+ 	my $netsize = 2**(32 - $prefix);
+ 	my $netend = $netstart + $netsize - 1;
+-	my $sdbq = $dbase->prepare("SELECT ipaddr, ownerid FROM nodes WHERE ipaddr >= $netstart AND ipaddr <= $netend");
++	my $sdbq = $dbase->prepare("SELECT ipaddr, assignmentid FROM nodes,nodesassignments WHERE nodes.id=nodesassignments.nodeid AND ipaddr >= $netstart AND ipaddr <= $netend");
+ 	$sdbq->execute();
+ 	while (my $srow = $sdbq->fetchrow_hashref())
+ 	{
+ 		my $ipaddr = u32todotquad($srow->{'ipaddr'});
+-		$nodetable{$srow->{'ownerid'}} = "" if not defined $nodetable{$srow->{'ownerid'}};
+-		$nodetable{$srow->{'ownerid'}} = $nodetable{$srow->{'ownerid'}} . " " . $ipaddr . ":" . $row->{'interface'};
++		$nodetable{$srow->{'assignmentid'}} = "" if not defined $nodetable{$srow->{'assignmentid'}};
++		$nodetable{$srow->{'assignmentid'}} = $nodetable{$srow->{'assignmentid'}} . " " . $ipaddr . ":" . $row->{'interface'};
+ 		$iftable{$row->{'interface'}} = $totalspd if not defined $iftable{$row->{'interface'}};
+ 	}
+ }
+@@ -271,19 +272,24 @@
+ 	
+ }
+ 
+-$dbq = $dbase->prepare("SELECT userid, SUM(uprate) AS uprate, SUM(downrate) AS downrate, SUM(upceil) AS upceil, SUM(downceil) AS downceil FROM assignments, users, tariffs WHERE users.id = userid AND deleted = 0 AND tariffid = tariffs.id AND (datefrom <= $utsfmt OR datefrom = 0) AND (dateto > $utsfmt OR dateto = 0) GROUP BY userid");
++$dbq = $dbase->prepare("SELECT nodes.access AS access, assignments.id AS assignmentid, users.name AS name,users.lastname AS lastname, tariffs.uprate AS uprate, tariffs.downrate AS downrate,tariffs.upceil AS upceil, tariffs.downceil AS downceil FROM nodesassignments, assignments, tariffs, users, nodes WHERE nodesassignments.nodeid=nodes.id AND nodesassignments.assignmentid=assignments.id AND assignments.tariffid=tariffs.id AND assignments.userid=users.id AND (datefrom <= $utsfmt OR datefrom = 0) AND (dateto > $utsfmt OR dateto = 0) GROUP BY assignments.id");
+ $dbq->execute();
+ 
+ my $iptid = 0;
+ my %htbid;
++my $uprate = 0;
++my $upceil = 0;
++my $downrate = 0;
++my $downceil = 0;
+ 
+ while (my $row = $dbq->fetchrow_hashref())
+ {
+-	if($nodetable{$row->{'userid'}} && $row->{'downrate'})
++	print OUTFILE "### ".$row->{'name'}." ".$row->{'lastname'}."\n";		
++	if($nodetable{$row->{'assignmentid'}} && $row->{'downrate'})
+ 	{
+ 		my %ifaces;
+ 		$iptid ++;
+-		foreach my $ippair (split(' ',$nodetable{$row->{'userid'}}))
++		foreach my $ippair (split(' ',$nodetable{$row->{'assignmentid'}}))
+ 		{
+ 			my ($ipaddr, $if) = split(':',$ippair);
+ 			$ifaces{$if} = 1;
+@@ -293,14 +299,24 @@
+ 		{
+ 			$htbid{$key} = 0 if not defined $htbid{$key};
+ 			$htbid{$key} ++;
+-			print OUTFILE "$tc_binary class add dev $key parent 1:19999 classid 1:".$htbid{$key}." htb rate ".$row->{'downrate'}."kbit ceil ".$row->{'downceil'}."kbit burst ".($row->{'downrate'} / 8)."kbit\n";
++			if ($row->{'access'}) 
++			{
++				$downrate=$row->{'downrate'};
++				$downceil=$row->{'downceil'};
++			}
++			else 
++			{
++                                $downrate=$row->{'downrate'}/100;				
++                                $downceil=$row->{'downceil'}/100;				
++			}
++			print OUTFILE "$tc_binary class add dev $key parent 1:19999 classid 1:".$htbid{$key}." htb rate ".$downrate."kbit ceil ".$downceil."kbit burst ".($downrate / 8)."kbit\n";
+ 			print OUTFILE "$tc_binary filter add dev $key protocol ip parent 1: handle $iptid fw classid 1:".$htbid{$key}."\n";
+ 		}
+ 	}
+-	if($nodetable{$row->{'userid'}} && $row->{'uprate'})
++	if($nodetable{$row->{'assignmentid'}} && $row->{'uprate'})
+ 	{
+ 		$iptid ++;
+-		foreach my $ippair (split(' ',$nodetable{$row->{'userid'}}))
++		foreach my $ippair (split(' ',$nodetable{$row->{'assignmentid'}}))
+ 		{
+ 			my ($ipaddr, $if) = split(':',$ippair);
+ 			print OUTFILE "$iptables_binary -t mangle -A LIMITS -s $ipaddr -j MARK --set-mark $iptid\n";
+@@ -310,7 +326,17 @@
+ 			my ($if,$spd) = split(':', $wan_interface);
+ 			$htbid{$if} = 0 if not defined $htbid{$if};
+ 			$htbid{$if} ++;
+-			print OUTFILE "$tc_binary class add dev $if parent 1:19999 classid 1:".$htbid{$if}." htb rate ".$row->{'uprate'}."kbit ceil ".$row->{'upceil'}."kbit burst ".($row->{'uprate'} / 8). "kbit\n";
++                        if ($row->{'access'})
++                        {
++                                $uprate=$row->{'uprate'};
++                                $upceil=$row->{'upceil'};
++                        }
++                        else
++                        {
++                                $uprate=$row->{'uprate'}/100;
++                                $upceil=$row->{'upceil'}/100;
++                        }
++			print OUTFILE "$tc_binary class add dev $if parent 1:19999 classid 1:".$htbid{$if}." htb rate ".$uprate."kbit ceil ".$upceil."kbit burst ".($uprate / 8). "kbit\n";
+ 			print OUTFILE "$tc_binary filter add dev $if protocol ip parent 1: handle $iptid fw classid 1:".$htbid{$if}."\n";
+ 		}
+ 	}		
