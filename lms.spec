@@ -192,7 +192,6 @@ install daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
 cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/dns
 cp -r daemon/modules/ggnotify/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/ggnotify
 cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/nofity
-
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/lmsd
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 %endif
@@ -291,6 +290,7 @@ echo
 %if %{with almsd}
 %files almsd
 %defattr(644,root,root,755)
+%doc daemon/{lms.ini.sample,TODO}
 %attr(755,root,root) %{_sbindir}/almsd-*
 %attr(755,root,root) /usr/lib/lms/*.so
 %attr(754,root,root) /etc/rc.d/init.d/lmsd
