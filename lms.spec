@@ -24,14 +24,15 @@ Requires:	ADOdb
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_lmsdir	/home/services/httpd/html/%{name}
+%define		_lmsdir		/home/services/httpd/html/%{name}
+%define		_localstatedir	/var/lib/lms
 
 %description
-This is a package of applications in PHP and Perl to managing LANs.
+This is a package of applications in PHP and Perl for managing LANs.
 It's using MySQL (for now) but PostgreSQL will be supported in near
-future. Main foundation is get the best service of users at
-providiers level.
-The main sign in LMS are:
+future. The main goal is to get the best service of users at
+provider's level.
+The main features in LMS are:
 - database of users (name, surname, address, telefon number, 
   commentary);
 - database of computers (IP, MAC);
@@ -44,7 +45,7 @@ The main sign in LMS are:
 - many levels of access for LMS administrators;
 - integration with LinuxStat package;
 - autogenerating ARP rules (ether auth);
-- autogenerating DNS files;
+- autogenerating DNS files.
 
 %description -l pl
 "LMS" jest skrótem od "LAN Management System". Jest to zestaw
@@ -68,7 +69,7 @@ Najbardziej podstawowe cechy LMS to:
 - ró¿ne poziomy dostêpu do funkcji LMS dla administratorów;
 - integracja z pakietem LinuxStat;
 - generowanie wpisów ARP (blokada adresów IP po ARP);
-- generowanie wpisów do DNS;
+- generowanie wpisów do DNS.
 
 %prep
 %setup -q -n lms
@@ -77,12 +78,12 @@ Najbardziej podstawowe cechy LMS to:
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_lmsdir}/{img,lib,modules,templates,templates_c}
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
-install -d $RPM_BUILD_ROOT%{_bindir}/
+install -d $RPM_BUILD_ROOT%{_bindir}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}
 install -d {img,lib,modules,templates,templates_c} $RPM_BUILD_ROOT%{_lmsdir}
-install -d backup $RPM_BUILD_ROOT%{_localstatedir}/%{name}/
-install bin/* $RPM_BUILD_ROOT%{_bindir}/
+install -d backup $RPM_BUILD_ROOT%{_localstatedir}
+install bin/* $RPM_BUILD_ROOT%{_bindir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -90,6 +91,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc doc
+%attr(755,root,root) %{_bindir}/lms-*
 %dir %{_lmsdir}
 %attr(770,root,http) %{_lmsdir}/templates_c
 %{_lmsdir}/*.php
@@ -97,5 +99,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_lmsdir}/lib
 %{_lmsdir}/modules
 %{_lmsdir}/templates
-%{_localstatedir}/%{name}
-%{_bindir}/lms-*
+%{_localstatedir}
