@@ -3,7 +3,6 @@
 %bcond_without	almsd		# without almsd daemon
 #
 # TODO:
-# - almsd description
 # - cosmetics (sort in %%files and %%install)
 # - contrib split
 %define		lmsver		1.4
