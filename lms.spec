@@ -25,6 +25,8 @@ URL:		http://lms.rulez.pl/
 %{?with_almsd:BuildRequires:	libgadu-devel}
 %{?with_almsd:BuildRequires:	mysql-devel}
 %{?with_almsd:BuildRequires:	postgresql-devel}
+%{?with_almsd:PreReq:		rc-scripts}
+%{?with_almsd:Requires(post,preun):	/sbin/chkconfig}
 Requires:	php
 Requires:	php-posix
 Requires:	php-pcre
@@ -201,6 +203,22 @@ elif [ -d /etc/httpd/httpd.conf ]; then
 	if [ -f /var/lock/subsys/httpd ]; then
 		/usr/sbin/apachectl restart 1>&2
 	fi
+fi
+
+%post
+/sbin/chkconfig --add almsd
+if [ -f /var/lock/subsys/almsd ]; then
+	/etc/rc.d/init.d/almsd restart >&2
+else
+	echo "Run \"/etc/rc.d/init.d/almsd start\" to start almsd daemon."
+fi
+
+%preun
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/almsd ]; then
+		/etc/rc.d/init.d/almsd stop >&2
+	fi
+	/sbin/chkconfig --del almsd
 fi
 
 %preun
