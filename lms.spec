@@ -1,19 +1,18 @@
-%define		_add pre5
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Siec± Lokaln±
 Name:		lms
-Version:	1.0
-Release:	0.2.%{_add}
+Version:	1.0pre5
+Release:	0.3
 License:	GPL
 Group:		Networking/Utilities
-Source0:	http://lms.rulez.pl/download/%{name}-%{version}%{_add}.tar.gz
+Source0:	http://lms.rulez.pl/download/%{name}-%{version}.tar.gz
 Vendor:		Rulez.PL
 Requires:	php
 Requires:	php-posix
 Requires:	webserver
 Requires:	mysql
 #Requires:	perl-Getopt-Long
-# for now i'm not sure is it required ...
+# for now i'm not sure if it's required ...
 Requires:	perl-Net-SMTP-Server
 Requires:	perl-Config-IniFiles
 Requires:	perl-DBI
