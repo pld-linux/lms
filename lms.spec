@@ -192,7 +192,7 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post almsd
+%post
 if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
 	echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
 	if [ -f /var/lock/subsys/httpd ]; then
@@ -205,6 +205,7 @@ elif [ -d /etc/httpd/httpd.conf ]; then
 	fi
 fi
 
+%post almsd
 /sbin/chkconfig --add almsd
 if [ -f /var/lock/subsys/almsd ]; then
 	/etc/rc.d/init.d/almsd restart >&2
@@ -212,7 +213,7 @@ else
 	echo "Run \"/etc/rc.d/init.d/almsd start\" to start almsd daemon."
 fi
 
-%preun almds
+%preun
 if [ "$1" = "0" ]; then
 	umask 027
 	if [ -d /etc/httpd/httpd.conf ]; then
@@ -227,6 +228,7 @@ if [ "$1" = "0" ]; then
 	fi
 fi
 
+%preun almsd
 if [ "$1" = "0" ]; then
         if [ -f /var/lock/subsys/almsd ]; then
                 /etc/rc.d/init.d/almsd stop >&2
