@@ -9,7 +9,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	1.5.1
-Release:	0.6
+Release:	0.7
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -21,6 +21,8 @@ Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 Patch2:		%{name}-calendar.patch
+Patch3:		%{name}-makedhcpconf.patch
+Patch4:		%{name}-traffic.patch
 URL:		http://lms.rulez.pl/
 %{?with_almsd:BuildRequires:	libgadu-devel}
 %{?with_almsd:BuildRequires:	mysql-devel}
@@ -144,6 +146,8 @@ wybranych us³ug.
 %patch1 -p1
 %endif
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 %build
 %if %{with almsd}
