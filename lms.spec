@@ -12,9 +12,6 @@ URL:		http://lms.rulez.pl
 Requires:	php
 Requires:	php-posix
 Requires:	webserver
-Requires:	perl-Net-SMTP-Server
-Requires:	perl-Config-IniFiles
-Requires:	perl-DBI
 Requires:	Smarty >= 2.5.0
 Requires:	adodb >= 2.90
 BuildArch:	noarch
@@ -67,6 +64,26 @@ Najbardziej podstawowe cechy LMS to:
 - generowanie wpisów ARP (blokada adresów IP po ARP);
 - generowanie wpisów do DNS.
 
+%package scripts
+Summary:	LAN Managment System - scripts
+Summary(pl):	LAN Managment System - skrypty
+Requires:	perl-Net-SMTP-Server
+Requires:	perl-Config-IniFiles
+Requires:	perl-DBI
+BuildArch:	noarch
+Group:		Networking/Utilities
+
+%description scripts
+This package contains scripts to integrate LMS with your system, monthly
+billing, notify users about their debts and cutting off customers. Also
+you can build propably any kind of config file using lms-mgc.
+
+%description scripts -l pl
+Ten pakiet zawiera skrypty do zintegrowania LMS z twoim systemem,
+naliczania comiesiêcznych op³at, powiadamiania u¿ytkowników o ich
+zad³u¿eniu oraz ich automagicznego od³±czania. Mo¿esz tak¿e zbudowaæ
+prawdopodobnie ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc.
+
 %prep
 %setup -q -n lms
 %patch0 -p1
@@ -93,8 +110,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc doc sample/lms-mgc* sample/*txt sample/rc.reminder_1st sample/crontab-entry
-%attr(755,root,root) %{_bindir}/lms-*
+%doc doc sample/*.ini sample/*txt sample/rc.reminder_1st sample/crontab-entry
 %dir %{_lmsdir}
 %dir %{_libexecdir}/%{name}
 %dir %{_sharedstatedir}/%{name}
@@ -107,3 +123,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libexecdir}/%{name}/templates
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/*.ini
+
+%files scripts
+%attr(755,root,root) %{_bindir}/lms-*
+%doc sample/*.ini
