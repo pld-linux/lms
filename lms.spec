@@ -8,13 +8,13 @@
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
-Version:	1.5.1
-Release:	0.7
+Version:	1.5.2
+Release:	0.1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/devel/%{name}-%{version}.tar.gz
-# Source0-md5:	d0a5108fd3d86ba772cb3c3346f5b9f1
+# Source0-md5:	844d2157cb319d3a150dd9774314fa9a
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
@@ -23,6 +23,7 @@ Patch1:		%{name}-amd64.patch
 Patch2:		%{name}-calendar.patch
 Patch3:		%{name}-makedhcpconf.patch
 Patch4:		%{name}-traffic.patch
+Patch5:		%{name}-pinger.patch
 URL:		http://lms.rulez.pl/
 %{?with_almsd:BuildRequires:	libgadu-devel}
 %{?with_almsd:BuildRequires:	mysql-devel}
@@ -148,6 +149,7 @@ wybranych us³ug.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 %if %{with almsd}
@@ -303,7 +305,7 @@ echo
 %if %{with almsd}
 %files almsd
 %defattr(644,root,root,755)
-%doc daemon/{lms.ini.sample,TODO}
+%doc daemon/{lms.ini.sample,Changelog}
 %attr(755,root,root) %{_sbindir}/almsd-*
 %attr(755,root,root) /usr/lib/lms/*.so
 %attr(754,root,root) /etc/rc.d/init.d/almsd
