@@ -139,12 +139,12 @@ cd ..
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/httpd/,%{_sysconfdir},%{_lmsvar}/{backups,templates_c},/usr/lib/lms}
-install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts,contrib,config_templates}
+install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts,contrib}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
-cp -r lib modules templates $RPM_BUILD_ROOT%{_lmsdir}
+cp -r lib modules templates config_templates $RPM_BUILD_ROOT%{_lmsdir}
 install bin/* $RPM_BUILD_ROOT%{_lmsdir}/scripts
 #cp -r contrib $RPM_BUILD_ROOT%{_lmsdir}
 
@@ -160,8 +160,6 @@ install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 
 # daemon
 install daemon/almsd-* daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
-
-install config_templates/*.tpl $RPM_BUILD_ROOT%{_lmsdir}/config_templates
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -212,6 +210,7 @@ fi
 %{_lmsdir}/modules
 %exclude %{_lmsdir}/modules/sql.php
 %{_lmsdir}/templates
+%{_lmsdir}/config_templates
 %exclude %{_lmsdir}/templates/sql.html
 %exclude %{_lmsdir}/templates/sqlprint.html
 
