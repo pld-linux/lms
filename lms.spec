@@ -1,13 +1,14 @@
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Siec± Lokaln±
 Name:		lms
-Version:	1.0pre9
+Version:	1.0pre10
 Release:	0.1
 License:	GPL
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{name}-%{version}.tar.gz
-Patch0:		%{name}.ini-PLD.patch
-Vendor:		Rulez.PL
+Patch0:		%{name}-PLD.patch
+Vendor:		LMS Developers
+URL:		http://lms.rulez.pl
 Requires:	php
 Requires:	php-posix
 Requires:	webserver
@@ -20,8 +21,7 @@ BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_lmsdir		/home/services/httpd/html/%{name}
-%define		_localstatedir	/var/lib/lms/
-%define		_libexecdir	/usr/lib/lms/
+%define		_sharedstatedir	/var/lib
 
 %description
 This is a package of applications in PHP and Perl for managing LANs.
@@ -77,15 +77,15 @@ install -d $RPM_BUILD_ROOT%{_lmsdir}/img
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
 install -d $RPM_BUILD_ROOT%{_bindir}
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-install -d $RPM_BUILD_ROOT%{_localstatedir}/{backups,templates_c}
-install -d $RPM_BUILD_ROOT%{_libexecdir}/{lib,modules,templates}
+install -d $RPM_BUILD_ROOT%{_sharedstatedir}/%{name}/{backups,templates_c}
+install -d $RPM_BUILD_ROOT%{_libexecdir}/%{name}/{lib,modules,templates}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}
 install bin/* $RPM_BUILD_ROOT%{_bindir}
-install lib/* $RPM_BUILD_ROOT%{_libexecdir}/lib
+install lib/* $RPM_BUILD_ROOT%{_libexecdir}/%{name}/lib
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/img
-install modules/* $RPM_BUILD_ROOT%{_libexecdir}/modules
-install templates/* $RPM_BUILD_ROOT%{_libexecdir}/templates
+install modules/* $RPM_BUILD_ROOT%{_libexecdir}/%{name}/modules
+install templates/* $RPM_BUILD_ROOT%{_libexecdir}/%{name}/templates
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
 %clean
@@ -96,14 +96,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc sample/lms-mgc* sample/*txt sample/rc.reminder_1st sample/crontab-entry
 %attr(755,root,root) %{_bindir}/lms-*
 %dir %{_lmsdir}
-%dir %{_libexecdir}
-%dir %{_localstatedir}
-%attr(770,root,http) %{_localstatedir}/templates_c
-%attr(770,root,http) %{_localstatedir}/backups
+%dir %{_libexecdir}/%{name}
+%dir %{_sharedstatedir}/%{name}
+%attr(770,root,http) %{_sharedstatedir}/%{name}/templates_c
+%attr(770,root,http) %{_sharedstatedir}/%{name}/backups
 %{_lmsdir}/*.php
 %{_lmsdir}/img
-%{_libexecdir}/lib
-%{_libexecdir}/modules
-%{_libexecdir}/templates
+%{_libexecdir}/%{name}/lib
+%{_libexecdir}/%{name}/modules
+%{_libexecdir}/%{name}/templates
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/*.ini
