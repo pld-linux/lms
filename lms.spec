@@ -12,8 +12,6 @@ Requires:	php
 Requires:	php-posix
 Requires:	webserver
 Requires:	mysql
-#Requires:	perl-Getopt-Long
-# for now i'm not sure if it's required ...
 Requires:	perl-Net-SMTP-Server
 Requires:	perl-Config-IniFiles
 Requires:	perl-DBI
