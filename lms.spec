@@ -269,6 +269,7 @@ echo
 %exclude %{_lmsdir}/modules/sql.php
 %{_lmsdir}/contrib
 %{_lmsdir}/sample
+%attr(755,root,root) %{_lmsdir}/sample/traffic_ipt.sh
 %{_lmsdir}/templates
 %{_lmsdir}/config_templates
 %exclude %{_lmsdir}/templates/sql.html
