@@ -2,10 +2,11 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Siec± Lokaln±
 Name:		lms
 Version:	1.0pre5
-Release:	0.3
+Release:	0.4
 License:	GPL
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{name}-%{version}.tar.gz
+Patch0:		%{name}.ini-PLD.patch
 Vendor:		Rulez.PL
 Requires:	php
 Requires:	php-posix
@@ -72,24 +73,27 @@ Najbardziej podstawowe cechy LMS to:
 
 %prep
 %setup -q -n lms
+%patch0 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_lmsdir}/{img,lib,modules,templates,templates_c}
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
 install -d $RPM_BUILD_ROOT%{_bindir}
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}
 install -d {img,lib,modules,templates,templates_c} $RPM_BUILD_ROOT%{_lmsdir}
 install -d backup $RPM_BUILD_ROOT%{_localstatedir}
 install bin/* $RPM_BUILD_ROOT%{_bindir}
+install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc doc
+%doc doc sample/lms-mgc* sample/*txt sample/rc.reminder_1st
 %attr(755,root,root) %{_bindir}/lms-*
 %dir %{_lmsdir}
 %attr(770,root,http) %{_lmsdir}/templates_c
@@ -99,3 +103,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_lmsdir}/modules
 %{_lmsdir}/templates
 %{_localstatedir}
+%{_sysconfdir}/%{name}
