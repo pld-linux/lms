@@ -5,22 +5,21 @@
  my $olddhcpd = $ini->val('dhcp','ignore_ddns') || '';
  my $logfacility = $ini->val('dhcp','log_facility') || '';
 +my $authoritative = $ini->val('dhcp','authoritative') || 1;
-
+ 
  my $dbhost = $ini->val('database', 'host') || 'localhost';
  my $dbuser = $ini->val('database', 'user') || 'root';
-@@ -226,6 +227,14 @@
- 		print DHCPDCONF "\tsubnet $row->{'address'} netmask $row->{'mask'} { # Network: $key (ID:$row->{'id'})\n";
- 		print DHCPDCONF "\t\tdefault-lease-time $ndeflease;\n";
- 		print DHCPDCONF "\t\tmax-lease-time $nmaxlease;\n";
-+		if($authoritative)
-+		{
-+		        print DHCPDCONF "\t\tauthoritative;\n";
-+		}
-+		else
-+		{
-+		        print DHCPDCONF "\t\tnot authoritative;\n";
-+		}
- 		if($row->{'dhcpstart'} && $row->{'dhcpend'})
- 		{
- 			print DHCPDCONF "\t\trange $row->{'dhcpstart'} $row->{'dhcpend'};\n";
-
+@@ -259,6 +260,14 @@
+ 	print DHCPDCONF "\t\tdefault-lease-time $ndeflease;\n";
+ 	print DHCPDCONF "\t\tmax-lease-time $nmaxlease;\n";
+ 
++	if($authoritative)
++	{
++	        print DHCPDCONF "\t\tauthoritative;\n";
++	}
++	else
++	{
++	        print DHCPDCONF "\t\tnot authoritative;\n";
++	}
+ 	if($row->{'dhcpstart'} && $row->{'dhcpend'})
+ 	{
+ 		print DHCPDCONF "\t\trange $row->{'dhcpstart'} $row->{'dhcpend'};\n";
