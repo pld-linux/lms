@@ -146,7 +146,7 @@ cd daemon
 
 ./configure --with-mysql
 %{__make} \
-	CC='%{__cc}' CFLAGS='%{rpmcflags} -DUSE_MYSQL -I../..'
+	CC='%{__cc}' CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -I../..'
 mv almsd almsd-mysql
 
 rm db.o
@@ -154,7 +154,7 @@ rm db.o
 ./configure --with-pgsql
 %{__make} almsd \
 	CC='%{__cc}' \
-	CFLAGS='%{rpmcflags} -DUSE_PGSQL -I../..'
+	CFLAGS='%{rpmcflags} -fPIC -DUSE_PGSQL -I../..'
 mv almsd almsd-pgsql
 
 cd ..
