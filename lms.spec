@@ -7,11 +7,13 @@ Release:	0.2.%{_add}
 License:	GPL
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{name}-%{version}%{_add}.tar.gz
+Vendor:		Rulez.PL
 Requires:	php
+Requires:	php-posix
 Requires:	webserver
 Requires:	mysql
-Requires:	perl-POSIX
-Requires:	perl-Getopt-Long
+#Requires:	perl-Getopt-Long
+# for now i'm not sure is it required ...
 Requires:	perl-Net-SMTP-Server
 Requires:	perl-Config-IniFiles
 Requires:	perl-DBI
