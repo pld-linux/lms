@@ -1,13 +1,13 @@
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
-Version:	1.3.5
-Release:	0.3
+Version:	1.3.6
+Release:	0.1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/devel/%{name}-%{version}.tar.gz
-# Source0-md5:	fb3f05c48b0ca434cc68e8c2acd0a43f
+# Source0-md5:	81cd6c52cd34ad00bae970cee461adf0
 Source1:	%{name}.conf
 URL:		http://lms.rulez.pl/
 BuildRequires:	libgadu-devel
@@ -109,7 +109,6 @@ Prosty interfejs u¿ytkownika.
 
 %package almsd
 Summary:	LAN Managment System - almsd
-Requires:	%{name}
 Group:		Networking/Utilities
 
 %description almsd
