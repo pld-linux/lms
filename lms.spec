@@ -1,5 +1,8 @@
 # TODO:
 # - fix lms-amd64.patch
+# - tigger (upgrade from old 1.0.4)
+# - lms-upgrade package
+# - fix lms-PLD.patch (paths in lms.ini)
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
