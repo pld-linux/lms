@@ -10,7 +10,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	1.5.1
-Release:	0.1
+Release:	0.3
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -126,7 +126,6 @@ Prosty interfejs u¿ytkownika.
 %package almsd
 Summary:	LAN Managment System - almsd
 Group:		Networking/Utilities
-Requires:	%{name}
 
 %description almsd
 TODO
@@ -162,8 +161,8 @@ cd ..
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sbindir} \
+	   $RPM_BUILD_ROOT%{_sysconfdir} \
 	   $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd} \
-	   $RPM_BUILD_ROOT/etc/lms/modules/{dns,ggnofity,nofity} \
 	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},/usr/lib/lms} \
 	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
 
@@ -294,7 +293,6 @@ echo
 %doc daemon/{lms.ini.sample,TODO}
 %attr(755,root,root) %{_sbindir}/almsd-*
 %attr(755,root,root) /usr/lib/lms/*.so
-%attr(754,root,root) /etc/rc.d/init.d/lmsd
-/etc/lms/modules/*
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/almsd
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/almsd
 %endif
