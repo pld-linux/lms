@@ -6,11 +6,13 @@
 # - fix lms-amd64.patch
 # - almsd description
 # - cosmetics (sort in %%files and %%install)
+# - fix pinger.c (daeminmodules/pinger)
+# - contrib stuff
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	1.5.0
-Release:	0.7.2
+Release:	0.7.3
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -161,7 +163,8 @@ cd ..
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sbindir} \
-	   $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd,lms} \
+	   $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd} \
+	   $RPM_BUILD_ROOT/etc/lms/modules/{dns,ggnofity,nofity} \
 	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},/usr/lib/lms} \
 	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
 
@@ -185,6 +188,10 @@ install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 %if %{with almsd}
 install daemon/almsd-* $RPM_BUILD_ROOT%{_sbindir}
 install daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
+cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/dns
+cp -r daemon/modules/ggnotify/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/ggnotify
+cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/nofity
+
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/lmsd
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 %endif
@@ -286,5 +293,6 @@ echo
 %attr(755,root,root) %{_sbindir}/almsd-*
 %attr(755,root,root) /usr/lib/lms/*.so
 %attr(754,root,root) /etc/rc.d/init.d/lmsd
+/etc/lms/modules/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %endif
