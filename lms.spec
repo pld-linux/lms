@@ -11,7 +11,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	1.5.0
-Release:	0.5
+Release:	0.6
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -156,14 +156,14 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/httpd/,%{_sysconfdir},%{_lmsvar}/{backups,templates_c},/usr/lib/lms}
-install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts}
+install -d $RPM_BUILD_ROOT{%{_sbindir},/etc/httpd/,%{_sysconfdir},%{_lmsvar}/{backups,templates_c},/usr/lib/lms}
+install -d $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
 cp -r lib config_templates modules templates $RPM_BUILD_ROOT%{_lmsdir}
-install bin/* $RPM_BUILD_ROOT%{_lmsdir}/scripts
+install bin/* $RPM_BUILD_ROOT%{_sbindir}
 
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
@@ -242,8 +242,8 @@ echo
 
 %files scripts
 %defattr(644,root,root,755)
-%dir %{_lmsdir}/scripts
-%attr(755,root,root) %{_lmsdir}/scripts/*
+%dir %{_sbindir}
+%attr(755,root,root) %{_sbindir}/*
 
 %files sqlpanel
 %defattr(644,root,root,755)
