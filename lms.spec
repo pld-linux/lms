@@ -152,9 +152,8 @@ install -d $RPM_BUILD_ROOT%{_lmsdir}/{www/{img,doc,user},scripts,contrib}
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
-cp -r lib modules templates config_templates $RPM_BUILD_ROOT%{_lmsdir}
+cp -r lib config_templates contrib modules templates $RPM_BUILD_ROOT%{_lmsdir}
 install bin/* $RPM_BUILD_ROOT%{_lmsdir}/scripts
-#cp -r contrib $RPM_BUILD_ROOT%{_lmsdir}
 
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
