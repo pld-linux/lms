@@ -35,7 +35,7 @@ case "$1" in
   start)
 	if [ ! -f /var/lock/subsys/almsd ]; then
 		msg_starting almsd
-		daemon almsd-$ALMSD_DATABASE_TYPE -b
+		daemon almsd-$ALMSD_DATABASE_TYPE -b </dev/null
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/almsd
 	else
