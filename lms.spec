@@ -9,19 +9,18 @@
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
-Version:	1.5.0
-Release:	0.7.4
+Version:	1.5.1
+Release:	0.1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/devel/%{name}-%{version}.tar.gz
-# Source0-md5:	2775bd6d1a962bc289b73b224100b7ed
+# Source0-md5:	d0a5108fd3d86ba772cb3c3346f5b9f1
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
-Patch2:		%{name}-pinger.patch
 URL:		http://lms.rulez.pl/
 %{?with_almsd:BuildRequires:	libgadu-devel}
 %{?with_almsd:BuildRequires:	mysql-devel}
@@ -138,7 +137,6 @@ TODO
 %ifarch amd64
 %patch1 -p1
 %endif
-%patch2 -p1
 
 %build
 %if %{with almsd}
@@ -189,11 +187,11 @@ install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 %if %{with almsd}
 install daemon/almsd-* $RPM_BUILD_ROOT%{_sbindir}
 install daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
-cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/dns
-cp -r daemon/modules/ggnotify/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/ggnotify
-cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/nofity
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/lmsd
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+#cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/dns
+#cp -r daemon/modules/ggnotify/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/ggnotify
+#cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/nofity
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/almsd
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/almsd
 %endif
 
 %clean
@@ -213,11 +211,11 @@ elif [ -d /etc/httpd/httpd.conf ]; then
 fi
 
 %post almsd
-/sbin/chkconfig --add lmsd
-if [ -f /var/lock/subsys/lmsd ]; then
-	/etc/rc.d/init.d/lmsd restart >&2
+/sbin/chkconfig --add almsd
+if [ -f /var/lock/subsys/almsd ]; then
+	/etc/rc.d/init.d/almsd restart >&2
 else
-	echo "Run \"/etc/rc.d/init.d/lmsd start\" to start almsd daemon."
+	echo "Run \"/etc/rc.d/init.d/almsd start\" to start almsd daemon."
 fi
 
 %preun
@@ -237,10 +235,10 @@ fi
 
 %preun almsd
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/lmsd ]; then
-		/etc/rc.d/init.d/lmsd stop >&2
+	if [ -f /var/lock/subsys/almsd ]; then
+		/etc/rc.d/init.d/almsd stop >&2
 	fi
-	/sbin/chkconfig --del lmsd
+	/sbin/chkconfig --del almsd
 fi
 
 %triggerpostun -- %{name} <= 1.0.4
@@ -278,7 +276,7 @@ echo
 %files scripts
 %defattr(644,root,root,755)
 %dir %{_sbindir}
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/lms-*
 
 %files sqlpanel
 %defattr(644,root,root,755)
