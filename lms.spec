@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	almsd		# without almsd daemon
+#
 # TODO:
 # - fix lms-amd64.patch
 # - almsd description
@@ -6,7 +10,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	1.5.0
-Release:	0.4
+Release:	0.5
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -16,9 +20,9 @@ Source1:	%{name}.conf
 Patch0:         %{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 URL:		http://lms.rulez.pl/
-BuildRequires:	libgadu-devel
-BuildRequires:	mysql-devel
-BuildRequires:	postgresql-devel
+%{?with_almsd:BuildRequires:	libgadu-devel}
+%{?with_almsd:BuildRequires:	mysql-devel}
+%{?with_almsdl:BuildRequires:	postgresql-devel}
 Requires:	php
 Requires:	php-posix
 Requires:	php-pcre
@@ -129,6 +133,9 @@ TODO
 %endif
 
 %build
+%if %{with almsd}
+%endif
+
 cd daemon
 
 ./configure --with-mysql
@@ -145,6 +152,7 @@ make almsd \
 mv almsd almsd-pgsql
 
 cd ..
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
