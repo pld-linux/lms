@@ -10,7 +10,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	1.5.1
-Release:	0.3
+Release:	0.5
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -169,7 +169,7 @@ install -d $RPM_BUILD_ROOT%{_sbindir} \
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
-cp -r lib config_templates contrib modules templates sample $RPM_BUILD_ROOT%{_lmsdir}
+cp -r lib modules templates sample $RPM_BUILD_ROOT%{_lmsdir}
 install bin/* $RPM_BUILD_ROOT%{_sbindir}
 
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
@@ -264,11 +264,11 @@ echo
 %{_lmsdir}/lib
 %{_lmsdir}/modules
 %exclude %{_lmsdir}/modules/sql.php
-%{_lmsdir}/contrib
+#{_lmsdir}/contrib
 %{_lmsdir}/sample
 %attr(755,root,root) %{_lmsdir}/sample/traffic_ipt.sh
 %{_lmsdir}/templates
-%{_lmsdir}/config_templates
+#{_lmsdir}/config_templates
 %exclude %{_lmsdir}/templates/sql.html
 %exclude %{_lmsdir}/templates/sqlprint.html
 
