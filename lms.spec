@@ -126,12 +126,17 @@ Simple user interface.
 Prosty interfejs u¿ytkownika.
 
 %package almsd
-Summary:	LAN Managment System - almsd
+Summary:	LAN Managment System - backend LMS system
+Summary(pl):	LAN Managment System - backend systemu LMS
 Group:		Networking/Utilities
 Requires:	%{name}
 
 %description almsd
 TODO
+
+%description almsd -l pl
+Program zarz±dzaj±cy serwerem poprzez tworzenie plików konfiguracyjnych
+na podstawie bazy danych LMS'a i restartowanie wybranych us³ug.
 
 %prep
 %setup -q -n %{name}
