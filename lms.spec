@@ -20,7 +20,7 @@ Requires:	perl-DBI
 Requires:	perl-DBD-mysql
 Requires:	perl-DBD-Pg
 Requires:	Smarty
-Requires:	ADOdb
+Requires:	adodb
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
