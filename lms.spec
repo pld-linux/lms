@@ -4,11 +4,11 @@ Name:		lms
 Version:	1.0pre10
 Release:	0.1
 License:	GPL
+Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{name}-%{version}.tar.gz
 Patch0:		%{name}-PLD.patch
-Vendor:		LMS Developers
-URL:		http://lms.rulez.pl
+URL:		http://lms.rulez.pl/
 Requires:	php
 Requires:	php-posix
 Requires:	webserver
@@ -20,7 +20,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_lmsdir		/home/services/httpd/html/%{name}
 %define		_sharedstatedir	/var/lib
 # when spec'll be finished, this sould go to RA-branch
-# becouse sharedstatedir is already defined at rpm macros from HEAD
+# because sharedstatedir is already defined at rpm macros from HEAD
 
 %description
 This is a package of applications in PHP and Perl for managing LANs.
@@ -76,18 +76,19 @@ BuildArch:	noarch
 Group:		Networking/Utilities
 
 %description scripts
-This package contains scripts to integrate LMS with your system, monthly
-billing, notify users about their debts and cutting off customers. Also
-you can build propably any kind of config file using lms-mgc.
+This package contains scripts to integrate LMS with your system,
+monthly billing, notify users about their debts and cutting off
+customers. Also you can build propably any kind of config file using
+lms-mgc.
 
 %description scripts -l pl
-Ten pakiet zawiera skrypty do zintegrowania LMS z twoim systemem,
-naliczania comiesiêcznych op³at, powiadamiania u¿ytkowników o ich
-zad³u¿eniu oraz ich automagicznego od³±czania. Mo¿esz tak¿e zbudowaæ
-prawdopodobnie ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc.
+Ten pakiet zawiera skrypty do zintegrowania LMS z systemem, naliczania
+comiesiêcznych op³at, powiadamiania u¿ytkowników o ich zad³u¿eniu oraz
+ich automagicznego od³±czania. Mo¿esz tak¿e zbudowaæ prawdopodobnie
+ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc.
 
 %prep
-%setup -q -n lms
+%setup -q -n %{name}
 %patch0 -p1
 
 %install
@@ -127,5 +128,6 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/*.ini
 
 %files scripts
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/lms-*
 %doc sample/*.ini
