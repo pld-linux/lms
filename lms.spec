@@ -1,8 +1,8 @@
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Siec± Lokaln±
 Name:		lms
-Version:	1.0pre6
-Release:	0.1
+Version:	1.0pre7
+Release:	0.2
 License:	GPL
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{name}-%{version}.tar.gz
@@ -77,15 +77,15 @@ Najbardziej podstawowe cechy LMS to:
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_lmsdir}/{img,lib,modules,templates,templates_c}
+install -d $RPM_BUILD_ROOT%{_lmsdir}/{img,lib,modules,templates,templates_c,backups}
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
 install -d $RPM_BUILD_ROOT%{_bindir}
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+install -d $RPM_BUILD_ROOT%{_localstatedir}/backup
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}
-install -d {img,lib,modules,templates,templates_c} $RPM_BUILD_ROOT%{_lmsdir}
-install -d backup $RPM_BUILD_ROOT%{_localstatedir}
 install bin/* $RPM_BUILD_ROOT%{_bindir}
+install lib/* $RPM_BUILD_ROOT%{_lmsdir}/lib
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
 %clean
@@ -97,10 +97,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/lms-*
 %dir %{_lmsdir}
 %attr(770,root,http) %{_lmsdir}/templates_c
+%attr(770,root,http) %{_lmsdir}/backups
 %{_lmsdir}/*.php
 %{_lmsdir}/img
 %{_lmsdir}/lib
 %{_lmsdir}/modules
 %{_lmsdir}/templates
 %{_localstatedir}
-%{_sysconfdir}/%{name}
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/%{name}/*.ini
