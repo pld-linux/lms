@@ -19,7 +19,7 @@ Source0:	http://lms.rulez.pl/download/devel/%{name}-%{version}.tar.gz
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
-Patch0:         %{name}-PLD.patch
+Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 URL:		http://lms.rulez.pl/
 %{?with_almsd:BuildRequires:	libgadu-devel}
