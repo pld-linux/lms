@@ -126,7 +126,7 @@ Simple user interface.
 Prosty interfejs u¿ytkownika.
 
 %package almsd
-Summary:	LAN Managment System - backend LMS system
+Summary:	LAN Managment System - LMS system backend
 Summary(pl):	LAN Managment System - backend systemu LMS
 Group:		Networking/Utilities
 Requires:	%{name}
