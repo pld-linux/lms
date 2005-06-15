@@ -22,7 +22,6 @@ Source2:	%{name}.init
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
-Patch2:		%{name}-calendar.patch
 URL:		http://lms.rulez.pl/
 %{?with_almsd:BuildRequires:	libgadu-devel}
 %{?with_almsd:BuildRequires:	mysql-devel}
@@ -142,11 +141,10 @@ wybranych us³ug.
 
 %prep
 %setup -q -n %{name}
-#%patch0 -p1
+%patch0 -p1
 %if "%{_lib}" == "lib64"
 %patch1 -p1
 %endif
-#%patch2 -p1
 
 %build
 %if %{with almsd}
@@ -257,7 +255,12 @@ echo "WARNING!!!"
 echo "_READ_ and upgrade LMS database:"
 echo "MySQL: /usr/share/doc/%{name}-%{version}/UPGRADE-1.0-1.5.mysql.gz"
 echo "PostgreSQL: /usr/share/doc/%{name}-%{version}/UPGRADE-1.0-1.5.pgsql.gz"
-echo
+
+%triggerpostun -- %{name} <= 1.2.0
+echo "BEWARE:" 
+echo "Automatic upgrade from LMS<= 1.2.0 is NO LONGER SUPPORTED by lms team" 
+echo "You are advised to upgrade it manually" 
+echo 
 
 %files
 %defattr(644,root,root,755)
