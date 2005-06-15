@@ -5,8 +5,8 @@
 # TODO:
 # - cosmetics (sort in %%files and %%install)
 # - contrib split
-%define		lmsver		1.4
-%define		lmssubver	5
+%define		lmsver		1.6
+%define		lmssubver	0
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
@@ -16,7 +16,7 @@ License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	e73494060ba156955d33081adb104b5f
+# Source0-md5:	942955f198c2d7f5b8b702ec60335729
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
@@ -142,11 +142,11 @@ wybranych us³ug.
 
 %prep
 %setup -q -n %{name}
-%patch0 -p1
+#%patch0 -p1
 %if "%{_lib}" == "lib64"
 %patch1 -p1
 %endif
-%patch2 -p1
+#%patch2 -p1
 
 %build
 %if %{with almsd}
@@ -192,7 +192,7 @@ install contrib/sqlpanel/sql.php $RPM_BUILD_ROOT%{_lmsdir}/modules
 install contrib/sqlpanel/*.html $RPM_BUILD_ROOT%{_lmsdir}/templates
 
 # user
-install contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
+cp -r contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 
 # daemon
 %if %{with almsd}
@@ -261,7 +261,7 @@ echo
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{AUTHORS,ChangeLog*,README,TODO,UPGRADE*,lms*}
+%doc doc/{AUTHORS,ChangeLog*,README,UPGRADE*,lms*}
 %dir %{_sysconfdir}
 %attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*.ini
 %config(noreplace) %verify(not size mtime md5) /etc/httpd/%{name}.conf
@@ -278,7 +278,7 @@ echo
 %exclude %{_lmsdir}/modules/sql.php
 %{_lmsdir}/contrib
 %{_lmsdir}/sample
-%attr(755,root,root) %{_lmsdir}/sample/traffic_ipt.sh
+%attr(755,root,root) %{_lmsdir}/sample/traffic_ipt.pl
 %{_lmsdir}/templates
 %exclude %{_lmsdir}/templates/sql.html
 %exclude %{_lmsdir}/templates/sqlprint.html
