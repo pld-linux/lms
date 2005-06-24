@@ -1,2 +1,2 @@
-# almsd database type (mysql, pgsql or sqlite)
-# ALMSD_DATABASE_TYPE="mysql"
+# lmsd database type (mysql, pgsql or sqlite)
+# LMSD_DATABASE_TYPE="mysql"
