@@ -172,13 +172,12 @@ install -d $RPM_BUILD_ROOT%{_sbindir} \
 	   $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd} \
 	   $RPM_BUILD_ROOT/etc/lms/modules/{dns,ggnofity,nofity} \
 	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},/usr/lib/lms} \
-	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user,calendar}
+	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
 cp -r lib contrib modules templates sample $RPM_BUILD_ROOT%{_lmsdir}
-mv $RPM_BUILD_ROOT%{_lmsdir}/templates/calendar.html $RPM_BUILD_ROOT%{_lmsdir}/www/calendar
 install bin/* $RPM_BUILD_ROOT%{_sbindir}
 
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
