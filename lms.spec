@@ -1,33 +1,34 @@
+# TODO: test build on amd64 and sheck /usr/lib64 patch
 #
 # Conditional build:
-%bcond_without	almsd		# without almsd daemon
+%bcond_without	lmsd		# without lmsd daemon
 #
 # TODO:
 # - cosmetics (sort in %%files and %%install)
 # - contrib split
 %define		lmsver		1.6
-%define		lmssubver	0
+%define		lmssubver	1
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	1
+Release:	0.1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	942955f198c2d7f5b8b702ec60335729
+# Source0-md5:	b9ace330b87a6253009a56358289821e
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 URL:		http://lms.rulez.pl/
-%{?with_almsd:BuildRequires:	libgadu-devel}
-%{?with_almsd:BuildRequires:	mysql-devel}
-%{?with_almsd:BuildRequires:	postgresql-devel}
-%{?with_almsd:PreReq:		rc-scripts}
-%{?with_almsd:Requires(post,preun):	/sbin/chkconfig}
+%{?with_lmsd:BuildRequires:	libgadu-devel}
+%{?with_lmsd:BuildRequires:	mysql-devel}
+%{?with_lmsd:BuildRequires:	postgresql-devel}
+%{?with_lmsd:PreReq:		rc-scripts}
+%{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
 Requires:	php
 Requires:	php-gd
 Requires:	php-posix
@@ -124,17 +125,17 @@ Simple user interface.
 %description user -l pl
 Prosty interfejs u¿ytkownika.
 
-%package almsd
+%package lmsd
 Summary:	LAN Managment System - LMS system backend
 Summary(pl):	LAN Managment System - backend systemu LMS
 Group:		Networking/Utilities
 Requires:	%{name} = %{version}-%{release}
 
-%description almsd
+%description lmsd
 A program to manage the server by creating configuration files based
 upon LMS database and restarting selected services.
 
-%description almsd -l pl
+%description lmsd -l pl
 Program zarz±dzaj±cy serwerem poprzez tworzenie plików
 konfiguracyjnych na podstawie bazy danych LMS'a i restartowanie
 wybranych us³ug.
@@ -147,22 +148,20 @@ wybranych us³ug.
 %endif
 
 %build
-%if %{with almsd}
+%if %{with lmsd}
 
 cd daemon
 
 ./configure --with-mysql
 %{__make} \
-	CC='%{__cc}' CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -I../..'
-mv almsd almsd-mysql
-
-rm db.o
+	CC='%{__cc}' CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -DLMS_LIB_DIR=\"/usr/lib/lms/\" -I../..'
+mv lmsd lmsd-mysql
 
 ./configure --with-pgsql
-%{__make} almsd \
+%{__make} lmsd \
 	CC='%{__cc}' \
-	CFLAGS='%{rpmcflags} -fPIC -DUSE_PGSQL -I../..'
-mv almsd almsd-pgsql
+	CFLAGS='%{rpmcflags} -fPIC -DUSE_PGSQL -DLMS_LIB_DIR=\"/usr/lib/lms/\" -I../..'
+mv lmsd lmsd-pgsql
 
 cd ..
 %endif
@@ -193,8 +192,8 @@ install contrib/sqlpanel/*.html $RPM_BUILD_ROOT%{_lmsdir}/templates
 cp -r contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 
 # daemon
-%if %{with almsd}
-install daemon/almsd-* $RPM_BUILD_ROOT%{_sbindir}
+%if %{with lmsd}
+install daemon/lmsd-* $RPM_BUILD_ROOT%{_sbindir}
 install daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
 cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/dns
 cp -r daemon/modules/ggnotify/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/ggnotify
@@ -219,12 +218,12 @@ elif [ -d /etc/httpd/httpd.conf ]; then
 	fi
 fi
 
-%post almsd
+%post lmsd
 /sbin/chkconfig --add lmsd
 if [ -f /var/lock/subsys/lmsd ]; then
 	/etc/rc.d/init.d/lmsd restart >&2
 else
-	echo "Run \"/etc/rc.d/init.d/lmsd start\" to start almsd daemon."
+	echo "Run \"/etc/rc.d/init.d/lmsd start\" to start lmsd daemon."
 fi
 
 %preun
@@ -242,7 +241,7 @@ if [ "$1" = "0" ]; then
 	fi
 fi
 
-%preun almsd
+%preun lmsd
 if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/lmsd ]; then
 		/etc/rc.d/init.d/lmsd stop >&2
@@ -301,11 +300,10 @@ echo
 %defattr(644,root,root,755)
 %{_lmsdir}/www/user
 
-%if %{with almsd}
-%files almsd
+%if %{with lmsd}
+%files lmsd
 %defattr(644,root,root,755)
-%doc daemon/lms.ini.sample
-%attr(755,root,root) %{_sbindir}/almsd-*
+%attr(755,root,root) %{_sbindir}/lmsd-*
 %attr(755,root,root) /usr/lib/lms/*.so
 %attr(754,root,root) /etc/rc.d/init.d/lmsd
 /etc/lms/modules/*
