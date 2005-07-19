@@ -130,6 +130,7 @@ Summary:	LAN Managment System - LMS system backend
 Summary(pl):	LAN Managment System - backend systemu LMS
 Group:		Networking/Utilities
 Requires:	%{name} = %{version}-%{release}
+Obsoletes:	lms-almsd
 
 %description lmsd
 A program to manage the server by creating configuration files based
