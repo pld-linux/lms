@@ -7,7 +7,7 @@
 # - cosmetics (sort in %%files and %%install)
 # - contrib split
 %define		lmsver		1.6
-%define		lmssubver	1
+%define		lmssubver	2
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
@@ -17,7 +17,7 @@ License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	b9ace330b87a6253009a56358289821e
+# Source0-md5:	36700215ccdb81674d183b7531d1a00c
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
