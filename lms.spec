@@ -1,36 +1,34 @@
+# TODO: test build on amd64 and sheck /usr/lib64 patch
 #
 # Conditional build:
-%bcond_without	almsd		# without almsd daemon
+%bcond_without	lmsd		# without lmsd daemon
 #
 # TODO:
 # - cosmetics (sort in %%files and %%install)
 # - contrib split
+%define		lmsver		1.7
+%define		lmssubver	4
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
-Version:	1.5.4
-Release:	0.5
+Version:	%{lmsver}.%{lmssubver}
+Release:	1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
-Source0:	http://lms.rulez.pl/download/devel/%{name}-%{version}.tar.gz
-# Source0-md5:	084cb54ef31a84834b37a8742988669b
+Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
+# Source0-md5:	cb78d7d189291f1b1a2907694dfb844e
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
-Patch2:		%{name}-makedhcpconf.patch
-Patch3:		%{name}-traffic.patch
-Patch4:		%{name}-pinger.patch
-Patch5:		%{name}-misc_mods.patch
-Patch6:		%{name}-tariff_per_node.patch
 URL:		http://lms.rulez.pl/
-%{?with_almsd:BuildRequires:	libgadu-devel}
-%{?with_almsd:BuildRequires:	mysql-devel}
-%{?with_almsd:BuildRequires:	postgresql-devel}
-%{?with_almsd:PreReq:		rc-scripts}
-%{?with_almsd:Requires(post,preun):	/sbin/chkconfig}
+%{?with_lmsd:BuildRequires:	libgadu-devel}
+%{?with_lmsd:BuildRequires:	mysql-devel}
+%{?with_lmsd:BuildRequires:	postgresql-devel}
+%{?with_lmsd:PreReq:		rc-scripts}
+%{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
 Requires:	php
 Requires:	php-gd
 Requires:	php-iconv
@@ -57,7 +55,7 @@ service of users at provider's level. The main features in LMS are:
 - many levels of access for LMS administrators;
 - autogenerating ipchains, iptables, dhcpd, ethers file, oidentd,
   openbsd packet filter configuration files/scripts;
-- autogenerating almost any kind of config file using templates;
+- autogenerating almost any kind of config file using templates.
 
 %description -l pl
 "LMS" jest skrótem od "LAN Management System". Jest to zestaw
@@ -79,7 +77,7 @@ to:
 - generowanie regu³ i plików konfiguracyjnych dla ipchains, iptables,
   dhcpd, oidentd, packet filtra openbsd, wpisów /etc/ethers
 - generowanie praktycznie ka¿dego pliku konfiguracyjnego na podstawie
-  danych w bazie przy u¿yciu prostych szablonów;
+  danych w bazie przy u¿yciu prostych szablonów.
 
 %package scripts
 Summary:	LAN Managment System - scripts
@@ -99,7 +97,7 @@ lms-mgc.
 Ten pakiet zawiera skrypty do zintegrowania LMS z systemem, naliczania
 comiesiêcznych op³at, powiadamiania u¿ytkowników o ich zad³u¿eniu oraz
 ich automagicznego od³±czania. Mo¿esz tak¿e zbudowaæ prawdopodobnie
-ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc;
+ka¿dy typ pliku konfiguracyjnego przy u¿yciu lms-mgc.
 
 %package sqlpanel
 Summary:	LAN Managment System - sqlpanel module
@@ -128,16 +126,18 @@ Simple user interface.
 %description user -l pl
 Prosty interfejs u¿ytkownika.
 
-%package almsd
+%package lmsd
 Summary:	LAN Managment System - LMS system backend
 Summary(pl):	LAN Managment System - backend systemu LMS
 Group:		Networking/Utilities
+Requires:	%{name} = %{version}-%{release}
+Obsoletes:	lms-almsd
 
-%description almsd
+%description lmsd
 A program to manage the server by creating configuration files based
 upon LMS database and restarting selected services.
 
-%description almsd -l pl
+%description lmsd -l pl
 Program zarz±dzaj±cy serwerem poprzez tworzenie plików
 konfiguracyjnych na podstawie bazy danych LMS'a i restartowanie
 wybranych us³ug.
@@ -145,32 +145,25 @@ wybranych us³ug.
 %prep
 %setup -q -n %{name}
 %patch0 -p1
-%ifarch amd64
+%if "%{_lib}" == "lib64"
 %patch1 -p1
 %endif
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
 
 %build
-%if %{with almsd}
+%if %{with lmsd}
 
 cd daemon
 
 ./configure --with-mysql
 %{__make} \
-	CC='%{__cc}' CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -I../..'
-mv almsd almsd-mysql
-
-rm db.o
+	CC='%{__cc}' CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -DLMS_LIB_DIR=\"/usr/lib/lms/\" -I../..'
+mv lmsd lmsd-mysql
 
 ./configure --with-pgsql
-%{__make} almsd \
+%{__make} lmsd \
 	CC='%{__cc}' \
-	CFLAGS='%{rpmcflags} -fPIC -DUSE_PGSQL -I../..'
-mv almsd almsd-pgsql
+	CFLAGS='%{rpmcflags} -fPIC -DUSE_PGSQL -DLMS_LIB_DIR=\"/usr/lib/lms/\" -I../..'
+mv lmsd lmsd-pgsql
 
 cd ..
 %endif
@@ -178,15 +171,15 @@ cd ..
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sbindir} \
-	   $RPM_BUILD_ROOT%{_sysconfdir} \
 	   $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd} \
+	   $RPM_BUILD_ROOT/etc/lms/modules/{dns,ggnofity,nofity} \
 	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},/usr/lib/lms} \
 	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
-cp -r lib modules templates sample $RPM_BUILD_ROOT%{_lmsdir}
+cp -r lib contrib modules templates sample $RPM_BUILD_ROOT%{_lmsdir}
 install bin/* $RPM_BUILD_ROOT%{_sbindir}
 
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
@@ -197,43 +190,41 @@ install contrib/sqlpanel/sql.php $RPM_BUILD_ROOT%{_lmsdir}/modules
 install contrib/sqlpanel/*.html $RPM_BUILD_ROOT%{_lmsdir}/templates
 
 # user
-cp -r contrib/customer $RPM_BUILD_ROOT%{_lmsdir}/www/user
+cp -r contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 
 # daemon
-%if %{with almsd}
-install daemon/almsd-* $RPM_BUILD_ROOT%{_sbindir}
+%if %{with lmsd}
+install daemon/lmsd-* $RPM_BUILD_ROOT%{_sbindir}
 install daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
-#cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/dns
-#cp -r daemon/modules/ggnotify/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/ggnotify
-#cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/nofity
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/almsd
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/almsd
+cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/dns
+cp -r daemon/modules/ggnotify/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/ggnotify
+cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/nofity
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/lmsd
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 %endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ "$1" = "1" ]; then
-	if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
-		echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
-		if [ -f /var/lock/subsys/httpd ]; then
-			/usr/sbin/apachectl graceful 1>&2
-		fi
-	elif [ -d /etc/httpd/httpd.conf ]; then
-		ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
-		if [ -f /var/lock/subsys/httpd ]; then
-			/usr/sbin/apachectl graceful 1>&2
-		fi
+if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
+	echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
+	if [ -f /var/lock/subsys/httpd ]; then
+		/usr/sbin/apachectl restart 1>&2
+	fi
+elif [ -d /etc/httpd/httpd.conf ]; then
+	ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
+	if [ -f /var/lock/subsys/httpd ]; then
+		/usr/sbin/apachectl restart 1>&2
 	fi
 fi
 
-%post almsd
-/sbin/chkconfig --add almsd
-if [ -f /var/lock/subsys/almsd ]; then
-	/etc/rc.d/init.d/almsd restart >&2
+%post lmsd
+/sbin/chkconfig --add lmsd
+if [ -f /var/lock/subsys/lmsd ]; then
+	/etc/rc.d/init.d/lmsd restart >&2
 else
-	echo "Run \"/etc/rc.d/init.d/almsd start\" to start almsd daemon."
+	echo "Run \"/etc/rc.d/init.d/lmsd start\" to start lmsd daemon."
 fi
 
 %preun
@@ -247,16 +238,16 @@ if [ "$1" = "0" ]; then
 		mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
 	fi
 	if [ -f /var/lock/subsys/httpd ]; then
-		/usr/sbin/apachectl graceful 1>&2
+		/usr/sbin/apachectl restart 1>&2
 	fi
 fi
 
-%preun almsd
+%preun lmsd
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/almsd ]; then
-		/etc/rc.d/init.d/almsd stop >&2
+	if [ -f /var/lock/subsys/lmsd ]; then
+		/etc/rc.d/init.d/lmsd stop >&2
 	fi
-	/sbin/chkconfig --del almsd
+	/sbin/chkconfig --del lmsd
 fi
 
 %triggerpostun -- %{name} <= 1.0.4
@@ -264,11 +255,16 @@ echo "WARNING!!!"
 echo "_READ_ and upgrade LMS database:"
 echo "MySQL: /usr/share/doc/%{name}-%{version}/UPGRADE-1.0-1.5.mysql.gz"
 echo "PostgreSQL: /usr/share/doc/%{name}-%{version}/UPGRADE-1.0-1.5.pgsql.gz"
-echo
+
+%triggerpostun -- %{name} <= 1.2.0
+echo "BEWARE:" 
+echo "Automatic upgrade from LMS<= 1.2.0 is NO LONGER SUPPORTED by lms team" 
+echo "You are advised to upgrade it manually" 
+echo 
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{AUTHORS,ChangeLog*,README,TODO,UPGRADE*,lms*}
+%doc doc/{AUTHORS,ChangeLog*,README,UPGRADE*,lms*}
 %dir %{_sysconfdir}
 %attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*.ini
 %config(noreplace) %verify(not size mtime md5) /etc/httpd/%{name}.conf
@@ -283,18 +279,17 @@ echo
 %{_lmsdir}/lib
 %{_lmsdir}/modules
 %exclude %{_lmsdir}/modules/sql.php
-#{_lmsdir}/contrib
+%{_lmsdir}/contrib
 %{_lmsdir}/sample
-%attr(755,root,root) %{_lmsdir}/sample/traffic_ipt.sh
+%attr(755,root,root) %{_lmsdir}/sample/traffic_ipt.pl
 %{_lmsdir}/templates
-#{_lmsdir}/config_templates
 %exclude %{_lmsdir}/templates/sql.html
 %exclude %{_lmsdir}/templates/sqlprint.html
 
 %files scripts
 %defattr(644,root,root,755)
 %dir %{_sbindir}
-%attr(755,root,root) %{_sbindir}/lms-*
+%attr(755,root,root) %{_sbindir}/*
 
 %files sqlpanel
 %defattr(644,root,root,755)
@@ -306,12 +301,12 @@ echo
 %defattr(644,root,root,755)
 %{_lmsdir}/www/user
 
-%if %{with almsd}
-%files almsd
+%if %{with lmsd}
+%files lmsd
 %defattr(644,root,root,755)
-%doc daemon/{lms.ini.sample,Changelog}
-%attr(755,root,root) %{_sbindir}/almsd-*
+%attr(755,root,root) %{_sbindir}/lmsd-*
 %attr(755,root,root) /usr/lib/lms/*.so
-%attr(754,root,root) /etc/rc.d/init.d/almsd
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/almsd
+%attr(754,root,root) /etc/rc.d/init.d/lmsd
+/etc/lms/modules/*
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %endif
