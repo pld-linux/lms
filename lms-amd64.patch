@@ -1,42 +1,38 @@
---- lms.orig/daemon/Makefile	2004-09-09 13:08:39.000000000 +0200
-+++ lms/daemon/Makefile	2004-10-03 02:24:11.350998864 +0200
-@@ -1,6 +1,6 @@
- 
- LIBS = -lmysqlclient -ldl
--LDFLAGS = -L/usr/lib
-+LDFLAGS = -L/usr/lib64
- CFLAGS = -I/usr/include -DUSE_MYSQL
- INSTALLDIR = /usr/local/bin
- 
---- lms.orig/daemon/configure	2004-04-14 11:12:19.000000000 +0200
-+++ lms/daemon/configure	2004-10-03 02:24:29.598224864 +0200
+diff -urpN lms.orig/daemon/configure lms/daemon/configure
+--- lms.orig/daemon/configure	2005-06-20 08:36:59.000000000 +0200
++++ lms/daemon/configure	2005-07-19 00:22:17.000000000 +0200
 @@ -3,7 +3,7 @@
  # Initialize default variables
- prefix="/usr/local/bin"
+ prefix="/usr/local"
  incdir="/usr/include"
 -libdir="/usr/lib"
 +libdir="/usr/lib64"
  with_mysql=yes
  
- # Parse options *****************************************************************
-@@ -80,7 +80,7 @@
-   --with-sqlite		enables use of SQLite database (disabled)
-   --prefix=DIR		sets program and modules install location 
- 			(/usr/local/bin)
+ # Create config.status file
+@@ -89,7 +89,7 @@ Options: [defaults in brackets after des
+   --prefix=PREFIX	sets program and modules install location
+ 			(/usr/local), modules goes to PREFIX/lms/lib and main
+ 			program to PREFIX/lms/bin
 -  --libdir=DIR		sets location of database library (/usr/lib)
 +  --libdir=DIR		sets location of database library (/usr/lib64)
    --incdir=DIR		sets location of database include files (/usr/include)
+   --inifile=FILE        configuration file - disables online configuration
  EOF
-     		exit 0
---- lms.orig/daemon/modules/ggnotify/Makefile.in	2004-08-25 15:37:35.000000000 +0200
-+++ lms/daemon/modules/ggnotify/Makefile.in	2004-10-03 02:34:18.739661752 +0200
-@@ -1,7 +1,7 @@
+diff -urpN lms.orig/daemon/modules/ggnotify/Makefile.in lms/daemon/modules/ggnotify/Makefile.in
+--- lms.orig/daemon/modules/ggnotify/Makefile.in	2005-05-01 09:31:23.000000000 +0200
++++ lms/daemon/modules/ggnotify/Makefile.in	2005-07-19 00:23:16.000000000 +0200
+@@ -1,5 +1,5 @@
  # dla libgadu i ekg --------------
 -LDFLAGS += -L/usr/lib
 +LDFLAGS += -L/usr/lib64
  CFLAGS += -I/usr/src/ekg/lib
--LIBS += /usr/lib/libgadu.so
-+LIBS += /usr/lib64/libgadu.so
  # --------------------------------
  
- SOURCES = ggnotify.c
+@@ -18,4 +18,4 @@ clean:
+ 	rm -rf $(OUT)
+ 
+ install:
+-	install -c -m 755 $(OUT) $(MODULESDIR)
+\ No newline at end of file
++	install -c -m 755 $(OUT) $(MODULESDIR)

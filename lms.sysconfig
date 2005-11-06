@@ -1,2 +1,20 @@
-# almsd database type (mysql or pgsql)
-# ALMSD_DATABASE_TYPE="mysql"
+# lmsd database type (mysql, pgsql or sqlite)
+# LMSD_DATABASE_TYPE="mysql"
+
+# lmsd database password 
+# LMSD_DATABASE_PASSWORD=""
+
+# lmsd database name (default: lms)
+# LMSD_DATABASE_NAME="lms"
+
+# lmsd database user (default: lms)
+# LMSD_DATABASE_USER="lms"
+
+# lmsd database port (default: empty)
+# LMSD_DATABASE_PORT=""
+
+# lmsd database host (default: localhost)
+# LMSD_DATABASE_HOST="localhost"
+
+# lmsd extra options
+# LMSD_OPTIONS=""
