@@ -1,26 +1,30 @@
---- lms.orig/index.php	2004-09-18 21:26:55.000000000 +0200
-+++ lms/index.php	2004-10-03 04:09:36.022502648 +0200
-@@ -98,13 +98,13 @@
- }
+diff -urN lms.orig/index.php lms/index.php
+--- lms.orig/index.php	2005-11-05 22:03:05.000000000 +0000
++++ lms/index.php	2005-11-05 22:10:16.000000000 +0000
+@@ -82,14 +82,15 @@
+ 	$CONFIG[$key] = $val;
  
  // Check for configuration vars and set default values
--$_CONFIG['directories']['sys_dir'] = (! $_CONFIG['directories']['sys_dir'] ? getcwd() : $_CONFIG['directories']['sys_dir']);
--$_CONFIG['directories']['backup_dir'] = (! $_CONFIG['directories']['backup_dir'] ? $_CONFIG['directories']['sys_dir'].'/backups' : $_CONFIG['directories']['backup_dir']);
-+$_CONFIG['directories']['sys_dir'] = (! $_CONFIG['directories']['sys_dir'] ? '/usr/share/lms' : $_CONFIG['directories']['sys_dir']);
-+$_CONFIG['directories']['backup_dir'] = (! $_CONFIG['directories']['backup_dir'] ? '/var/lib/lms/backups' : $_CONFIG['directories']['backup_dir']);
- $_CONFIG['directories']['lib_dir'] = (! $_CONFIG['directories']['lib_dir'] ? $_CONFIG['directories']['sys_dir'].'/lib' : $_CONFIG['directories']['lib_dir']);
- $_CONFIG['directories']['modules_dir'] = (! $_CONFIG['directories']['modules_dir'] ? $_CONFIG['directories']['sys_dir'].'/modules' : $_CONFIG['directories']['modules_dir']);
- $_CONFIG['directories']['config_templates_dir'] = (! $_CONFIG['directories']['config_templates_dir'] ? $_CONFIG['directories']['sys_dir'].'/config_templates' : $_CONFIG['directories']['config_templates_dir']);
--$_CONFIG['directories']['smarty_dir'] = (! $_CONFIG['directories']['smarty_dir'] ? (is_readable('/usr/share/php/smarty/libs/Smarty.class.php') ? '/usr/share/php/smarty/libs' : $_CONFIG['directories']['lib_dir'].'/Smarty') : $_CONFIG['directories']['smarty_dir']);
--$_CONFIG['directories']['smarty_compile_dir'] = (! $_CONFIG['directories']['smarty_compile_dir'] ? $_CONFIG['directories']['sys_dir'].'/templates_c' : $_CONFIG['directories']['smarty_compile_dir']);
-+$_CONFIG['directories']['smarty_dir'] = (! $_CONFIG['directories']['smarty_dir'] ? '/usr/share/pear/Smarty' : $_CONFIG['directories']['smarty_dir']);
-+$_CONFIG['directories']['smarty_compile_dir'] = (! $_CONFIG['directories']['smarty_compile_dir'] ? '/var/lib/lms/templates_c/' : $_CONFIG['directories']['smarty_compile_dir']);
- $_CONFIG['directories']['smarty_templates_dir'] = (! $_CONFIG['directories']['smarty_templates_dir'] ? $_CONFIG['directories']['sys_dir'].'/templates' : $_CONFIG['directories']['smarty_templates_dir']);
+-$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? getcwd() : $CONFIG['directories']['sys_dir']);
+-$CONFIG['directories']['backup_dir'] = (!isset($CONFIG['directories']['backup_dir']) ? $CONFIG['directories']['sys_dir'].'/backups' : $CONFIG['directories']['backup_dir']);
++$_CONFIG['directories']['sys_dir'] = (!isset($_CONFIG['directories']['sys_dir']) ? '/usr/share/lms' : $_CONFIG['directories']['sys_dir']);
++$_CONFIG['directories']['backup_dir'] = (!isset($_CONFIG['directories']['backup_dir']) ? '/var/lib/lms/backups' : $_CONFIG['directories']['backup_dir']);
+ $CONFIG['directories']['doc_dir'] = (!isset($CONFIG['directories']['doc_dir']) ? $CONFIG['directories']['sys_dir'].'/documents' : $CONFIG['directories']['doc_dir']);
+ $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'].'/lib' : $CONFIG['directories']['lib_dir']);
+ $CONFIG['directories']['modules_dir'] = (!isset($CONFIG['directories']['modules_dir']) ? $CONFIG['directories']['sys_dir'].'/modules' : $CONFIG['directories']['modules_dir']);
+ $CONFIG['directories']['config_templates_dir'] = (!isset($CONFIG['directories']['config_templates_dir']) ? $CONFIG['directories']['sys_dir'].'/config_templates' : $CONFIG['directories']['config_templates_dir']);
+-$CONFIG['directories']['smarty_dir'] = (!isset($CONFIG['directories']['smarty_dir']) ? (is_readable('/usr/share/php/smarty/libs/Smarty.class.php') ? '/usr/share/php/smarty/libs' : $CONFIG['directories']['lib_dir'].'/Smarty') : $CONFIG['directories']['smarty_dir']);
+-$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? $CONFIG['directories']['sys_dir'].'/templates_c' : $CONFIG['directories']['smarty_compile_dir']);
++$_CONFIG['directories']['smarty_dir'] = (!isset($_CONFIG['directories']['smarty_dir']) ? '/usr/share/pear/Smarty' : $_CONFIG['directories']['smarty_dir']);
++$_CONFIG['directories']['smarty_compile_dir'] = (!isset($_CONFIG['directories']['smarty_compile_dir']) ? '/var/lib/lms/templates_c/' : $_CONFIG['directories']['smarty_compile_dir']);
++
+ $CONFIG['directories']['smarty_templates_dir'] = (!isset($CONFIG['directories']['smarty_templates_dir']) ? $CONFIG['directories']['sys_dir'].'/templates' : $CONFIG['directories']['smarty_templates_dir']);
  
- foreach(lms_parse_ini_file($_CONFIG['directories']['lib_dir'].'/config_defaults.ini', TRUE) as $section => $values)
---- lms.orig/sample/lms.ini	2004-08-25 14:52:18.000000000 +0200
-+++ lms/sample/lms.ini	2004-10-04 02:52:16.676497680 +0200
-@@ -201,7 +201,7 @@
+ foreach(lms_parse_ini_file($CONFIG['directories']['lib_dir'].'/config_defaults.ini', TRUE) as $section => $values)
+diff -urN lms.orig/sample/lms.ini lms/sample/lms.ini
+--- lms.orig/sample/lms.ini	2005-11-05 22:03:05.000000000 +0000
++++ lms/sample/lms.ini	2005-11-06 00:05:04.000000000 +0000
+@@ -268,7 +268,7 @@
  ; index.php, graphics, templates and the rest. By default index.php seek in filesystem
  ; using getcwd(), but better is to say him where hi is:
  
@@ -29,14 +33,16 @@
  
  ; Directory with "modules" of LMS. That is content of /modules directory.
  ; By default it is subdirectory modules in sys_dir
-@@ -218,13 +218,13 @@
+@@ -285,7 +285,7 @@
  ; If directory with backups will be accessible from WWW level, then anybody will
  ; can to access them without authorization.
  
 -; backup_dir          = /var/backup/lms/
 +; backup_dir          = /var/lib/lms/backups/
  
- ; Directory with Smarty library
+ ; In that directory LMS will store uploaded documents (files). 
+ ; By default it is subdirectory documents in sys_dir.
+@@ -299,7 +299,7 @@
  ; By default, subdirectory Smarty in lib_dir
  ; http://smarty.php.net
  
@@ -44,8 +50,8 @@
 +; smarty_dir          = /usr/share/pear/Smarty
  
  ; W pld jest domy¶lnie tutaj: (nie zapomnij o "poldek -i Smarty");
- ; smarty_dir      = /usr/share/pear/Smarty
-@@ -232,7 +232,7 @@
+ ; In PLD-linux distribution it's here: (and don't forget about "poldek -i Smarty")
+@@ -309,7 +309,7 @@
  ; Smarty's compilation directory. Place where Smarty compile templates.
  ; By default it is subdirectory templates_c in sys_dir.
  
@@ -54,63 +60,3 @@
  
  ; Directory with Smarty's templates.
  ; By default it is subdirectory templates in sys_dir.
---- lms/contrib/customer/index.php.orig	2004-12-01 19:02:51.345013621 +0100
-+++ lms/contrib/customer/index.php	2004-12-01 19:10:16.188078586 +0100
-@@ -83,13 +83,13 @@
- 	$_CONFIG[$key] = $val;
- 
- // Check for configuration vars and set default values
--$_CONFIG['directories']['sys_dir'] = (! $_CONFIG['directories']['sys_dir'] ? getcwd() : $_CONFIG['directories']['sys_dir']);
-+$_CONFIG['directories']['sys_dir'] = (! $_CONFIG['directories']['sys_dir'] ? '/usr/share/lms' : $_CONFIG['directories']['sys_dir']);
- $_CONFIG['directories']['backup_dir'] = (! $_CONFIG['directories']['backup_dir'] ? $_CONFIG['directories']['sys_dir'].'/backups' : $_CONFIG['directories']['backup_dir']);
- $_CONFIG['directories']['lib_dir'] = (! $_CONFIG['directories']['lib_dir'] ? $_CONFIG['directories']['sys_dir'].'/lib' : $_CONFIG['directories']['lib_dir']);
- $_CONFIG['directories']['modules_dir'] = (! $_CONFIG['directories']['modules_dir'] ? $_CONFIG['directories']['sys_dir'].'/modules' : $_CONFIG['directories']['modules_dir']);
- $_CONFIG['directories']['config_templates_dir'] = (! $_CONFIG['directories']['config_templates_dir'] ? $_CONFIG['directories']['sys_dir'].'/config_templates' : $_CONFIG['directories']['config_templates_dir']);
--$_CONFIG['directories']['smarty_dir'] = (! $_CONFIG['directories']['smarty_dir'] ? (is_readable('/usr/share/php/smarty/libs/Smarty.class.php') ? '/usr/share/php/smarty/libs' : $_CONFIG['directories']['lib_dir'].'/Smarty') : $_CONFIG['directories']['smarty_dir']);
--$_CONFIG['directories']['smarty_compile_dir'] = (! $_CONFIG['directories']['smarty_compile_dir'] ? $_CONFIG['directories']['sys_dir'].'/templates_c' : $_CONFIG['directories']['smarty_compile_dir']);
-+$_CONFIG['directories']['smarty_dir'] = (! $_CONFIG['directories']['smarty_dir'] ? (is_readable('/usr/share/pear/Smarty/Smarty.class.php') ? '/usr/share/pear/Smarty' : $_CONFIG['directories']['lib_dir'].'/Smarty') : $_CONFIG['directories']['smarty_dir']);
-+$_CONFIG['directories']['smarty_compile_dir'] = (! $_CONFIG['directories']['smarty_compile_dir'] ? '/var/lib/lms/templates_c' : $_CONFIG['directories']['smarty_compile_dir']);
- $_CONFIG['directories']['smarty_templates_dir'] = (! $_CONFIG['directories']['smarty_templates_dir'] ? $_CONFIG['directories']['sys_dir'].'/templates' : $_CONFIG['directories']['smarty_templates_dir']);
- 
- foreach(lms_parse_ini_file($_CONFIG['directories']['lib_dir'].'/config_defaults.ini', TRUE) as $section => $values)
---- lms/contrib/customer_otherip/class.php.orig	2004-12-01 19:15:14.661275274 +0100
-+++ lms/contrib/customer_otherip/class.php	2004-12-01 19:17:01.288242321 +0100
-@@ -83,13 +83,13 @@
- 	$_CONFIG[$key] = $val;
- 
- // Check for configuration vars and set default values
--$_CONFIG['directories']['sys_dir'] = (! $_CONFIG['directories']['sys_dir'] ? getcwd() : $_CONFIG['directories']['sys_dir']);
-+$_CONFIG['directories']['sys_dir'] = (! $_CONFIG['directories']['sys_dir'] ? '/usr/share/lms' : $_CONFIG['directories']['sys_dir']);
- $_CONFIG['directories']['backup_dir'] = (! $_CONFIG['directories']['backup_dir'] ? $_CONFIG['directories']['sys_dir'].'/backups' : $_CONFIG['directories']['backup_dir']);
- $_CONFIG['directories']['lib_dir'] = (! $_CONFIG['directories']['lib_dir'] ? $_CONFIG['directories']['sys_dir'].'/lib' : $_CONFIG['directories']['lib_dir']);
- $_CONFIG['directories']['modules_dir'] = (! $_CONFIG['directories']['modules_dir'] ? $_CONFIG['directories']['sys_dir'].'/modules' : $_CONFIG['directories']['modules_dir']);
- $_CONFIG['directories']['config_templates_dir'] = (! $_CONFIG['directories']['config_templates_dir'] ? $_CONFIG['directories']['sys_dir'].'/config_templates' : $_CONFIG['directories']['config_templates_dir']);
--$_CONFIG['directories']['smarty_dir'] = (! $_CONFIG['directories']['smarty_dir'] ? (is_readable('/usr/share/php/smarty/libs/Smarty.class.php') ? '/usr/share/php/smarty/libs' : $_CONFIG['directories']['lib_dir'].'/Smarty') : $_CONFIG['directories']['smarty_dir']);
--$_CONFIG['directories']['smarty_compile_dir'] = (! $_CONFIG['directories']['smarty_compile_dir'] ? $_CONFIG['directories']['sys_dir'].'/templates_c' : $_CONFIG['directories']['smarty_compile_dir']);
-+$_CONFIG['directories']['smarty_dir'] = (! $_CONFIG['directories']['smarty_dir'] ? (is_readable('/usr/share/pear/Smarty/Smarty.class.php') ? '/usr/share/pear/Smarty' : $_CONFIG['directories']['lib_dir'].'/Smarty') : $_CONFIG['directories']['smarty_dir']);
-+$_CONFIG['directories']['smarty_compile_dir'] = (! $_CONFIG['directories']['smarty_compile_dir'] ? 'var/lib/lms/templates_c' : $_CONFIG['directories']['smarty_compile_dir']);
- $_CONFIG['directories']['smarty_templates_dir'] = (! $_CONFIG['directories']['smarty_templates_dir'] ? $_CONFIG['directories']['sys_dir'].'/templates' : $_CONFIG['directories']['smarty_templates_dir']);
- 
- foreach(lms_parse_ini_file($_CONFIG['directories']['lib_dir'].'/config_defaults.ini', TRUE) as $section => $values)
---- lsm/modules/accountadd.php	2005-03-05 11:03:13.000000000 +0100
-+++ lms/modules/accountadd.php	2005-03-07 14:17:47.048620236 +0100
-@@ -75,7 +75,7 @@
- 				array(	$account['ownerid'], 
- 					$account['login'], 
- 					crypt($account['passwd1']), 
--					'/home/'.$account['login'],
-+					'/home/users/'.$account['login'],
- 					$account['expdate'],
- 					$account['domainid'],
- 					$account['type']
---- lsm/modules/accountedit.php	2005-03-05 11:03:13.000000000 +0100
-+++ lms/modules/accountedit.php	2005-03-07 14:18:03.834859599 +0100
-@@ -112,7 +112,7 @@
- 			$LMS->DB->Execute('UPDATE passwd SET ownerid = ?, login = ?, home = ?, expdate = ?, domainid = ?, type = ? WHERE id = ?', 
- 				array(	$account['ownerid'], 
- 					$account['login'], 
--					'/home/'.$account['login'],
-+					'/home/users/'.$account['login'],
- 					$account['expdate'],
- 					$account['domainid'],
- 					$account['type'],
