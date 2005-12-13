@@ -27,15 +27,15 @@ URL:		http://lms.rulez.pl/
 %{?with_lmsd:BuildRequires:	libgadu-devel}
 %{?with_lmsd:BuildRequires:	mysql-devel}
 %{?with_lmsd:BuildRequires:	postgresql-devel}
-%{?with_lmsd:PreReq:		rc-scripts}
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
+Requires:	Smarty >= 2.5.0
 Requires:	php
 Requires:	php-gd
 Requires:	php-iconv
-Requires:	php-posix
 Requires:	php-pcre
+Requires:	php-posix
+%{?with_lmsd:Requires: rc-scripts}
 Requires:	webserver
-Requires:	Smarty >= 2.5.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/%{name}
@@ -83,9 +83,9 @@ to:
 Summary:	LAN Managment System - scripts
 Summary(pl):	LAN Managment System - skrypty
 Group:		Networking/Utilities
-Requires:	perl-Net-SMTP-Server
 Requires:	perl-Config-IniFiles
 Requires:	perl-DBI
+Requires:	perl-Net-SMTP-Server
 
 %description scripts
 This package contains scripts to integrate LMS with your system,
@@ -257,17 +257,17 @@ echo "MySQL: /usr/share/doc/%{name}-%{version}/UPGRADE-1.0-1.5.mysql.gz"
 echo "PostgreSQL: /usr/share/doc/%{name}-%{version}/UPGRADE-1.0-1.5.pgsql.gz"
 
 %triggerpostun -- %{name} <= 1.2.0
-echo "BEWARE:" 
-echo "Automatic upgrade from LMS<= 1.2.0 is NO LONGER SUPPORTED by lms team" 
-echo "You are advised to upgrade it manually" 
-echo 
+echo "BEWARE:"
+echo "Automatic upgrade from LMS<= 1.2.0 is NO LONGER SUPPORTED by lms team"
+echo "You are advised to upgrade it manually"
+echo
 
 %files
 %defattr(644,root,root,755)
 %doc doc/{AUTHORS,ChangeLog*,README,UPGRADE*,lms*}
 %dir %{_sysconfdir}
-%attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*.ini
-%config(noreplace) %verify(not size mtime md5) /etc/httpd/%{name}.conf
+%attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.ini
+%config(noreplace) %verify(not md5 mtime size) /etc/httpd/%{name}.conf
 #
 %dir %{_lmsvar}
 %attr(770,root,http) %{_lmsvar}/backups
