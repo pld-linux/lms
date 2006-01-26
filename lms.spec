@@ -1,18 +1,18 @@
-# TODO: test build on amd64 and sheck /usr/lib64 patch
+# TODO
+# - test build on amd64 and sheck /usr/lib64 patch
+# - cosmetics (sort in %%files and %%install)
+# - contrib split
 #
 # Conditional build:
 %bcond_without	lmsd		# without lmsd daemon
 #
-# TODO:
-# - cosmetics (sort in %%files and %%install)
-# - contrib split
 %define		lmsver		1.6
 %define		lmssubver	6
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	1
+Release:	1.1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -46,7 +46,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 This is a package of applications in PHP and Perl for managing LANs.
 It's using MySQL or PostgreSQL. The main goal is to get the best
 service of users at provider's level. The main features in LMS are:
-- database of users (name, surname, address, telefon number,
+- database of users (name, surname, address, telephone number,
   commentary);
 - database of computers (IP, MAC);
 - easy-ridden financial system and funds of network;
@@ -90,7 +90,7 @@ Requires:	perl-Net-SMTP-Server
 %description scripts
 This package contains scripts to integrate LMS with your system,
 monthly billing, notify users about their debts and cutting off
-customers. Also you can build propably any kind of config file using
+customers. Also you can build probably any kind of config file using
 lms-mgc.
 
 %description scripts -l pl
@@ -156,13 +156,13 @@ cd daemon
 
 ./configure --with-mysql
 %{__make} \
-	CC='%{__cc}' CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -DLMS_LIB_DIR=\"/usr/lib/lms/\" -I../..'
+	CC='%{__cc}' CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
 mv lmsd lmsd-mysql
 
 ./configure --with-pgsql
 %{__make} lmsd \
 	CC='%{__cc}' \
-	CFLAGS='%{rpmcflags} -fPIC -DUSE_PGSQL -DLMS_LIB_DIR=\"/usr/lib/lms/\" -I../..'
+	CFLAGS='%{rpmcflags} -fPIC -DUSE_PGSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
 mv lmsd lmsd-pgsql
 
 cd ..
@@ -173,7 +173,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sbindir} \
 	   $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,httpd} \
 	   $RPM_BUILD_ROOT/etc/lms/modules/{dns,ggnofity,nofity} \
-	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},/usr/lib/lms} \
+	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},%{_libdir}/lms} \
 	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
@@ -195,7 +195,7 @@ cp -r contrib/customer/* $RPM_BUILD_ROOT%{_lmsdir}/www/user
 # daemon
 %if %{with lmsd}
 install daemon/lmsd-* $RPM_BUILD_ROOT%{_sbindir}
-install daemon/modules/*/*.so $RPM_BUILD_ROOT/usr/lib/lms
+install daemon/modules/*/*.so $RPM_BUILD_ROOT%{_libdir}/lms
 cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/dns
 cp -r daemon/modules/ggnotify/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/ggnotify
 cp -r daemon/modules/dns/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/nofity
@@ -264,7 +264,7 @@ echo
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{AUTHORS,ChangeLog*,README,UPGRADE*,lms*}
+%doc doc/{AUTHORS,ChangeLog*,INSTALL,README,UPGRADE*,lms*}
 %dir %{_sysconfdir}
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.ini
 %config(noreplace) %verify(not md5 mtime size) /etc/httpd/%{name}.conf
@@ -305,7 +305,7 @@ echo
 %files lmsd
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/lmsd-*
-%attr(755,root,root) /usr/lib/lms/*.so
+%attr(755,root,root) %{_libdir}/lms/*.so
 %attr(754,root,root) /etc/rc.d/init.d/lmsd
 /etc/lms/modules/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
