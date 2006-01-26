@@ -1,0 +1,3 @@
+- added /etc/lms/modules/{dns,nofity,ggnofity}
+- TODO: contrib stuff
+  fix pinger.c (daemon/modules/pinger)
