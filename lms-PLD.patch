@@ -13,7 +13,7 @@
  $_CONFIG['directories']['config_templates_dir'] = (!isset($_CONFIG['directories']['config_templates_dir']) ? $_CONFIG['directories']['sys_dir'].'/config_templates' : $_CONFIG['directories']['config_templates_dir']);
 -$_CONFIG['directories']['smarty_dir'] = (!isset($_CONFIG['directories']['smarty_dir']) ? (is_readable('/usr/share/php/smarty/libs/Smarty.class.php') ? '/usr/share/php/smarty/libs' : $_CONFIG['directories']['lib_dir'].'/Smarty') : $_CONFIG['directories']['smarty_dir']);
 -$_CONFIG['directories']['smarty_compile_dir'] = (!isset($_CONFIG['directories']['smarty_compile_dir']) ? $_CONFIG['directories']['sys_dir'].'/templates_c' : $_CONFIG['directories']['smarty_compile_dir']);
-+$_CONFIG['directories']['smarty_dir'] = (!isset($_CONFIG['directories']['smarty_dir']) ? '/usr/share/pear/Smarty' : $_CONFIG['directories']['smarty_dir']);
++$_CONFIG['directories']['smarty_dir'] = (!isset($_CONFIG['directories']['smarty_dir']) ? '/usr/share/php/Smarty' : $_CONFIG['directories']['smarty_dir']);
 +$_CONFIG['directories']['smarty_compile_dir'] = (!isset($_CONFIG['directories']['smarty_compile_dir']) ? '/var/lib/lms/templates_c/' : $_CONFIG['directories']['smarty_compile_dir']);
  $_CONFIG['directories']['smarty_templates_dir'] = (!isset($_CONFIG['directories']['smarty_templates_dir']) ? $_CONFIG['directories']['sys_dir'].'/templates' : $_CONFIG['directories']['smarty_templates_dir']);
  
@@ -42,7 +42,7 @@
  ; http://smarty.php.net
  
 -; smarty_dir          = /usr/lib/php/Smarty
-+; smarty_dir       = /usr/share/pear/Smarty
++; smarty_dir       = /usr/share/php/Smarty
 +
  
  ; W pld jest domy¶lnie tutaj: (nie zapomnij o "poldek -i Smarty");
