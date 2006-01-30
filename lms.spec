@@ -28,7 +28,7 @@ URL:		http://lms.rulez.pl/
 %{?with_lmsd:BuildRequires:	mysql-devel}
 %{?with_lmsd:BuildRequires:	postgresql-devel}
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
-Requires:	Smarty >= 2.6.2
+Requires:	Smarty >= 2.6.10-4
 Requires:	php
 Requires:	php-gd
 Requires:	php-iconv
