@@ -6,18 +6,18 @@
 # Conditional build:
 %bcond_without	lmsd		# without lmsd daemon
 #
-%define		lmsver		1.6
-%define		lmssubver	6
+%define		lmsver		1.8
+%define		lmssubver	0
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	2
-License:	GPL
+Release:	0.1
+License:	GPL v2
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	8500349fc938d66504dca033abc3a5f5
+# Source0-md5:	afa0680e112dc14c4fbb41d9ec2eedee
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
@@ -269,7 +269,7 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{AUTHORS,ChangeLog*,INSTALL,README,UPGRADE*,lms*}
+%doc doc/{AUTHORS,ChangeLog,INSTALL,README*,lms*}
 %dir %{_sysconfdir}
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.ini
 %dir %attr(750,root,http) %{_webapps}/%{_webapp}
