@@ -6,9 +6,10 @@
  // Check for configuration vars and set default values
 -$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? getcwd() : $CONFIG['directories']['sys_dir']);
 -$CONFIG['directories']['backup_dir'] = (!isset($CONFIG['directories']['backup_dir']) ? $CONFIG['directories']['sys_dir'].'/backups' : $CONFIG['directories']['backup_dir']);
+-$CONFIG['directories']['doc_dir'] = (!isset($CONFIG['directories']['doc_dir']) ? $CONFIG['directories']['sys_dir'].'/documents' : $CONFIG['directories']['doc_dir']);
 +$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? '/usr/share/lms' : $CONFIG['directories']['sys_dir']);
 +$CONFIG['directories']['backup_dir'] = (!isset($CONFIG['directories']['backup_dir']) ? '/var/lib/lms/backups' : $CONFIG['directories']['backup_dir']);
- $CONFIG['directories']['doc_dir'] = (!isset($CONFIG['directories']['doc_dir']) ? $CONFIG['directories']['sys_dir'].'/documents' : $CONFIG['directories']['doc_dir']);
++$CONFIG['directories']['doc_dir'] = (!isset($CONFIG['directories']['doc_dir']) ? '/var/lib/lms/documents' : $CONFIG['directories']['doc_dir']);
  $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'].'/lib' : $CONFIG['directories']['lib_dir']);
  $CONFIG['directories']['modules_dir'] = (!isset($CONFIG['directories']['modules_dir']) ? $CONFIG['directories']['sys_dir'].'/modules' : $CONFIG['directories']['modules_dir']);
  $CONFIG['directories']['config_templates_dir'] = (!isset($CONFIG['directories']['config_templates_dir']) ? $CONFIG['directories']['sys_dir'].'/config_templates' : $CONFIG['directories']['config_templates_dir']);
@@ -39,7 +40,14 @@
  
  ; In that directory LMS will store uploaded documents (files). 
  ; By default it is subdirectory documents in sys_dir.
-@@ -299,7 +299,7 @@
+@@ -293,13 +293,13 @@
+ ; can to access them without authorization. Those files are renamed to their
+ ; md5 sums.
+ 
+-; doc_dir          = /usr/share/lms/documents/
++; doc_dir          = /var/lib/lms/documents/
+ 
+ ; Directory with Smarty library
  ; By default, subdirectory Smarty in lib_dir
  ; http://smarty.php.net
  
