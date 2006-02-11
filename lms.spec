@@ -132,7 +132,6 @@ Prosty interfejs u¿ytkownika.
 Summary:	LAN Managment System - LMS system backend
 Summary(pl):	LAN Managment System - backend systemu LMS
 Group:		Networking/Utilities
-Requires:	%{name} = %{version}-%{release}
 Obsoletes:	lms-almsd
 
 %description lmsd
@@ -158,7 +157,8 @@ cd daemon
 
 ./configure --with-mysql
 %{__make} \
-	CC='%{__cc}' CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
+	CC='%{__cc}' \
+	CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
 mv lmsd lmsd-mysql
 
 ./configure --with-pgsql
