@@ -12,7 +12,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	0.1
+Release:	1
 License:	GPL v2
 Vendor:		LMS Developers
 Group:		Networking/Utilities
@@ -175,7 +175,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sbindir} \
 	   $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
 	   $RPM_BUILD_ROOT/etc/lms/modules/{dns,ggnofity,nofity} \
-	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c},%{_libdir}/lms} \
+	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c,documents},%{_libdir}/lms} \
 	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
@@ -279,6 +279,7 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 %dir %{_lmsvar}
 %attr(770,root,http) %{_lmsvar}/backups
 %attr(770,root,http) %{_lmsvar}/templates_c
+%attr(770,root,http) %{_lmsvar}/documents
 #
 %dir %{_lmsdir}
 %{_lmsdir}/www
