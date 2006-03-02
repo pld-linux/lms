@@ -14,7 +14,6 @@ Name:		lms
 Version:	%{lmsver}.%{lmssubver}
 Release:	1
 License:	GPL v2
-Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
 # Source0-md5:	afa0680e112dc14c4fbb41d9ec2eedee
@@ -27,6 +26,7 @@ URL:		http://lms.rulez.pl/
 %{?with_lmsd:BuildRequires:	libgadu-devel}
 %{?with_lmsd:BuildRequires:	mysql-devel}
 %{?with_lmsd:BuildRequires:	postgresql-devel}
+BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
 Requires:	Smarty >= 2.6.10-4
 Requires:	php
@@ -213,17 +213,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post lmsd
 /sbin/chkconfig --add lmsd
-if [ -f /var/lock/subsys/lmsd ]; then
-	/etc/rc.d/init.d/lmsd restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/lmsd start\" to start lmsd daemon."
-fi
+%service lmsd restart "lmsd daemon"
 
 %preun lmsd
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/lmsd ]; then
-		/etc/rc.d/init.d/lmsd stop >&2
-	fi
+	%service lmsd stop
 	/sbin/chkconfig --del lmsd
 fi
 
