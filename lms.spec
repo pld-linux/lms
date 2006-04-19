@@ -7,17 +7,17 @@
 %bcond_without	lmsd		# without lmsd daemon
 #
 %define		lmsver		1.6
-%define		lmssubver	6
+%define		lmssubver	7
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	2
+Release:	1
 License:	GPL
 Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	8500349fc938d66504dca033abc3a5f5
+# Source0-md5:	773eb4da0f97848886487d82b5c51417
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
@@ -28,6 +28,7 @@ URL:		http://lms.rulez.pl/
 %{?with_lmsd:BuildRequires:	mysql-devel}
 %{?with_lmsd:BuildRequires:	postgresql-devel}
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	Smarty >= 2.6.10-4
 Requires:	php
 Requires:	php-gd
@@ -132,7 +133,6 @@ Prosty interfejs u¿ytkownika.
 Summary:	LAN Managment System - LMS system backend
 Summary(pl):	LAN Managment System - backend systemu LMS
 Group:		Networking/Utilities
-Requires:	%{name} = %{version}-%{release}
 Obsoletes:	lms-almsd
 
 %description lmsd
@@ -158,7 +158,8 @@ cd daemon
 
 ./configure --with-mysql
 %{__make} \
-	CC='%{__cc}' CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
+	CC='%{__cc}' \
+	CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
 mv lmsd lmsd-mysql
 
 ./configure --with-pgsql
@@ -213,17 +214,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post lmsd
 /sbin/chkconfig --add lmsd
-if [ -f /var/lock/subsys/lmsd ]; then
-	/etc/rc.d/init.d/lmsd restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/lmsd start\" to start lmsd daemon."
-fi
+%service lmsd restart "lmsd daemon"
 
 %preun lmsd
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/lmsd ]; then
-		/etc/rc.d/init.d/lmsd stop >&2
-	fi
+	%service lmsd stop
 	/sbin/chkconfig --del lmsd
 fi
 
