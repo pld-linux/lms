@@ -14,7 +14,6 @@ Name:		lms
 Version:	%{lmsver}.%{lmssubver}
 Release:	1
 License:	GPL
-Vendor:		LMS Developers
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
 # Source0-md5:	773eb4da0f97848886487d82b5c51417
