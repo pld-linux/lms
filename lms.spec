@@ -34,7 +34,6 @@ Requires:	php-gd
 Requires:	php-iconv
 Requires:	php-pcre
 Requires:	php-posix
-%{?with_lmsd:Requires: rc-scripts}
 Requires:	webapps
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -132,6 +131,8 @@ Prosty interfejs u¿ytkownika.
 Summary:	LAN Managment System - LMS system backend
 Summary(pl):	LAN Managment System - backend systemu LMS
 Group:		Networking/Utilities
+Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 Obsoletes:	lms-almsd
 
 %description lmsd
@@ -140,7 +141,7 @@ upon LMS database and restarting selected services.
 
 %description lmsd -l pl
 Program zarz±dzaj±cy serwerem poprzez tworzenie plików
-konfiguracyjnych na podstawie bazy danych LMS'a i restartowanie
+konfiguracyjnych na podstawie bazy danych LMS-a i restartowanie
 wybranych us³ug.
 
 %prep
@@ -290,7 +291,6 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 
 %files scripts
 %defattr(644,root,root,755)
-%dir %{_sbindir}
 %attr(755,root,root) %{_sbindir}/*
 
 %files sqlpanel
@@ -307,8 +307,12 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 %files lmsd
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/lmsd-*
-%attr(755,root,root) %{_libdir}/lms
+%dir %{_libdir}/lms
+%attr(755,root,root) %{_libdir}/lms/*.so
 %attr(754,root,root) /etc/rc.d/init.d/lmsd
-%{_sysconfdir}/modules
+# XXX: dir shared with base
+%dir %{_sysconfdir}
+%dir %{_sysconfdir}/modules
+%{_sysconfdir}/modules/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %endif
