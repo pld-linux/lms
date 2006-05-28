@@ -307,8 +307,8 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 %files lmsd
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/lmsd-*
-%attr(755,root,root) %{_libdir}/lms/*.so
+%attr(755,root,root) %{_libdir}/lms
 %attr(754,root,root) /etc/rc.d/init.d/lmsd
-/etc/lms/modules/*
+/etc/lms/modules
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %endif
