@@ -6,8 +6,8 @@
 # Conditional build:
 %bcond_without	lmsd		# without lmsd daemon
 #
-%define		lmsver		1.8
-%define		lmssubver	6
+%define		lmsver		1.9
+%define		lmssubver	3
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
@@ -16,7 +16,7 @@ Release:	1
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	961f251265a3793cf47d923754646050
+# Source0-md5:	c9560bf98462498a3bf4923e27560caf
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
@@ -28,7 +28,9 @@ URL:		http://lms.rulez.pl/
 %{?with_lmsd:BuildRequires:	postgresql-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
-Requires:	Smarty >= 2.6.10-4
+BuildRequires:	bison
+BuildRequires:	flex
+BuildRequires:	rpm-pythonprov
 Requires:	php
 Requires:	php-gd
 Requires:	php-iconv
@@ -177,10 +179,17 @@ install -d $RPM_BUILD_ROOT%{_sbindir} \
 	   $RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
 	   $RPM_BUILD_ROOT/etc/lms/modules/{dns,ggnofity,nofity} \
 	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c,documents},%{_libdir}/lms} \
-	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user}
+	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user} \
+	   $RPM_BUILD_ROOT%{_lmsdir}/www/img/core
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
-install img/* $RPM_BUILD_ROOT%{_lmsdir}/www/img
+install img/core/* $RPM_BUILD_ROOT%{_lmsdir}/www/img/core/*
+install img/*.gif $RPM_BUILD_ROOT%{_lmsdir}/www/img
+install img/*.jpg $RPM_BUILD_ROOT%{_lmsdir}/www/img
+install img/*.png $RPM_BUILD_ROOT%{_lmsdir}/www/img
+install img/*.css $RPM_BUILD_ROOT%{_lmsdir}/www/img
+install img/*.js $RPM_BUILD_ROOT%{_lmsdir}/www/img
+install img/*.fdb $RPM_BUILD_ROOT%{_lmsdir}/www/img
 cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
 cp -r lib contrib modules templates sample $RPM_BUILD_ROOT%{_lmsdir}
 install bin/* $RPM_BUILD_ROOT%{_sbindir}
