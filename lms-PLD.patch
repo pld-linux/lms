@@ -1,6 +1,6 @@
 --- lms/index.php-u	2005-06-15 22:48:13.000000000 +0200
 +++ lms/index.php	2005-06-15 22:53:52.000000000 +0200
-@@ -82,14 +82,14 @@
+@@ -82,9 +82,9 @@
  	$CONFIG[$key] = $val;
  
  // Check for configuration vars and set default values
@@ -13,13 +13,6 @@
  $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'].'/lib' : $CONFIG['directories']['lib_dir']);
  $CONFIG['directories']['modules_dir'] = (!isset($CONFIG['directories']['modules_dir']) ? $CONFIG['directories']['sys_dir'].'/modules' : $CONFIG['directories']['modules_dir']);
  $CONFIG['directories']['config_templates_dir'] = (!isset($CONFIG['directories']['config_templates_dir']) ? $CONFIG['directories']['sys_dir'].'/config_templates' : $CONFIG['directories']['config_templates_dir']);
--$CONFIG['directories']['smarty_dir'] = (!isset($CONFIG['directories']['smarty_dir']) ? (is_readable('/usr/share/php/smarty/libs/Smarty.class.php') ? '/usr/share/php/smarty/libs' : $CONFIG['directories']['lib_dir'].'/Smarty') : $CONFIG['directories']['smarty_dir']);
--$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? $CONFIG['directories']['sys_dir'].'/templates_c' : $CONFIG['directories']['smarty_compile_dir']);
-+$CONFIG['directories']['smarty_dir'] = (!isset($CONFIG['directories']['smarty_dir']) ? '/usr/share/php/Smarty' : $CONFIG['directories']['smarty_dir']);
-+$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? '/var/lib/lms/templates_c/' : $CONFIG['directories']['smarty_compile_dir']);
- $CONFIG['directories']['smarty_templates_dir'] = (!isset($CONFIG['directories']['smarty_templates_dir']) ? $CONFIG['directories']['sys_dir'].'/templates' : $CONFIG['directories']['smarty_templates_dir']);
- 
- foreach(lms_parse_ini_file($CONFIG['directories']['lib_dir'].'/config_defaults.ini', TRUE) as $section => $values)
 --- lms/sample/lms.ini.orig	2005-05-13 13:36:19.000000000 +0200
 +++ lms/sample/lms.ini	2005-06-15 23:04:30.000000000 +0200
 @@ -268,7 +268,7 @@
@@ -40,23 +33,7 @@
  
  ; In that directory LMS will store uploaded documents (files). 
  ; By default it is subdirectory documents in sys_dir.
-@@ -293,13 +293,13 @@
- ; can to access them without authorization. Those files are renamed to their
- ; md5 sums.
- 
--; doc_dir          = /usr/share/lms/documents/
-+; doc_dir          = /var/lib/lms/documents/
- 
- ; Directory with Smarty library
- ; By default, subdirectory Smarty in lib_dir
- ; http://smarty.php.net
- 
--; smarty_dir          = /usr/lib/php/Smarty
-+; smarty_dir          = /usr/share/php/Smarty
- 
- ; W pld jest domy¶lnie tutaj: (nie zapomnij o "poldek -i Smarty");
- ; In PLD-linux distribution it's here: (and don't forget about "poldek -i Smarty")
-@@ -309,7 +309,7 @@
+@@ -298,7 +298,7 @@
  ; Smarty's compilation directory. Place where Smarty compile templates.
  ; By default it is subdirectory templates_c in sys_dir.
  
