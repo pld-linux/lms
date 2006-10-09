@@ -22,15 +22,17 @@ Source2:	%{name}.init
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
+Patch2:		%{name}-smarty.patch
 URL:		http://lms.rulez.pl/
+BuildRequires:	bison
+BuildRequires:	flex
 %{?with_lmsd:BuildRequires:	libgadu-devel}
 %{?with_lmsd:BuildRequires:	mysql-devel}
 %{?with_lmsd:BuildRequires:	postgresql-devel}
+BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
-BuildRequires:	bison
-BuildRequires:	flex
-BuildRequires:	rpm-pythonprov
+Requires:	Smarty >= 2.6.10-4
 Requires:	php
 Requires:	php-gd
 Requires:	php-iconv
@@ -42,6 +44,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_sysconfdir	/etc/%{name}
 %define		_lmsdir		%{_datadir}/%{name}
 %define		_lmsvar		/var/lib/%{name}
+%define		_smartyplugindir	/usr/share/php/Smarty/plugins
 %define		_webapps	/etc/webapps
 %define		_webapp		%{name}
 
@@ -153,6 +156,14 @@ wybranych us³ug.
 %patch1 -p1
 %endif
 
+mkdir smarty-plugins
+mv \
+lib/Smarty/plugins/block.t.php \
+lib/Smarty/plugins/function.{bankaccount,handle,number,size,sum,tip}.php \
+lib/Smarty/plugins/modifier.{money_format,striphtml,to_words}.php \
+	smarty-plugins
+rm -rf lib/Smarty
+
 %build
 %if %{with lmsd}
 
@@ -180,7 +191,8 @@ install -d $RPM_BUILD_ROOT%{_sbindir} \
 	   $RPM_BUILD_ROOT/etc/lms/modules/{dns,ggnofity,nofity} \
 	   $RPM_BUILD_ROOT{%{_lmsvar}/{backups,templates_c,documents},%{_libdir}/lms} \
 	   $RPM_BUILD_ROOT%{_lmsdir}/www/{img,doc,user} \
-	   $RPM_BUILD_ROOT%{_lmsdir}/www/img/core
+	   $RPM_BUILD_ROOT%{_lmsdir}/www/img/core \
+	   $RPM_BUILD_ROOT%{_smartyplugindir}
 
 install *.php $RPM_BUILD_ROOT%{_lmsdir}/www
 install img/core/* $RPM_BUILD_ROOT%{_lmsdir}/www/img/core/*
@@ -190,9 +202,10 @@ install img/*.png $RPM_BUILD_ROOT%{_lmsdir}/www/img
 install img/*.css $RPM_BUILD_ROOT%{_lmsdir}/www/img
 install img/*.js $RPM_BUILD_ROOT%{_lmsdir}/www/img
 install img/*.fdb $RPM_BUILD_ROOT%{_lmsdir}/www/img
-cp -r doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
-cp -r lib contrib modules templates sample $RPM_BUILD_ROOT%{_lmsdir}
+cp -a doc/html $RPM_BUILD_ROOT%{_lmsdir}/www/doc
+cp -a lib contrib modules templates sample $RPM_BUILD_ROOT%{_lmsdir}
 install bin/* $RPM_BUILD_ROOT%{_sbindir}
+cp -a smarty-plugins/* $RPM_BUILD_ROOT%{_smartyplugindir}
 
 install sample/%{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}
 
@@ -279,6 +292,7 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 %dir %attr(750,root,http) %{_webapps}/%{_webapp}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_webapps}/%{_webapp}/httpd.conf
+%{_smartyplugindir}/*
 #
 %dir %{_lmsvar}
 %attr(770,root,http) %{_lmsvar}/backups
