@@ -1,0 +1,44 @@
+--- lms/contrib/customer/index.php	2006-09-19 09:29:54.000000000 +0300
++++ lms.smarty/contrib/customer/index.php	2006-10-09 22:10:09.496575380 +0300
+@@ -127,7 +127,7 @@
+ 
+ // Initialize templates engine
+ 
+-require_once($_LIB_DIR.'/Smarty/Smarty.class.php');
++require_once('/usr/share/php/Smarty/Smarty.class.php');
+ 
+ $SMARTY = new Smarty;
+ 
+--- lms/contrib/customer_otherip/class.php	2006-09-19 09:29:54.000000000 +0300
++++ lms.smarty/contrib/customer_otherip/class.php	2006-10-09 22:10:28.897010001 +0300
+@@ -129,7 +129,7 @@
+ 
+ // Initialize templates engine
+ 
+-require_once($_LIB_DIR.'/Smarty/Smarty.class.php');
++require_once('/usr/share/php/Smarty/Smarty.class.php');
+ 
+ $SMARTY = new Smarty;
+ 
+--- lms/contrib/squid_redirector/index.php	2006-09-19 09:29:54.000000000 +0300
++++ lms.smarty/contrib/squid_redirector/index.php	2006-10-09 22:10:37.417200876 +0300
+@@ -119,7 +119,7 @@
+ 
+ // Initialize templates engine
+ 
+-require_once($_LIB_DIR.'/Smarty/Smarty.class.php');
++require_once('/usr/share/php/Smarty/Smarty.class.php');
+ 
+ $SMARTY = new Smarty;
+ $SESSION = NULL;
+--- lms/index.php	2006-10-09 22:11:58.559018668 +0300
++++ lms.smarty/index.php	2006-10-09 22:09:37.405856460 +0300
+@@ -126,7 +126,7 @@
+ 
+ // Initialize templates engine (must be before locale settings)
+ 
+-require_once($_LIB_DIR.'/Smarty/Smarty.class.php');
++require_once '/usr/share/php/Smarty/Smarty.class.php');
+ 
+ $SMARTY = new Smarty;
+ 
