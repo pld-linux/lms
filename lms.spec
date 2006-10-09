@@ -306,8 +306,21 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 %{_lmsdir}/modules
 %exclude %{_lmsdir}/modules/sql.php
 %{_lmsdir}/contrib
-%{_lmsdir}/sample
+%dir %{_lmsdir}/sample
+%{_lmsdir}/sample/crontab-entry
+%{_lmsdir}/sample/lms-mgc-netx-sample.ini
+%{_lmsdir}/sample/lms-mgc.ini
+%{_lmsdir}/sample/lms.apache.conf
+%{_lmsdir}/sample/lms.ini
+%{_lmsdir}/sample/mailtemplate.txt
+%{_lmsdir}/sample/mailtemplate_en.txt
+%{_lmsdir}/sample/rc.lmsd
+%{_lmsdir}/sample/rc.reminder_1st
+%{_lmsdir}/sample/smstemplate.txt
+%{_lmsdir}/sample/tekst_1.txt
+%{_lmsdir}/sample/test.txt
 %attr(755,root,root) %{_lmsdir}/sample/traffic_ipt.pl
+
 %{_lmsdir}/templates
 %exclude %{_lmsdir}/templates/sql.html
 %exclude %{_lmsdir}/templates/sqlprint.html
