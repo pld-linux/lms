@@ -12,7 +12,7 @@ Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
@@ -33,12 +33,12 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
 Requires:	Smarty >= 2.6.10-4
-Requires:	php
-Requires:	php-gd
-Requires:	php-iconv
-Requires:	php-pcre
-Requires:	php-posix
+Requires:	php(gd)
+Requires:	php(iconv)
+Requires:	php(pcre)
+Requires:	php(posix)
 Requires:	webapps
+Requires:	webserver(php)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/%{name}
