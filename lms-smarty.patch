@@ -38,7 +38,7 @@
  // Initialize templates engine (must be before locale settings)
  
 -require_once($_LIB_DIR.'/Smarty/Smarty.class.php');
-+require_once '/usr/share/php/Smarty/Smarty.class.php');
++require_once('/usr/share/php/Smarty/Smarty.class.php');
  
  $SMARTY = new Smarty;
  
