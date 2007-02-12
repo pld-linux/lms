@@ -9,7 +9,7 @@
 %define		lmsver		1.7
 %define		lmssubver	4
 Summary:	LAN Managment System
-Summary(pl):	System Zarz±dzania Sieci± Lokaln±
+Summary(pl.UTF-8):   System ZarzƒÖdzania SieciƒÖ LokalnƒÖ
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
 Release:	1
@@ -57,31 +57,31 @@ service of users at provider's level. The main features in LMS are:
   openbsd packet filter configuration files/scripts;
 - autogenerating almost any kind of config file using templates.
 
-%description -l pl
-"LMS" jest skrÛtem od "LAN Management System". Jest to zestaw
-aplikacji w PHP i Perlu, u≥atwiaj±cych zarz±dzanie sieciami
+%description -l pl.UTF-8
+"LMS" jest skr√≥tem od "LAN Management System". Jest to zestaw
+aplikacji w PHP i Perlu, u≈ÇatwiajƒÖcych zarzƒÖdzanie sieciami
 osiedlowymi (popularnie zwanymi Amatorskimi Sieciami Komputerowymi),
-opartych o bazÍ danych MySQL lub PostgreSQL. G≥Ûwne za≥oøenia to
-uzyskanie jako∂ci us≥ug oraz obs≥ugi uøytkownikÛw na poziomie
+opartych o bazƒô danych MySQL lub PostgreSQL. G≈Ç√≥wne za≈Ço≈ºenia to
+uzyskanie jako≈õci us≈Çug oraz obs≈Çugi u≈ºytkownik√≥w na poziomie
 providera z prawdziwego zdarzenia. Najbardziej podstawowe cechy LMS
 to:
-- baza danych uøytkownikÛw (imiÍ, nazwisko, adres, numer telefonu,
+- baza danych u≈ºytkownik√≥w (imiƒô, nazwisko, adres, numer telefonu,
   uwagi);
-- baza danych komputerÛw (adres IP, adres MAC);
+- baza danych komputer√≥w (adres IP, adres MAC);
 - prowadzenie prostego rachunku operacji finansowych oraz stanu
-  funduszÛw sieci;
-- rÛøne taryfy abonamentowe;
-- wysy≥anie poczt± elektroniczn± upomnieÒ do uøytkownikÛw;
-- automatyczne naliczanie op≥at miesiÍcznych;
-- rÛøne poziomy dostÍpu do funkcji LMS dla administratorÛw;
-- generowanie regu≥ i plikÛw konfiguracyjnych dla ipchains, iptables,
-  dhcpd, oidentd, packet filtra openbsd, wpisÛw /etc/ethers
-- generowanie praktycznie kaødego pliku konfiguracyjnego na podstawie
-  danych w bazie przy uøyciu prostych szablonÛw.
+  fundusz√≥w sieci;
+- r√≥≈ºne taryfy abonamentowe;
+- wysy≈Çanie pocztƒÖ elektronicznƒÖ upomnie≈Ñ do u≈ºytkownik√≥w;
+- automatyczne naliczanie op≈Çat miesiƒôcznych;
+- r√≥≈ºne poziomy dostƒôpu do funkcji LMS dla administrator√≥w;
+- generowanie regu≈Ç i plik√≥w konfiguracyjnych dla ipchains, iptables,
+  dhcpd, oidentd, packet filtra openbsd, wpis√≥w /etc/ethers
+- generowanie praktycznie ka≈ºdego pliku konfiguracyjnego na podstawie
+  danych w bazie przy u≈ºyciu prostych szablon√≥w.
 
 %package scripts
 Summary:	LAN Managment System - scripts
-Summary(pl):	LAN Managment System - skrypty
+Summary(pl.UTF-8):   LAN Managment System - skrypty
 Group:		Networking/Utilities
 Requires:	perl-Net-SMTP-Server
 Requires:	perl-Config-IniFiles
@@ -93,15 +93,15 @@ monthly billing, notify users about their debts and cutting off
 customers. Also you can build propably any kind of config file using
 lms-mgc.
 
-%description scripts -l pl
+%description scripts -l pl.UTF-8
 Ten pakiet zawiera skrypty do zintegrowania LMS z systemem, naliczania
-comiesiÍcznych op≥at, powiadamiania uøytkownikÛw o ich zad≥uøeniu oraz
-ich automagicznego od≥±czania. Moøesz takøe zbudowaÊ prawdopodobnie
-kaødy typ pliku konfiguracyjnego przy uøyciu lms-mgc.
+comiesiƒôcznych op≈Çat, powiadamiania u≈ºytkownik√≥w o ich zad≈Çu≈ºeniu oraz
+ich automagicznego od≈ÇƒÖczania. Mo≈ºesz tak≈ºe zbudowaƒá prawdopodobnie
+ka≈ºdy typ pliku konfiguracyjnego przy u≈ºyciu lms-mgc.
 
 %package sqlpanel
 Summary:	LAN Managment System - sqlpanel module
-Summary(pl):	LAN Managment System - modu≥ sqlpanel
+Summary(pl.UTF-8):   LAN Managment System - modu≈Ç sqlpanel
 Group:		Networking/Utilities
 Requires:	%{name} = %{version}-%{release}
 
@@ -109,26 +109,26 @@ Requires:	%{name} = %{version}-%{release}
 SQL-panel module allows you to execute SQL queries and directly modify
 data.
 
-%description sqlpanel -l pl
-Modu≥ 'SQL - panel' daje moøliwo∂Ê bezpo∂redniego dostÍpu do bazy
-danych poprzez zadawanie zapytaÒ SQL. Wyniki wy∂wietlane s± w formie
+%description sqlpanel -l pl.UTF-8
+Modu≈Ç 'SQL - panel' daje mo≈ºliwo≈õƒá bezpo≈õredniego dostƒôpu do bazy
+danych poprzez zadawanie zapyta≈Ñ SQL. Wyniki wy≈õwietlane sƒÖ w formie
 tabeli. Ponadto podawany jest czas wykonania zapytania.
 
 %package user
 Summary:	LAN Managment System - simple user interface
-Summary(pl):	LAN Managment System - prosty interfejs uøytkownika
+Summary(pl.UTF-8):   LAN Managment System - prosty interfejs u≈ºytkownika
 Group:		Networking/Utilities
 Requires:	%{name} = %{version}-%{release}
 
 %description user
 Simple user interface.
 
-%description user -l pl
-Prosty interfejs uøytkownika.
+%description user -l pl.UTF-8
+Prosty interfejs u≈ºytkownika.
 
 %package lmsd
 Summary:	LAN Managment System - LMS system backend
-Summary(pl):	LAN Managment System - backend systemu LMS
+Summary(pl.UTF-8):   LAN Managment System - backend systemu LMS
 Group:		Networking/Utilities
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	lms-almsd
@@ -137,10 +137,10 @@ Obsoletes:	lms-almsd
 A program to manage the server by creating configuration files based
 upon LMS database and restarting selected services.
 
-%description lmsd -l pl
-Program zarz±dzaj±cy serwerem poprzez tworzenie plikÛw
+%description lmsd -l pl.UTF-8
+Program zarzƒÖdzajƒÖcy serwerem poprzez tworzenie plik√≥w
 konfiguracyjnych na podstawie bazy danych LMS'a i restartowanie
-wybranych us≥ug.
+wybranych us≈Çug.
 
 %prep
 %setup -q -n %{name}
