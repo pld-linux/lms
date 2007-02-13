@@ -9,7 +9,7 @@
 %define		lmsver		1.9
 %define		lmssubver	3
 Summary:	LAN Managment System
-Summary(pl.UTF-8):   System Zarządzania Siecią Lokalną
+Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
 Release:	2
@@ -87,7 +87,7 @@ to:
 
 %package scripts
 Summary:	LAN Managment System - scripts
-Summary(pl.UTF-8):   LAN Managment System - skrypty
+Summary(pl.UTF-8):	LAN Managment System - skrypty
 Group:		Networking/Utilities
 Requires:	perl-Config-IniFiles
 Requires:	perl-DBI
@@ -107,7 +107,7 @@ każdy typ pliku konfiguracyjnego przy użyciu lms-mgc.
 
 %package sqlpanel
 Summary:	LAN Managment System - sqlpanel module
-Summary(pl.UTF-8):   LAN Managment System - moduł sqlpanel
+Summary(pl.UTF-8):	LAN Managment System - moduł sqlpanel
 Group:		Networking/Utilities
 Requires:	%{name} = %{version}-%{release}
 
@@ -122,7 +122,7 @@ tabeli. Ponadto podawany jest czas wykonania zapytania.
 
 %package user
 Summary:	LAN Managment System - simple user interface
-Summary(pl.UTF-8):   LAN Managment System - prosty interfejs użytkownika
+Summary(pl.UTF-8):	LAN Managment System - prosty interfejs użytkownika
 Group:		Networking/Utilities
 Requires:	%{name} = %{version}-%{release}
 
@@ -134,7 +134,7 @@ Prosty interfejs użytkownika.
 
 %package lmsd
 Summary:	LAN Managment System - LMS system backend
-Summary(pl.UTF-8):   LAN Managment System - backend systemu LMS
+Summary(pl.UTF-8):	LAN Managment System - backend systemu LMS
 Group:		Networking/Utilities
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
