@@ -7,23 +7,23 @@
 %bcond_without	lmsd		# without lmsd daemon
 #
 %define		lmsver		1.9
-%define		lmssubver	3
+%define		lmssubver	5
 Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	2
+Release:	1
 License:	GPL v2
 Group:		Networking/Utilities
-Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	c9560bf98462498a3bf4923e27560caf
+Source0:	http://lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
+# Source0-md5:	f3d0284b3f2028ba74d2b8c3f52897cb
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 Patch2:		%{name}-smarty.patch
-URL:		http://lms.rulez.pl/
+URL:		http://lms.org.pl/
 BuildRequires:	bison
 BuildRequires:	flex
 %{?with_lmsd:BuildRequires:	libgadu-devel}
