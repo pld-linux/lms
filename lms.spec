@@ -15,14 +15,14 @@ Version:	%{lmsver}.%{lmssubver}
 Release:	4
 License:	GPL v2
 Group:		Networking/Utilities
-Source0:	http://lms.rulez.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
+Source0:	http://lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
 # Source0-md5:	370dbffe2f204a7f284c20c74f1d1259
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
-URL:		http://lms.rulez.pl/
+URL:		http://lms.org.pl/
 %{?with_lmsd:BuildRequires:	libgadu-devel}
 %{?with_lmsd:BuildRequires:	mysql-devel}
 %{?with_lmsd:BuildRequires:	postgresql-devel}
