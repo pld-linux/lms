@@ -23,7 +23,7 @@ Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 Patch2:		%{name}-smarty.patch
-URL:		http://lms.org.pl/
+URL:		http://www.lms.org.pl/
 BuildRequires:	bison
 BuildRequires:	flex
 %{?with_lmsd:BuildRequires:	libgadu-devel}
