@@ -18,3 +18,44 @@
  $CONFIG['directories']['smarty_templates_dir'] = (!isset($CONFIG['directories']['smarty_templates_dir']) ? $CONFIG['directories']['sys_dir'].'/templates' : $CONFIG['directories']['smarty_templates_dir']);
  
  foreach(lms_parse_ini_file($CONFIG['directories']['lib_dir'].'/config_defaults.ini', TRUE) as $section => $values)
+--- lms/sample/lms.ini.orig	2007-06-23 09:58:42.000000000 +0200
++++ lms/sample/lms.ini	2007-06-23 10:00:35.000000000 +0200
+@@ -257,7 +257,7 @@
+ ; index.php, graphics, templates and the rest. By default index.php seek in filesystem
+ ; using getcwd(), but better is to say him where hi is:
+ 
+-; sys_dir          = /var/www/htdocs/lms/
++; sys_dir          = /usr/share/lms/www/
+ 
+ ; Directory with "modules" of LMS. That is content of /modules directory.
+ ; By default it is subdirectory modules in sys_dir
+@@ -274,7 +274,7 @@
+ ; If directory with backups will be accessible from WWW level, then anybody will
+ ; can to access them without authorization.
+ 
+-; backup_dir          = /var/backup/lms/
++; backup_dir          = /var/lib/lms/backup/
+ 
+ ; In that directory LMS will store uploaded documents (files). 
+ ; By default it is subdirectory documents in sys_dir.
+@@ -282,17 +282,17 @@
+ ; can to access them without authorization. Those files are renamed to their
+ ; md5 sums.
+ 
+-; doc_dir          = /usr/share/lms/documents/
++; doc_dir          = /var/lib/lms/documents/
+ 
+ ; Smarty's compilation directory. Place where Smarty compile templates.
+ ; By default it is subdirectory templates_c in sys_dir.
+ 
+-; smarty_compile_dir     = /var/smarty/compile/lms
++; smarty_compile_dir     = /var/lib/lms/templates_c/
+ 
+ ; Directory with Smarty's templates.
+ ; By default it is subdirectory templates in sys_dir.
+ 
+-; smarty_templates_dir     = /usr/share/lms/templates
++; smarty_templates_dir     = /usr/share/lms/templates/
+ 
+ ; ---------------------------------------------------------------------------
+ ; Konfiguracja skryptu do logowania ruchu na iptables -
