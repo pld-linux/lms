@@ -7,7 +7,7 @@
 %bcond_without	lmsd		# without lmsd daemon
 #
 %define		lmsver		1.9
-%define		lmssubver	5
+%define		lmssubver	7
 Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
@@ -15,8 +15,8 @@ Version:	%{lmsver}.%{lmssubver}
 Release:	1
 License:	GPL v2
 Group:		Networking/Utilities
-Source0:	http://lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	f3d0284b3f2028ba74d2b8c3f52897cb
+Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
+# Source0-md5:	da8db5677a65e20654b4819a3090fdb2
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
@@ -32,7 +32,7 @@ BuildRequires:	flex
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
-Requires:	Smarty >= 2.6.10-4
+Requires:	Smarty >= 2.6.18-2
 Requires:	php(gd)
 Requires:	php(iconv)
 Requires:	php(pcre)
