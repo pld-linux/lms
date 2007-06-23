@@ -7,28 +7,28 @@
 %bcond_without	lmsd		# without lmsd daemon
 #
 %define		lmsver		1.6
-%define		lmssubver	8
+%define		lmssubver	9
 Summary:	LAN Managment System
 Summary(pl):	System Zarz±dzania Sieci± Lokaln±
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	4
+Release:	1
 License:	GPL v2
 Group:		Networking/Utilities
-Source0:	http://lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	370dbffe2f204a7f284c20c74f1d1259
+Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
+# Source0-md5:	0c3b7e61c8ed5e769eaee07f868f5315
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
-URL:		http://lms.org.pl/
+URL:		http://www.lms.org.pl/
 %{?with_lmsd:BuildRequires:	libgadu-devel}
 %{?with_lmsd:BuildRequires:	mysql-devel}
 %{?with_lmsd:BuildRequires:	postgresql-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
-Requires:	Smarty >= 2.6.10-4
+Requires:	Smarty >= 2.6.18-2
 Requires:	php(gd)
 Requires:	php(iconv)
 Requires:	php(pcre)
@@ -282,7 +282,19 @@ rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 %{_lmsdir}/modules
 %exclude %{_lmsdir}/modules/sql.php
 %{_lmsdir}/contrib
-%{_lmsdir}/sample
+%dir %{_lmsdir}/sample
+%{_lmsdir}/sample/crontab-entry
+%{_lmsdir}/sample/lms-mgc-netx-sample.ini
+%{_lmsdir}/sample/lms-mgc.ini
+%{_lmsdir}/sample/lms.apache.conf
+%{_lmsdir}/sample/lms.ini
+%{_lmsdir}/sample/mailtemplate.txt
+%{_lmsdir}/sample/rc.lmsd
+%{_lmsdir}/sample/rc.reminder_1st
+%{_lmsdir}/sample/smstemplate.txt
+%{_lmsdir}/sample/sqlite_createdb.php
+%{_lmsdir}/sample/tekst_1.txt
+%{_lmsdir}/sample/test.txt
 %attr(755,root,root) %{_lmsdir}/sample/traffic_ipt.pl
 %{_lmsdir}/templates
 %exclude %{_lmsdir}/templates/sql.html
