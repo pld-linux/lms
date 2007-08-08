@@ -1,24 +1,3 @@
-diff -urpN lms.orig/daemon/configure lms/daemon/configure
---- lms.orig/daemon/configure	2005-06-20 08:36:59.000000000 +0200
-+++ lms/daemon/configure	2005-07-19 00:22:17.000000000 +0200
-@@ -3,7 +3,7 @@
- # Initialize default variables
- prefix="/usr/local"
- incdir="/usr/include"
--libdir="/usr/lib"
-+libdir="/usr/lib64"
- with_mysql=yes
- 
- # Create config.status file
-@@ -89,7 +89,7 @@ Options: [defaults in brackets after des
-   --prefix=PREFIX	sets program and modules install location
- 			(/usr/local), modules goes to PREFIX/lms/lib and main
- 			program to PREFIX/lms/bin
--  --libdir=DIR		sets location of database library (/usr/lib)
-+  --libdir=DIR		sets location of database library (/usr/lib64)
-   --incdir=DIR		sets location of database include files (/usr/include)
-   --inifile=FILE        configuration file - disables online configuration
- EOF
 diff -urpN lms.orig/daemon/modules/ggnotify/Makefile.in lms/daemon/modules/ggnotify/Makefile.in
 --- lms.orig/daemon/modules/ggnotify/Makefile.in	2005-05-01 09:31:23.000000000 +0200
 +++ lms/daemon/modules/ggnotify/Makefile.in	2005-07-19 00:23:16.000000000 +0200
@@ -36,3 +15,23 @@ diff -urpN lms.orig/daemon/modules/ggnotify/Makefile.in lms/daemon/modules/ggnot
 -	install -c -m 755 $(OUT) $(MODULESDIR)
 \ No newline at end of file
 +	install -c -m 755 $(OUT) $(MODULESDIR)
+--- lms/daemon/configure.fix	2007-08-08 17:46:18.790076142 +0200
++++ lms/daemon/configure	2007-08-08 17:47:36.030477822 +0200
+@@ -3,7 +3,7 @@
+ # Initialize default variables
+ prefix="/usr/local"
+ incdir="/usr/include"
+-libdir="/usr/lib"
++libdir="/usr/lib64"
+ lmsbindir=""
+ lmslibdir=""
+ with_mysql=yes
+@@ -98,7 +98,7 @@ Options: [defaults in brackets after des
+ 			program to PREFIX/lms/bin
+   --lmsbindir=DIR	sets location of target LMS binaries (PREFIX/lms/bin)
+   --lmslibdir=DIR	sets location of target LMS modules (PREFIX/lms/lib)
+-  --libdir=DIR		sets location of database library (/usr/lib)
++  --libdir=DIR		sets location of database library (/usr/lib64)
+   --incdir=DIR		sets location of database include files (/usr/include)
+   --inifile=FILE        configuration file - disables online configuration
+ EOF
