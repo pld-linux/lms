@@ -7,7 +7,7 @@
 %bcond_without	lmsd		# without lmsd daemon
 #
 %define		lmsver		1.9
-%define		lmssubver	7
+%define		lmssubver	8
 Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
@@ -16,7 +16,7 @@ Release:	1
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	da8db5677a65e20654b4819a3090fdb2
+# Source0-md5:	894dae891a006b51a9a7b4e606ff12ec
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
