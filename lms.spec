@@ -12,7 +12,7 @@ Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	2
+Release:	3
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
@@ -155,6 +155,7 @@ wybranych usług.
 %if "%{_lib}" == "lib64"
 %patch1 -p1
 %endif
+%patch2 -p1
 
 mkdir smarty-plugins
 mv \
