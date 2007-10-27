@@ -12,7 +12,7 @@ Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
@@ -160,7 +160,7 @@ wybranych usług.
 mkdir smarty-plugins
 mv \
 lib/Smarty/plugins/block.t.php \
-lib/Smarty/plugins/function.{bankaccount,handle,number,size,sum,tip}.php \
+lib/Smarty/plugins/function.{bankaccount,gentime,handle,number,size,sum,tip}.php \
 lib/Smarty/plugins/modifier.{money_format,striphtml,to_words}.php \
 	smarty-plugins
 rm -rf lib/Smarty
