@@ -36,9 +36,7 @@ fi
 [ -z "$LMSD_DATABASE_HOST" ] && LMSD_DATABASE_HOST="localhost"
 [ -z "$LMSD_OPTIONS" ] && LMSD_OPTIONS=""
 
-RETVAL=0
-case "$1" in
-  start)
+start() {
 	if [ ! -f /var/lock/subsys/lmsd ]; then
 		msg_starting lmsd
 
@@ -54,8 +52,9 @@ case "$1" in
 	else
 		msg_already_running lmsd
 	fi
-	;;
-  stop)
+}
+
+stop() {
 	if [ -f /var/lock/subsys/lmsd ]; then
 		msg_stopping lmsd
 		killproc lmsd-$LMSD_DATABASE_TYPE
@@ -64,11 +63,19 @@ case "$1" in
 	else
 		msg_not_running lmsd
 	fi
+}
+
+RETVAL=0
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
 	;;
   restart)
-	$0 stop
-	$0 start
-	exit $?
+	stop
+	start
 	;;
   status)
 	status lmsd-$LMSD_DATABASE_TYPE
