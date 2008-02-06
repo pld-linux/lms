@@ -12,7 +12,7 @@ Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
@@ -256,34 +256,6 @@ fi
 
 %triggerun -- apache < 2.2.0, apache-base
 %webapp_unregister httpd %{_webapp}
-
-%triggerpostun -- %{name} <= 1.0.4
-echo "WARNING!!!"
-echo "_READ_ and upgrade LMS database:"
-echo "MySQL: /usr/share/doc/%{name}-%{version}/UPGRADE-1.0-1.5.mysql.gz"
-echo "PostgreSQL: /usr/share/doc/%{name}-%{version}/UPGRADE-1.0-1.5.pgsql.gz"
-
-%triggerpostun -- %{name} <= 1.2.0
-echo "BEWARE:"
-echo "Automatic upgrade from LMS<= 1.2.0 is NO LONGER SUPPORTED by lms team"
-echo "You are advised to upgrade it manually"
-echo
-
-%triggerpostun -- %{name} < 1.6.6-1.4
-# nuke very-old config location (this mostly for Ra)
-if [ -f /etc/httpd/httpd.conf ]; then
-	sed -i -e "/^Include.*%{name}.conf/d" /etc/httpd/httpd.conf
-fi
-
-# migrate from httpd (apache2) config dir
-if [ -f /etc/httpd/%{name}.conf.rpmsave ]; then
-	cp -f %{_webapps}/%{_webapp}/httpd.conf{,.rpmnew}
-	mv -f /etc/httpd/%{name}.conf.rpmsave %{_webapps}/%{_webapp}/httpd.conf
-fi
-
-rm -f /etc/httpd/httpd.conf/99_%{name}.conf
-/usr/sbin/webapp register httpd %{_webapp}
-%service -q httpd reload
 
 %files
 %defattr(644,root,root,755)
