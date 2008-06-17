@@ -30,7 +30,7 @@ BuildRequires:	flex
 %{?with_lmsd:BuildRequires:	mysql-devel}
 %{?with_lmsd:BuildRequires:	postgresql-devel}
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.461
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
 Requires:	Smarty >= 2.6.18-2
 Requires:	php(gd)
@@ -44,7 +44,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_sysconfdir	/etc/%{name}
 %define		_lmsdir		%{_datadir}/%{name}
 %define		_lmsvar		/var/lib/%{name}
-%define		_smartyplugindir	/usr/share/php/Smarty/plugins
+%define		_smartyplugindir	%{php_data_dir}/Smarty/plugins
 %define		_webapps	/etc/webapps
 %define		_webapp		%{name}
 
