@@ -1,0 +1,276 @@
+diff -ur lms-cvs.orig/lib/LMS.class.php lms-cvs/lib/LMS.class.php
+--- lms-cvs.orig/lib/LMS.class.php	2005-02-02 21:09:04.226695078 +0100
++++ lms-cvs/lib/LMS.class.php	2005-02-02 21:08:30.677015322 +0100
+@@ -1221,6 +1221,12 @@
+ 		return $this->DB->GetOne('SELECT ownerid FROM nodes WHERE id=?', array($id));
+ 	}
+ 
++	function NodeAssignmentUpdate($nodedata)
++	{
++		$this->SetTS('nodesassignments');
++		return $this->DB->Execute('UPDATE nodesassignments SET assignmentid=? WHERE nodeid=?',array($nodedata['assignment'],$nodedata['id']));
++	}
++
+ 	function NodeUpdate($nodedata)
+ 	{
+ 		$this->SetTS('nodes');
+@@ -1272,7 +1278,17 @@
+ 	{
+ 		return $this->DB->GetOne('SELECT name FROM nodes WHERE ipaddr=inet_aton(?)', array($ipaddr));
+ 	}
++ 	
++	function GetNodeAssignment($id)
++	{
++		return $this->DB->GetOne('SELECT assignmentid FROM nodesassignments WHERE nodeid=?',array($id));
++	}
+ 
++	function GetNodeTariff($id)
++	{
++		return $this->DB->GetOne('SELECT name FROM tariffs LEFT JOIN assignments ON (tariffs.id=assignments.tariffid) WHERE assignments.id=?',array($id));
++	}
++	
+ 	function GetNode($id)
+ 	{
+ 		if($result = $this->DB->GetRow('SELECT id, name, ownerid, ipaddr, inet_ntoa(ipaddr) AS ip, mac, access, warning, creationdate, moddate, creatorid, modid, netdev, lastonline, info FROM nodes WHERE id=?', array($id)))
+@@ -1296,6 +1312,8 @@
+ 			$result['netname'] = $this->GetNetworkName($result['netid']);
+ 			$result['producer'] = get_producer($result['mac']);
+ 			$result['devicename'] = $this->GetNetDevName($result['netdevid']);
++			$result['assignment'] = $this->GetNodeAssignment($id);
++			$result['tariff'] = $this->GetNodeTariff($result['assignment']);
+ 			return $result;
+ 		}else
+ 			return FALSE;
+@@ -1488,6 +1506,12 @@
+ 			return $this->DB->Execute('UPDATE nodes SET access=0 WHERE netdev=? AND ownerid=0', array($netdev));
+ 	}
+ 	
++	function NodeAssignmentAdd($nodedata)
++	{
++		$this->SetTS('nodesassignments');
++		return $this->DB->Execute('INSERT INTO nodesassignments (nodeid,assignmentid) VALUES (?,?)',array($nodedata['id'], $nodedata['assignment']));
++	}
++
+ 	function NodeAdd($nodedata)
+ 	{
+ 		$this->SetTS('nodes');
+diff -ur lms-cvs.orig/modules/nodeadd.php lms-cvs/modules/nodeadd.php
+--- lms-cvs.orig/modules/nodeadd.php	2005-02-02 21:11:40.954932764 +0100
++++ lms-cvs/modules/nodeadd.php	2005-02-01 20:51:45.000000000 +0100
+@@ -81,7 +81,8 @@
+ 
+ 	if(!$error)
+ 	{
+-		$nodeid = $LMS->NodeAdd($nodedata);
++		$nodeid=$LMS->NodeAdd($nodedata);
++		$LMS->NodeAssignmentAdd($nodedata);
+ 		if($nodedata['reuse']=='')
+ 		{
+ 			header('Location: ?m=nodeinfo&id='.$nodeid);
+diff -ur lms-cvs.orig/modules/nodeedit.php lms-cvs/modules/nodeedit.php
+--- lms-cvs.orig/modules/nodeedit.php	2005-02-02 21:11:41.036919912 +0100
++++ lms-cvs/modules/nodeedit.php	2005-02-01 20:51:45.000000000 +0100
+@@ -130,6 +130,8 @@
+ 
+ 	if(!$error)
+ 	{
++		if ($nodeinfo['assignment']) $LMS->NodeAssignmentUpdate($nodeedit);
++		else $LMS->NodeAssignmentAdd($nodeedit);
+ 		$LMS->NodeUpdate($nodeedit);
+ 		header('Location: ?m=nodeinfo&id='.$nodeedit['id']);
+ 	}
+diff -ur lms-cvs.orig/templates/nodeaddbox.html lms-cvs/templates/nodeaddbox.html
+--- lms-cvs.orig/templates/nodeaddbox.html	2005-01-31 22:09:20.000000000 +0100
++++ lms-cvs/templates/nodeaddbox.html	2005-02-01 20:52:10.000000000 +0100
+@@ -35,6 +35,22 @@
+ 	</TR>
+ 	<TR CLASS="LIGHT">
+ 		<TD WIDTH="1%" CLASS="FLEFT">
++		<IMG SRC="img/money.gif" BORDER="0" ALT=""></A>
++		</TD>
++		<TD WIDTH="1%" NOWRAP>
++			<B>{t}Tariff:{/t}</B>
++		</TD>
++		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
++			<SELECT SIZE="1" NAME="nodeedit[assignment]" {tip text="Pick tariff from list" trigger="assigment"}>
++				<OPTION VALUE="0" {if ! $nodeinfo.assignment}SELECTED{/if}>{t}none{/t}</OPTION>
++				{section name="assignment" loop=$assignments}
++				<OPTION VALUE="{$assignments[assignment].id}" {if $nodeinfo.assignment == $assignments[assignment].id} SELECTED {/if}>{$assignments[assignment].name} ({$assignments[assignment].id})</OPTION>
++				{/section}
++			</SELECT>
++		</TD>
++	</TR>
++	<TR CLASS="LIGHT">
++		<TD WIDTH="1%" CLASS="FLEFT">
+ 			<IMG SRC="img/{if ! $nodedata.access}no{/if}access.gif" BORDER="0" ALT="">
+ 		</TD>
+ 		<TD WIDTH="1%" NOWRAP>
+diff -ur lms-cvs.orig/templates/nodeeditbox.html lms-cvs/templates/nodeeditbox.html
+--- lms-cvs.orig/templates/nodeeditbox.html	2005-01-07 21:26:18.000000000 +0100
++++ lms-cvs/templates/nodeeditbox.html	2005-01-14 22:10:19.000000000 +0100
+@@ -49,6 +49,20 @@
+ 	</TR>
+ 	<TR CLASS="LIGHT">
+ 		<TD WIDTH="1%" CLASS="FLEFT">
++			<IMG SRC="img/money.gif" BORDER="0" ALT=""></A>
++		</TD>
++		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
++			<SELECT SIZE="1" NAME="nodeedit[assignment]" {tip text="Pick tariff from list" trigger="assigment"}>
++				<OPTION VALUE="0" {if ! $nodeinfo.assignment}SELECTED{/if}>{t}none{/t}</OPTION>
++				{section name="assignment" loop=$assignments}
++				<OPTION VALUE="{$assignments[assignment].id}" {if $nodeinfo.assignment == $assignments[assignment].id} SELECTED {/if}>{$assignments[assignment].name} ({$assignments[assignment].id})</OPTION>
++				{/section}
++
++			</SELECT>
++		</TD>
++	</TR>
++	<TR CLASS="LIGHT">
++		<TD WIDTH="1%" CLASS="FLEFT">
+ 			<IMG SRC="img/{if ! $nodeinfo.access}no{/if}access.gif" BORDER="0" ALT="">
+ 		</TD>
+ 		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
+diff -ur lms-cvs.orig/templates/nodeinfobox.html lms-cvs/templates/nodeinfobox.html
+--- lms-cvs.orig/templates/nodeinfobox.html	2005-01-20 18:53:16.000000000 +0100
++++ lms-cvs/templates/nodeinfobox.html	2005-02-02 21:18:44.702467494 +0100
+@@ -57,6 +57,14 @@
+ 	</TR>
+ 	<TR CLASS="LIGHT">
+ 		<TD WIDTH="1%" CLASS="FLEFT">
++			<IMG SRC="img/money.gif" BORDER="0" ALT=""></A>
++		</TD>
++		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
++			<B>{if $nodeinfo.assignment}{$nodeinfo.tariff}({$nodeinfo.assignment|string_format:"%04d"}){else}{t}none{/t}{/if}</B>
++		</TD>
++	</TR>	
++	<TR CLASS="LIGHT">
++		<TD WIDTH="1%" CLASS="FLEFT">
+ 			<A HREF="?m=nodeset&id={$nodeinfo.id}"><IMG SRC="img/{if ! $nodeinfo.access}no{/if}access.gif" BORDER="0" ALT=""></A>
+ 		</TD>
+ 		<TD WIDTH="99%" CLASS="FRIGHT" COLSPAN="2">
+@@ -108,8 +116,8 @@
+ 	<TR CLASS="LIGHT">
+ 		<TD WIDTH="100%" CLASS="FBOTTOMU" COLSPAN="3" ALIGN="RIGHT">
+ 			<A HREF="?m=userinfo&id={$nodeinfo.ownerid}">{t}All nodes{/t} <IMG SRC="img/cancel.gif" BORDER="0" ALT="" ALIGN="absmiddle"></A>
+-			<A HREF="?m=nodedel&id={$nodeinfo.id}" onClick="return confirmLink(this, '{t 0=$nodeinfo.name|upper}Are you sure, you want to remove node \'$0\' from database?{/t}')">{t}Delete{/t} <IMG SRC="img/delete.gif" BORDER="0" ALT="" ALIGN="absmiddle"></A>
+-			<A HREF="?m=nodeedit&id={$nodeinfo.id}" ACCESSKEY="E">{t}Edit{/t} <IMG SRC="img/edit.gif" BORDER="0" ALT="" ALIGN="absmiddle"></A>
+-		</TD>
+-	</TR>	
++			<A HREF="?m=nodedel&id={$nodeinfo.id}" onClick="return confirmLink(this, '{t}{$nodeinfo.name|upper}Are you sure, you want to remove node \'$0\' from database?{/t}')">{t}Delete{/t} <IMG SRC="img/delete.gif" BORDER="0" ALT="" ALIGN="absmiddle"></A>
++		<A HREF="?m=nodeedit&id={$nodeinfo.id}" ACCESSKEY="E">{t}Edit{/t} <IMG SRC="img/edit.gif" BORDER="0" ALT="" ALIGN="absmiddle"></A>
++	</TD>
++</TR>	
+ </TABLE>
+diff -ur lms-cvs.orig/templates/userassignments.html lms-cvs/templates/userassignments.html
+--- lms-cvs.orig/templates/userassignments.html	2005-01-31 22:09:24.000000000 +0100
++++ lms-cvs/templates/userassignments.html	2005-02-01 20:52:11.000000000 +0100
+@@ -27,7 +27,7 @@
+ 					{if !$a.tariffid}
+ 					<TD WIDTH="8%" COLSPAN="8"><B>{t}Suspending of all liabilities{/t}</B></TD>
+ 					{else}
+-					<TD WIDTH="1%" NOWRAP OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'"><B><A HREF="?m=tariffinfo&id={$a.tariffid}">{$a.name}</A></B></TD>
++					<TD WIDTH="1%" NOWRAP OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'"><B><A HREF="?m=tariffinfo&id={$a.tariffid}">{$a.name} ({$a.id|string_format:"%04d"})</A></B></TD>
+ 					<TD WIDTH="1%" NOWRAP ALIGN="RIGHT" OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'">{$a.value|money_format}</TD>
+ 					<TD WIDTH="1%" NOWRAP OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'">{$a.period} ({$a.at})</TD>
+ 					<TD WIDTH="1%" NOWRAP ALIGN="RIGHT" OnClick="return self.location.href='?m=userassignmentsedit&id={$a.id}'">{$a.downrate|default:"-"} kbps</TD>
+--- lms/bin/lms-traffic-htbiptlimits	2005-02-16 10:00:11.000000000 +0100
++++ lms/bin/lms-traffic-htbiptlimits	2005-02-19 08:58:07.000000000 +0100
+@@ -173,6 +173,7 @@
+ 	exit 1;
+ }
+ 
++system("cp $outfile $outfile.sav");
+ open(OUTFILE, ">$outfile") or die("Fatal error: Unable to write $outfile, exiting.\n");
+ 
+ my @local_ports_list = split(' ',$local_ports);
+@@ -251,13 +252,13 @@
+ 	my $prefix = mask2prefix($row->{'mask'});
+ 	my $netsize = 2**(32 - $prefix);
+ 	my $netend = $netstart + $netsize - 1;
+-	my $sdbq = $dbase->prepare("SELECT ipaddr, ownerid FROM nodes WHERE ipaddr >= $netstart AND ipaddr <= $netend");
++	my $sdbq = $dbase->prepare("SELECT ipaddr, assignmentid FROM nodes,nodesassignments WHERE nodes.id=nodesassignments.nodeid AND ipaddr >= $netstart AND ipaddr <= $netend");
+ 	$sdbq->execute();
+ 	while (my $srow = $sdbq->fetchrow_hashref())
+ 	{
+ 		my $ipaddr = u32todotquad($srow->{'ipaddr'});
+-		$nodetable{$srow->{'ownerid'}} = "" if not defined $nodetable{$srow->{'ownerid'}};
+-		$nodetable{$srow->{'ownerid'}} = $nodetable{$srow->{'ownerid'}} . " " . $ipaddr . ":" . $row->{'interface'};
++		$nodetable{$srow->{'assignmentid'}} = "" if not defined $nodetable{$srow->{'assignmentid'}};
++		$nodetable{$srow->{'assignmentid'}} = $nodetable{$srow->{'assignmentid'}} . " " . $ipaddr . ":" . $row->{'interface'};
+ 		$iftable{$row->{'interface'}} = $totalspd if not defined $iftable{$row->{'interface'}};
+ 	}
+ }
+@@ -271,19 +272,24 @@
+ 	
+ }
+ 
+-$dbq = $dbase->prepare("SELECT userid, SUM(uprate) AS uprate, SUM(downrate) AS downrate, SUM(upceil) AS upceil, SUM(downceil) AS downceil FROM assignments, users, tariffs WHERE users.id = userid AND deleted = 0 AND tariffid = tariffs.id AND (datefrom <= $utsfmt OR datefrom = 0) AND (dateto > $utsfmt OR dateto = 0) GROUP BY userid");
++$dbq = $dbase->prepare("SELECT nodes.access AS access, assignments.id AS assignmentid, users.name AS name,users.lastname AS lastname, tariffs.uprate AS uprate, tariffs.downrate AS downrate,tariffs.upceil AS upceil, tariffs.downceil AS downceil FROM nodesassignments, assignments, tariffs, users, nodes WHERE nodesassignments.nodeid=nodes.id AND nodesassignments.assignmentid=assignments.id AND assignments.tariffid=tariffs.id AND assignments.userid=users.id AND (datefrom <= $utsfmt OR datefrom = 0) AND (dateto > $utsfmt OR dateto = 0) GROUP BY assignments.id");
+ $dbq->execute();
+ 
+ my $iptid = 0;
+ my %htbid;
++my $uprate = 0;
++my $upceil = 0;
++my $downrate = 0;
++my $downceil = 0;
+ 
+ while (my $row = $dbq->fetchrow_hashref())
+ {
+-	if($nodetable{$row->{'userid'}} && $row->{'downrate'})
++	print OUTFILE "### ".$row->{'name'}." ".$row->{'lastname'}."\n";		
++	if($nodetable{$row->{'assignmentid'}} && $row->{'downrate'})
+ 	{
+ 		my %ifaces;
+ 		$iptid ++;
+-		foreach my $ippair (split(' ',$nodetable{$row->{'userid'}}))
++		foreach my $ippair (split(' ',$nodetable{$row->{'assignmentid'}}))
+ 		{
+ 			my ($ipaddr, $if) = split(':',$ippair);
+ 			$ifaces{$if} = 1;
+@@ -293,14 +299,24 @@
+ 		{
+ 			$htbid{$key} = 0 if not defined $htbid{$key};
+ 			$htbid{$key} ++;
+-			print OUTFILE "$tc_binary class add dev $key parent 1:19999 classid 1:".$htbid{$key}." htb rate ".$row->{'downrate'}."kbit ceil ".$row->{'downceil'}."kbit burst ".($row->{'downrate'} / 8)."kbit\n";
++			if ($row->{'access'}) 
++			{
++				$downrate=$row->{'downrate'};
++				$downceil=$row->{'downceil'};
++			}
++			else 
++			{
++                                $downrate=$row->{'downrate'}/100;				
++                                $downceil=$row->{'downceil'}/100;				
++			}
++			print OUTFILE "$tc_binary class add dev $key parent 1:19999 classid 1:".$htbid{$key}." htb rate ".$downrate."kbit ceil ".$downceil."kbit burst ".($downrate / 8)."kbit\n";
+ 			print OUTFILE "$tc_binary filter add dev $key protocol ip parent 1: handle $iptid fw classid 1:".$htbid{$key}."\n";
+ 		}
+ 	}
+-	if($nodetable{$row->{'userid'}} && $row->{'uprate'})
++	if($nodetable{$row->{'assignmentid'}} && $row->{'uprate'})
+ 	{
+ 		$iptid ++;
+-		foreach my $ippair (split(' ',$nodetable{$row->{'userid'}}))
++		foreach my $ippair (split(' ',$nodetable{$row->{'assignmentid'}}))
+ 		{
+ 			my ($ipaddr, $if) = split(':',$ippair);
+ 			print OUTFILE "$iptables_binary -t mangle -A LIMITS -s $ipaddr -j MARK --set-mark $iptid\n";
+@@ -310,7 +326,17 @@
+ 			my ($if,$spd) = split(':', $wan_interface);
+ 			$htbid{$if} = 0 if not defined $htbid{$if};
+ 			$htbid{$if} ++;
+-			print OUTFILE "$tc_binary class add dev $if parent 1:19999 classid 1:".$htbid{$if}." htb rate ".$row->{'uprate'}."kbit ceil ".$row->{'upceil'}."kbit burst ".($row->{'uprate'} / 8). "kbit\n";
++                        if ($row->{'access'})
++                        {
++                                $uprate=$row->{'uprate'};
++                                $upceil=$row->{'upceil'};
++                        }
++                        else
++                        {
++                                $uprate=$row->{'uprate'}/100;
++                                $upceil=$row->{'upceil'}/100;
++                        }
++			print OUTFILE "$tc_binary class add dev $if parent 1:19999 classid 1:".$htbid{$if}." htb rate ".$uprate."kbit ceil ".$upceil."kbit burst ".($uprate / 8). "kbit\n";
+ 			print OUTFILE "$tc_binary filter add dev $if protocol ip parent 1: handle $iptid fw classid 1:".$htbid{$if}."\n";
+ 		}
+ 	}		
