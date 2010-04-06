@@ -28,9 +28,11 @@ BuildRequires:	bison
 BuildRequires:	flex
 %{?with_lmsd:BuildRequires:	libgadu-devel}
 %{?with_lmsd:BuildRequires:	mysql-devel}
+BuildRequires:	net-snmp-devel
 %{?with_lmsd:BuildRequires:	postgresql-devel}
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.461
+BuildRequires:	yacc
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
 Requires:	Smarty >= 2.6.18-2
 Requires:	php(gd)
