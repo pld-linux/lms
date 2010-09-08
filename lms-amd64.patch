@@ -1,22 +1,6 @@
-diff -urpN lms.orig/daemon/modules/ggnotify/Makefile.in lms/daemon/modules/ggnotify/Makefile.in
---- lms.orig/daemon/modules/ggnotify/Makefile.in	2005-05-01 09:31:23.000000000 +0200
-+++ lms/daemon/modules/ggnotify/Makefile.in	2005-07-19 00:23:16.000000000 +0200
-@@ -1,5 +1,5 @@
- # dla libgadu i ekg --------------
--LDFLAGS += -L/usr/lib
-+LDFLAGS += -L/usr/lib64
- CFLAGS += -I/usr/src/ekg/lib
- # --------------------------------
- 
-@@ -18,4 +18,4 @@ clean:
- 	rm -rf $(OUT)
- 
- install:
--	install -c -m 755 $(OUT) $(MODULESDIR)
-\ No newline at end of file
-+	install -c -m 755 $(OUT) $(MODULESDIR)
---- lms/daemon/configure.fix	2007-08-08 17:46:18.790076142 +0200
-+++ lms/daemon/configure	2007-08-08 17:47:36.030477822 +0200
+diff -ur lms/daemon/configure lms.new//daemon/configure
+--- lms/daemon/configure	2009-07-14 19:04:12.000000000 +0200
++++ lms.new//daemon/configure	2010-09-08 12:27:03.122006557 +0200
 @@ -3,7 +3,7 @@
  # Initialize default variables
  prefix="/usr/local"
@@ -26,7 +10,7 @@ diff -urpN lms.orig/daemon/modules/ggnotify/Makefile.in lms/daemon/modules/ggnot
  lmsbindir=""
  lmslibdir=""
  with_mysql=yes
-@@ -98,7 +98,7 @@ Options: [defaults in brackets after des
+@@ -98,7 +98,7 @@
  			program to PREFIX/lms/bin
    --lmsbindir=DIR	sets location of target LMS binaries (PREFIX/lms/bin)
    --lmslibdir=DIR	sets location of target LMS modules (PREFIX/lms/lib)
@@ -35,3 +19,13 @@ diff -urpN lms.orig/daemon/modules/ggnotify/Makefile.in lms/daemon/modules/ggnot
    --incdir=DIR		sets location of database include files (/usr/include)
    --inifile=FILE        configuration file - disables online configuration
  EOF
+diff -ur lms/daemon/modules/ggnotify/Makefile.in lms.new//daemon/modules/ggnotify/Makefile.in
+--- lms/daemon/modules/ggnotify/Makefile.in	2007-11-26 12:06:48.000000000 +0100
++++ lms.new//daemon/modules/ggnotify/Makefile.in	2010-09-08 12:25:05.081888479 +0200
+@@ -1,5 +1,5 @@
+ # dla libgadu i ekg --------------
+-LDFLAGS += -L/usr/lib
++LDFLAGS += -L/usr/lib64
+ CFLAGS += -I/usr/src/ekg/lib
+ LIBS += -lgadu
+ # --------------------------------
