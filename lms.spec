@@ -37,6 +37,8 @@ BuildRequires:	yacc
 Requires:	Smarty >= 2.6.18-2
 Requires:	php(gd)
 Requires:	php(iconv)
+Requires:	php(mbstring)
+Requires:	php(mysql)
 Requires:	php(pcre)
 Requires:	php(posix)
 Requires:	webapps
