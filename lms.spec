@@ -40,6 +40,8 @@ Requires:	php(iconv)
 Requires:	php(pcre)
 Requires:	php(posix)
 Requires:	webapps
+Requires:	webserver(access)
+Requires:	webserver(alias)
 Requires:	webserver(php)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
