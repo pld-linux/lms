@@ -34,7 +34,7 @@
  ; can to access them without authorization.
  
 -; backup_dir          = /var/backup/lms/
-+; backup_dir          = /var/lib/lms/backup/
++; backup_dir          = /var/lib/lms/backups/
  
  ; In that directory LMS will store uploaded documents (files). 
  ; By default it is subdirectory documents in sys_dir.
