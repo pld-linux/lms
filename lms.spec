@@ -167,7 +167,7 @@ wybranych usług.
 mkdir smarty-plugins
 mv \
 lib/Smarty/plugins/block.t.php \
-lib/Smarty/plugins/function.{bankaccount,gentime,handle,number,size,sum,tip}.php \
+lib/Smarty/plugins/function.{bankaccount,gentime,handle,memory,number,size,sum,tip}.php \
 lib/Smarty/plugins/modifier.{money_format,striphtml,to_words}.php \
 	smarty-plugins
 rm -rf lib/Smarty
