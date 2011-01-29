@@ -1,5 +1,4 @@
 # TODO
-# - test build on amd64 and check /usr/lib64 patch
 # - cosmetics (sort in %%files and %%install)
 # - contrib split
 #
@@ -23,6 +22,7 @@ Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 Patch2:		%{name}-smarty.patch
+Patch3:		%{name}-sqlqueryfix.patch
 URL:		http://www.lms.org.pl/
 BuildRequires:	bison
 BuildRequires:	flex
@@ -162,6 +162,7 @@ wybranych usług.
 %patch1 -p1
 %endif
 %patch2 -p1
+%patch3 -p1
 
 mkdir smarty-plugins
 mv \
