@@ -4,14 +4,14 @@
 #
 # Conditional build:
 %bcond_without	lmsd		# without lmsd daemon
-#
+
 %define		lmsver		1.11
 %define		lmssubver	11
 Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
@@ -171,6 +171,9 @@ lib/Smarty/plugins/function.{bankaccount,gentime,handle,memory,number,size,sum,t
 lib/Smarty/plugins/modifier.{money_format,striphtml,to_words}.php \
 	smarty-plugins
 rm -rf lib/Smarty
+
+# cleanup backups after patching
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %build
 %if %{with lmsd}
