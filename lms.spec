@@ -4,6 +4,7 @@
 #
 # Conditional build:
 %bcond_without	lmsd		# without lmsd daemon
+%bcond_with	lmsd_debug	# with lmsd debugging
 
 %define		lmsver		1.11
 %define		lmssubver	11
@@ -11,7 +12,7 @@ Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
@@ -180,13 +181,13 @@ find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 cd daemon
 
-./configure --with-mysql
+./configure --with-mysql %{?with_lmsd_debug:--enable-debug0 --enable-debug1}
 %{__make} \
 	CC='%{__cc}' \
 	CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
 mv lmsd lmsd-mysql
 
-./configure --with-pgsql
+./configure --with-pgsql %{?with_lmsd_debug:--enable-debug0 --enable-debug1}
 %{__make} lmsd \
 	CC='%{__cc}' \
 	CFLAGS='%{rpmcflags} -fPIC -DUSE_PGSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
