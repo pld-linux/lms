@@ -1,0 +1,81 @@
+diff -ur lms/lib/language.php lms.new//lib/language.php
+--- lms/lib/language.php	2011-01-17 11:38:43.000000000 +0100
++++ lms.new//lib/language.php	2011-02-18 10:24:53.565208353 +0100
+@@ -1,9 +1,9 @@
+ <?php
+ 
+ /*
+- * LMS version 1.11.11 Bray
++ * LMS version 1.11-cvs
+  *
+- *  (C) Copyright 2001-2010 LMS Developers
++ *  (C) Copyright 2001-2011 LMS Developers
+  *
+  *  Please, see the doc/AUTHORS for more information about authors!
+  *
+@@ -21,7 +21,7 @@
+  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+  *  USA.
+  *
+- *  $Id$
++ *  $Id$
+  */
+ 
+ function trans()
+@@ -90,8 +90,7 @@
+ 			),
+ 		);
+ 
+-$_ui_language = 'en'; // default language
+-
++// UI language
+ if(!empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+ 	$langs = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+ else
+@@ -99,32 +98,33 @@
+ 
+ $langs = explode(',', $langs);
+ 
+-foreach ($langs as $val) 
++foreach ($langs as $val)
+ {
+-	switch (substr($val, 0, 2))
++    $val = substr($val, 0, 2);
++	switch ($val)
+ 	{
+ 		case 'pl':
+-			$_ui_language = 'pl';
+-    			break 2;
+ 		case 'lt':
+-			$_ui_language = 'lt';
+-    			break 2;
+ 		case 'sk':
+-			$_ui_language = 'sk';
+-			break 2;
+ 		case 'ro':
+-			$_ui_language = 'ro';
+-			break 2;
+ 		case 'en':
+-			$_ui_language = 'en';
+-			break 2;
++			$_ui_language = $val;
++    	    break 2;
+ 	}
+ }
+ 
++// System language
+ if(!empty($CONFIG['phpui']['lang']))
+ 	$_language = $CONFIG['phpui']['lang'];
+-else
++else if (!empty($_ui_language))
+ 	$_language = $_ui_language;
++else
++    $_language = 'en'; // default language
++
++// Use system lang for UI if any of browser langs isn't supported
++// or browser langs aren't set
++if (empty($_ui_language))
++	$_ui_language = $_language;
+ 
+ $_LANG = array();
+ 
