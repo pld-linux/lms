@@ -392,4 +392,4 @@ fi
 %{_lmsdir}/www/userpanel/style
 %{_lmsdir}/www/userpanel/index.php
 %dir %{_lmsvar}/userpanel
-%{_lmsvar}/userpanel/templates_c
+%attr(770,root,http) %{_lmsvar}/userpanel/templates_c
