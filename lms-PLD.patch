@@ -25,7 +25,7 @@
  ; using getcwd(), but better is to say him where hi is:
  
 -; sys_dir          = /var/www/htdocs/lms/
-+; sys_dir          = /usr/share/lms/www/
++; sys_dir          = /usr/share/lms/
  
  ; Directory with "modules" of LMS. That is content of /modules directory.
  ; By default it is subdirectory modules in sys_dir
@@ -90,7 +90,7 @@
  $SMARTY->assign_by_ref('_ui_language', $LMS->ui_lang);
  $SMARTY->assign_by_ref('_language', $LMS->lang);
 -$SMARTY->template_dir = getcwd();
-+$SMARTY->template_dir = SMARTY_TEMPLATES_DIR;
++$SMARTY->template_dir = getcwd();
  $SMARTY->compile_dir = SMARTY_COMPILE_DIR;
  @include('locale/'.$LMS->ui_lang.'/strings.php');
  
@@ -102,7 +102,7 @@
  $CONFIG['directories']['modules_dir'] = (!isset($CONFIG['directories']['modules_dir']) ? $CONFIG['directories']['sys_dir'].'/modules' : $CONFIG['directories']['modules_dir']);
 -$CONFIG['directories']['userpanel_dir'] = (!isset($CONFIG['directories']['userpanel_dir']) ? getcwd() : $CONFIG['directories']['userpanel_dir']);
 -$CONFIG['directories']['smarty_compile_dir'] = $CONFIG['directories']['userpanel_dir'].'/templates_c';
-+$CONFIG['directories']['userpanel_dir'] = (!isset($CONFIG['directories']['userpanel_dir']) ? $CONFIG['directories']['sys_dir'].'/userpanel'  : $CONFIG['directories']['userpanel_dir']);
++$CONFIG['directories']['userpanel_dir'] = (!isset($CONFIG['directories']['userpanel_dir']) ? '/usr/share/lms/userpanel'  : $CONFIG['directories']['userpanel_dir']);
 +$CONFIG['directories']['smarty_compile_dir'] = '/var/lib/lms/userpanel/templates_c';
  
  define('USERPANEL_DIR', $CONFIG['directories']['userpanel_dir']);
