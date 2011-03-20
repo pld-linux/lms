@@ -7,16 +7,16 @@
 %bcond_with	lmsd_debug	# with lmsd debugging
 
 %define		lmsver		1.11
-%define		lmssubver	11
+%define		lmssubver	12
 Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	4
+Release:	1
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	5f1a8cdd126107ddb0656a60f48f2d4e
+# Source0-md5:	484a02ea6e8d493b7906ea8246492b64
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
@@ -157,6 +157,28 @@ Program zarządzający serwerem poprzez tworzenie plików
 konfiguracyjnych na podstawie bazy danych LMS-a i restartowanie
 wybranych usług.
 
+%package userpanel
+Summary:        LAN Managment System - Userpanel
+Summary(pl.UTF-8):      System Zarządzania Siecią Lokalną - Panel Użytkownika
+Group:          Networking/Utilities
+Requires:       %{name} = %{version}-%{release}
+
+%description userpanel
+Userpanel is automated virtual customer service, based on LMS and
+using its core features. It enables customers (or it's intended to) to
+do review their payments, change their personal details or computer
+properties, modify subscriptions, submit problems, track their
+requests on Helpdesk and print invoices. It means, it makes a closer
+contact with their ISP.
+
+%description userpanel -l pl.UTF-8
+Userpanel jest opartą na szkielecie LMS (i ściśle z LMS
+współpracującą) implementacją tzw. e-boku. Umożliwia (albo będzie
+umożliwiał) klientom przeglądanie stanu swoich wpłat, zmianę swoich
+danych osobowych, edycję właściwości swoich komputerów, zmianę taryf,
+zgłaszanie błędów oraz awarii do Helpdesku, wydruk faktur oraz
+formularza przelewu.
+
 %prep
 %setup -q -n %{name}
 %patch0 -p1
@@ -164,8 +186,8 @@ wybranych usług.
 %patch1 -p1
 %endif
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
+#%patch3 -p1
+#%patch4 -p1
 
 mkdir smarty-plugins
 mv \
@@ -245,6 +267,23 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/lmsd
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 %endif
 
+#userpanel
+install -d $RPM_BUILD_ROOT%{_lmsdir}/userpanel
+install -d $RPM_BUILD_ROOT%{_lmsdir}/www/userpanel/modules
+install -d $RPM_BUILD_ROOT%{_lmsvar}/userpanel/templates_c
+
+cp -R {userpanel/lib,userpanel/modules,userpanel/templates}           $RPM_BUILD_ROOT%{_lmsdir}/userpanel
+cp -R {userpanel/index.php,userpanel/style}                 $RPM_BUILD_ROOT%{_lmsdir}/www/userpanel
+ln -s %{_lmsdir}/www/userpanel/style    $RPM_BUILD_ROOT%{_lmsdir}/userpanel
+ln -s %{_lmsvar}/userpanel/templates_c  $RPM_BUILD_ROOT%{_lmsdir}/userpanel
+
+for MODULE in $RPM_BUILD_ROOT%{_lmsdir}/userpanel/modules/*; do
+    MODULE=$(basename $MODULE)
+    mkdir $RPM_BUILD_ROOT%{_lmsdir}/www/userpanel/modules/$MODULE
+    ln -s %{_lmsdir}/userpanel/modules/$MODULE/style    \
+        $RPM_BUILD_ROOT%{_lmsdir}/www/userpanel/modules/$MODULE
+done
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -288,6 +327,7 @@ fi
 %dir %{_lmsdir}
 %{_lmsdir}/www
 %exclude %{_lmsdir}/www/user
+%exclude %{_lmsdir}/www/userpanel
 %{_lmsdir}/lib
 %{_lmsdir}/modules
 %exclude %{_lmsdir}/modules/sql.php
@@ -300,6 +340,7 @@ fi
 %{_lmsdir}/sample/lms.ini
 %{_lmsdir}/sample/mailtemplate.txt
 %{_lmsdir}/sample/mailtemplate_en.txt
+%{_lmsdir}/sample/radius-sql.conf
 %{_lmsdir}/sample/rc.lmsd
 %{_lmsdir}/sample/rc.reminder_1st
 %{_lmsdir}/sample/smstemplate.txt
@@ -338,3 +379,17 @@ fi
 %{_sysconfdir}/modules/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %endif
+
+%files userpanel
+%defattr(644,root,root,755)
+%dir %{_lmsdir}/userpanel
+%{_lmsdir}/userpanel/lib
+%{_lmsdir}/userpanel/modules
+%{_lmsdir}/userpanel/templates
+%{_lmsdir}/userpanel/templates_c
+%{_lmsdir}/userpanel/style
+%dir %{_lmsdir}/www/userpanel
+%{_lmsdir}/www/userpanel/style
+%{_lmsdir}/www/userpanel/index.php
+%dir %{_lmsvar}/userpanel
+%{_lmsvar}/userpanel/templates_c
