@@ -23,8 +23,7 @@ Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 Patch2:		%{name}-smarty.patch
-Patch3:		%{name}-sqlqueryfix.patch
-Patch4:		%{name}-language.php.patch
+Patch3:		%{name}-quicksearch.php.patch
 URL:		http://www.lms.org.pl/
 BuildRequires:	bison
 BuildRequires:	flex
@@ -186,8 +185,7 @@ formularza przelewu.
 %patch1 -p1
 %endif
 %patch2 -p1
-#%patch3 -p1
-#%patch4 -p1
+%patch3 -p1
 
 mkdir smarty-plugins
 mv \
