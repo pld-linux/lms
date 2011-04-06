@@ -1,0 +1,32 @@
+--- modules/balancelist.php	2011/01/18 08:12:20	1.64
++++ modules/balancelist.php	2011/04/01 10:35:12	1.65
+@@ -21,7 +21,7 @@
+  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+  *  USA.
+  *
+- *  $Id$
++ *  $Id$
+  */
+ 
+ function GetBalanceList($search=NULL, $cat=NULL, $group=NULL, $pagelimit=100, $page=NULL, $from, $to)
+@@ -42,7 +42,7 @@
+ 				$where = ' AND documents.number = '.intval($search);
+ 			break;
+ 			case 'cdate':
+-				$where = ' AND cash.time >= '.$search.' AND cash.time < '.($search+86400);
++				$where = ' AND cash.time >= '.intval($search).' AND cash.time < '.(intval($search)+86400);
+ 			break;
+ 			case 'ten':
+ 				$where = ' AND c.ten = '.$DB->Escape($search);
+@@ -68,9 +68,9 @@
+ 	}
+ 
+ 	if($from)
+-        	$where .= ' AND cash.time >= '.$from;
++        	$where .= ' AND cash.time >= '.intval($from);
+ 	if($to)
+-		$where .= ' AND cash.time <= '.$to;
++		$where .= ' AND cash.time <= '.intval($to);
+ 
+ 	if($res = $DB->Exec('SELECT cash.id AS id, time, cash.userid AS userid, cash.value AS value, 
+ 				cash.customerid AS customerid, comment, docid, cash.type AS type,
