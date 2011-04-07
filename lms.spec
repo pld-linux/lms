@@ -12,7 +12,7 @@ Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	2
+Release:	3
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
@@ -24,13 +24,14 @@ Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 Patch2:		%{name}-smarty.patch
 Patch3:		%{name}-quicksearch.php.patch
+Patch4:		%{name}-promotionlist.php.patch
 URL:		http://www.lms.org.pl/
 BuildRequires:	bison
 BuildRequires:	flex
 %{?with_lmsd:BuildRequires:	libgadu-devel}
 %{?with_lmsd:BuildRequires:	mysql-devel}
 BuildRequires:	net-snmp-devel
-%{?with_lmsd:BuildRequires:	postgresql-devel}
+%{?with_lmsd:BuildRequires:	postgresql-devel >= 8.2}
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.461
 BuildRequires:	yacc
@@ -157,10 +158,10 @@ konfiguracyjnych na podstawie bazy danych LMS-a i restartowanie
 wybranych usług.
 
 %package userpanel
-Summary:        LAN Managment System - Userpanel
-Summary(pl.UTF-8):      System Zarządzania Siecią Lokalną - Panel Użytkownika
-Group:          Networking/Utilities
-Requires:       %{name} = %{version}-%{release}
+Summary:	LAN Managment System - Userpanel
+Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną - Panel Użytkownika
+Group:		Networking/Utilities
+Requires:	%{name} = %{version}-%{release}
 
 %description userpanel
 Userpanel is automated virtual customer service, based on LMS and
@@ -186,6 +187,7 @@ formularza przelewu.
 %endif
 %patch2 -p1
 %patch3 -p1
+%patch4 -p0
 
 mkdir smarty-plugins
 mv \
