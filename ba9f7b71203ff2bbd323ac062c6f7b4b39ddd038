@@ -1,0 +1,1 @@
+- added Patch4: lms-language.php.patch from http://cvs.lms.org.pl/viewvc/Development/lms/lib/language.php?r1=1.55&r2=1.56 (Fixed UI language setting when HTTP_ACCEPT_LANGUAGE is not set)
