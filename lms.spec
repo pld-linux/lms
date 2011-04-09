@@ -7,24 +7,22 @@
 %bcond_with	lmsd_debug	# with lmsd debugging
 
 %define		lmsver		1.11
-%define		lmssubver	12
+%define		lmssubver	13
 Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	3
+Release:	1
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	484a02ea6e8d493b7906ea8246492b64
+# Source0-md5:	294899358ae2585a4030580d79a06ee8
 Source1:	%{name}.conf
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 Patch2:		%{name}-smarty.patch
-Patch3:		%{name}-quicksearch.php.patch
-Patch4:		%{name}-promotionlist.php.patch
 URL:		http://www.lms.org.pl/
 BuildRequires:	bison
 BuildRequires:	flex
@@ -186,8 +184,6 @@ formularza przelewu.
 %patch1 -p1
 %endif
 %patch2 -p1
-%patch3 -p1
-%patch4 -p0
 
 mkdir smarty-plugins
 mv \
