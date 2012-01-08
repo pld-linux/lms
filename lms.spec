@@ -213,8 +213,8 @@ mv lmsd lmsd-mysql
 	CFLAGS='%{rpmcflags} -fPIC -DUSE_PGSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
 mv lmsd lmsd-pgsql
 
-CFLAGS="%{rpmcflags}" %{__make} -C modules/parser \
-	CC='%{__cc}' \
+CFLAGS="%{rpmcflags}" %{__make} -j1 -C modules/parser \
+	CC='%{__cc}'
 
 cd ..
 %endif
