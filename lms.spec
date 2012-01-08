@@ -13,7 +13,7 @@ Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	4
+Release:	5
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
@@ -333,7 +333,6 @@ fi
 %files scripts
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/lms-*
-%attr(755,root,root) %{_sbindir}/lmsd-*sql
 
 %files sqlpanel
 %defattr(644,root,root,755)
@@ -349,7 +348,7 @@ fi
 %if %{with lmsd}
 %files lmsd
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_sbindir}/lmsd-*
+%attr(755,root,root) %{_sbindir}/lmsd-*sql
 %dir %{_libdir}/lms
 %attr(755,root,root) %{_libdir}/lms/*.so
 %attr(754,root,root) /etc/rc.d/init.d/lmsd
