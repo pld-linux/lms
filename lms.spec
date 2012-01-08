@@ -13,7 +13,7 @@ Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
@@ -222,7 +222,7 @@ cd ..
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sbindir},%{_libdir}/%{name},%{_webapps}/%{_webapp}} \
-	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
+	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,lms/modules} \
 	$RPM_BUILD_ROOT%{_smartyplugindir} \
 	$RPM_BUILD_ROOT%{_lmsdir}/{lms,userpanel,www/{doc,user,userpanel/modules}} \
 	$RPM_BUILD_ROOT%{_lmsvar}/{backups,documents,templates_c,userpanel/templates_c}
