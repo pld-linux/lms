@@ -46,7 +46,8 @@ start() {
 		export LMSDBPORT="$LMSD_DATABASE_PORT"
 		export LMSDBHOST="$LMSD_DATABASE_HOST"
 
-		daemon lmsd-$LMSD_DATABASE_TYPE $LMSD_OPTIONS
+		is_no "$RC_LOGGING" && fork=--fork
+		daemon $fork /usr/sbin/lmsd-$LMSD_DATABASE_TYPE $LMSD_OPTIONS
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/lmsd
 	else
@@ -68,17 +69,17 @@ stop() {
 RETVAL=0
 case "$1" in
   start)
-  	start
+	start
 	;;
   stop)
-  	stop
+	stop
 	;;
   restart)
 	stop
 	start
 	;;
   status)
-	status lmsd-$LMSD_DATABASE_TYPE
+	status lmsd
 	exit $?
 	;;
   *)
