@@ -8,7 +8,7 @@
 %bcond_with	lmsd_debug	# with lmsd debugging
 
 %define		lmsver		1.11
-%define		lmssubver	13
+%define		lmssubver	14
 %define		snapshot	20120222	
 Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
