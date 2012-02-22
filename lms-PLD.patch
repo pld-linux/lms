@@ -1,39 +1,56 @@
-diff -urN lms.orig/index.php lms/index.php
---- lms.orig/index.php	2005-11-05 22:03:05.000000000 +0000
-+++ lms/index.php	2005-11-05 22:10:16.000000000 +0000
-@@ -82,14 +82,15 @@
- 	$CONFIG[$key] = $val;
+diff -ur lms/contrib/customer/index.php lms.new/contrib/customer/index.php
+--- lms/contrib/customer/index.php	2012-02-22 13:46:41.626014441 +0100
++++ lms.new/contrib/customer/index.php	2012-02-22 13:54:31.610664226 +0100
+@@ -37,11 +37,11 @@
+ $CONFIG = (array) parse_ini_file($CONFIG_FILE, true);
  
  // Check for configuration vars and set default values
 -$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? getcwd() : $CONFIG['directories']['sys_dir']);
 -$CONFIG['directories']['backup_dir'] = (!isset($CONFIG['directories']['backup_dir']) ? $CONFIG['directories']['sys_dir'].'/backups' : $CONFIG['directories']['backup_dir']);
-+$_CONFIG['directories']['sys_dir'] = (!isset($_CONFIG['directories']['sys_dir']) ? '/usr/share/lms' : $_CONFIG['directories']['sys_dir']);
-+$_CONFIG['directories']['backup_dir'] = (!isset($_CONFIG['directories']['backup_dir']) ? '/var/lib/lms/backups' : $_CONFIG['directories']['backup_dir']);
- $CONFIG['directories']['doc_dir'] = (!isset($CONFIG['directories']['doc_dir']) ? $CONFIG['directories']['sys_dir'].'/documents' : $CONFIG['directories']['doc_dir']);
++$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? '/usr/share/lms' : $CONFIG['directories']['sys_dir']);
++$CONFIG['directories']['backup_dir'] = (!isset($CONFIG['directories']['backup_dir']) ? '/var/lib/lms/backups' : $CONFIG['directories']['backup_dir']);
  $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'].'/lib' : $CONFIG['directories']['lib_dir']);
  $CONFIG['directories']['modules_dir'] = (!isset($CONFIG['directories']['modules_dir']) ? $CONFIG['directories']['sys_dir'].'/modules' : $CONFIG['directories']['modules_dir']);
- $CONFIG['directories']['config_templates_dir'] = (!isset($CONFIG['directories']['config_templates_dir']) ? $CONFIG['directories']['sys_dir'].'/config_templates' : $CONFIG['directories']['config_templates_dir']);
--$CONFIG['directories']['smarty_dir'] = (!isset($CONFIG['directories']['smarty_dir']) ? (is_readable('/usr/share/php/smarty/libs/Smarty.class.php') ? '/usr/share/php/smarty/libs' : $CONFIG['directories']['lib_dir'].'/Smarty') : $CONFIG['directories']['smarty_dir']);
 -$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? $CONFIG['directories']['sys_dir'].'/templates_c' : $CONFIG['directories']['smarty_compile_dir']);
-+$_CONFIG['directories']['smarty_dir'] = (!isset($_CONFIG['directories']['smarty_dir']) ? '/usr/share/pear/Smarty' : $_CONFIG['directories']['smarty_dir']);
-+$_CONFIG['directories']['smarty_compile_dir'] = (!isset($_CONFIG['directories']['smarty_compile_dir']) ? '/var/lib/lms/templates_c/' : $_CONFIG['directories']['smarty_compile_dir']);
-+
++$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? '/var/lib/lms/templates_c' : $CONFIG['directories']['smarty_compile_dir']);
  $CONFIG['directories']['smarty_templates_dir'] = (!isset($CONFIG['directories']['smarty_templates_dir']) ? $CONFIG['directories']['sys_dir'].'/templates' : $CONFIG['directories']['smarty_templates_dir']);
  
- foreach(lms_parse_ini_file($CONFIG['directories']['lib_dir'].'/config_defaults.ini', TRUE) as $section => $values)
-diff -urN lms.orig/sample/lms.ini lms/sample/lms.ini
---- lms.orig/sample/lms.ini	2005-11-05 22:03:05.000000000 +0000
-+++ lms/sample/lms.ini	2005-11-06 00:05:04.000000000 +0000
-@@ -268,7 +268,7 @@
+ define('SYS_DIR', $CONFIG['directories']['sys_dir']);
+Tylko w lms.new/contrib/customer: index.php~
+diff -ur lms/index.php lms.new/index.php
+--- lms/index.php	2012-02-22 13:46:41.526009878 +0100
++++ lms.new/index.php	2012-02-22 13:50:59.477781573 +0100
+@@ -47,13 +47,13 @@
+ $CONFIG = (array) parse_ini_file($CONFIG_FILE, true);
+ 
+ // Check for configuration vars and set default values
+-$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? getcwd() : $CONFIG['directories']['sys_dir']);
++$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? '/usr/share/lms' : $CONFIG['directories']['sys_dir']);
+ $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'].'/lib' : $CONFIG['directories']['lib_dir']);
+-$CONFIG['directories']['doc_dir'] = (!isset($CONFIG['directories']['doc_dir']) ? $CONFIG['directories']['sys_dir'].'/documents' : $CONFIG['directories']['doc_dir']);
++$CONFIG['directories']['doc_dir'] = (!isset($CONFIG['directories']['doc_dir']) ? '/var/lib/lms/documents': $CONFIG['directories']['doc_dir']);
+ $CONFIG['directories']['modules_dir'] = (!isset($CONFIG['directories']['modules_dir']) ? $CONFIG['directories']['sys_dir'].'/modules' : $CONFIG['directories']['modules_dir']);
+-$CONFIG['directories']['backup_dir'] = (!isset($CONFIG['directories']['backup_dir']) ? $CONFIG['directories']['sys_dir'].'/backups' : $CONFIG['directories']['backup_dir']);
++$CONFIG['directories']['backup_dir'] = (!isset($CONFIG['directories']['backup_dir']) ? '/var/lib/lms/backups' : $CONFIG['directories']['backup_dir']);
+ $CONFIG['directories']['config_templates_dir'] = (!isset($CONFIG['directories']['config_templates_dir']) ? $CONFIG['directories']['sys_dir'].'/config_templates' : $CONFIG['directories']['config_templates_dir']);
+-$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? $CONFIG['directories']['sys_dir'].'/templates_c' : $CONFIG['directories']['smarty_compile_dir']);
++$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? '/var/lib/lms/templates_c' : $CONFIG['directories']['smarty_compile_dir']);
+ $CONFIG['directories']['smarty_templates_dir'] = (!isset($CONFIG['directories']['smarty_templates_dir']) ? $CONFIG['directories']['sys_dir'].'/templates' : $CONFIG['directories']['smarty_templates_dir']);
+ 
+ define('SYS_DIR', $CONFIG['directories']['sys_dir']);
+diff -ur lms/sample/lms.ini lms.new/sample/lms.ini
+--- lms/sample/lms.ini	2011-08-31 12:58:13.000000000 +0200
++++ lms.new/sample/lms.ini	2012-02-22 13:50:59.477781573 +0100
+@@ -228,7 +228,7 @@
  ; index.php, graphics, templates and the rest. By default index.php seek in filesystem
  ; using getcwd(), but better is to say him where hi is:
  
 -; sys_dir          = /var/www/htdocs/lms/
-+; sys_dir          = /usr/share/lms/www/
++; sys_dir          = /usr/share/lms/
  
  ; Directory with "modules" of LMS. That is content of /modules directory.
  ; By default it is subdirectory modules in sys_dir
-@@ -285,7 +285,7 @@
+@@ -245,7 +245,7 @@
  ; If directory with backups will be accessible from WWW level, then anybody will
  ; can to access them without authorization.
  
@@ -42,21 +59,48 @@ diff -urN lms.orig/sample/lms.ini lms/sample/lms.ini
  
  ; In that directory LMS will store uploaded documents (files). 
  ; By default it is subdirectory documents in sys_dir.
-@@ -299,7 +299,7 @@
- ; By default, subdirectory Smarty in lib_dir
- ; http://smarty.php.net
+@@ -253,17 +253,17 @@
+ ; can to access them without authorization. Those files are renamed to their
+ ; md5 sums.
  
--; smarty_dir          = /usr/lib/php/Smarty
-+; smarty_dir          = /usr/share/pear/Smarty
+-; doc_dir          = /usr/share/lms/documents/
++; doc_dir          = /var/lib/lms/documents/
  
- ; W pld jest domy¶lnie tutaj: (nie zapomnij o "poldek -i Smarty");
- ; In PLD-linux distribution it's here: (and don't forget about "poldek -i Smarty")
-@@ -309,7 +309,7 @@
  ; Smarty's compilation directory. Place where Smarty compile templates.
  ; By default it is subdirectory templates_c in sys_dir.
  
 -; smarty_compile_dir     = /var/smarty/compile/lms
-+; smarty_compile_dir     = /var/lib/lms/templates_c
++; smarty_compile_dir     = /var/lib/lms/templates_c/
  
  ; Directory with Smarty's templates.
  ; By default it is subdirectory templates in sys_dir.
+ 
+-; smarty_templates_dir     = /usr/share/lms/templates
++; smarty_templates_dir     = /usr/share/lms/templates/
+ 
+ [mail]
+ 
+diff -ur lms/userpanel/index.php lms.new/userpanel/index.php
+--- lms/userpanel/index.php	2012-02-22 13:46:44.219466127 +0100
++++ lms.new/userpanel/index.php	2012-02-22 13:50:59.481115059 +0100
+@@ -53,8 +53,8 @@
+ 	$CONFIG['directories']['sys_dir'] = $CONFIG['directories']['sys_dir'];
+ $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'].'/lib' : $CONFIG['directories']['lib_dir']);
+ $CONFIG['directories']['modules_dir'] = (!isset($CONFIG['directories']['modules_dir']) ? $CONFIG['directories']['sys_dir'].'/modules' : $CONFIG['directories']['modules_dir']);
+-$CONFIG['directories']['userpanel_dir'] = (!isset($CONFIG['directories']['userpanel_dir']) ? getcwd() : $CONFIG['directories']['userpanel_dir']);
+-$CONFIG['directories']['smarty_compile_dir'] = $CONFIG['directories']['userpanel_dir'].'/templates_c';
++$CONFIG['directories']['userpanel_dir'] = (!isset($CONFIG['directories']['userpanel_dir']) ? '/usr/share/lms/userpanel'  : $CONFIG['directories']['userpanel_dir']);
++$CONFIG['directories']['smarty_compile_dir'] = '/var/lib/lms/userpanel/templates_c';
+ 
+ define('USERPANEL_DIR', $CONFIG['directories']['userpanel_dir']);
+ define('USERPANEL_LIB_DIR', USERPANEL_DIR.'/lib/');
+@@ -85,7 +85,7 @@
+ 
+ // Initialize templates engine (must be before locale settings)
+ 
+-require_once(LIB_DIR.'/Smarty/Smarty.class.php');
++require_once('/usr/share/php/Smarty/Smarty.class.php');
+ 
+ $SMARTY = new Smarty;
+ 
+Tylko w lms.new/userpanel: index.php.orig
