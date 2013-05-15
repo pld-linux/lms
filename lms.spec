@@ -13,14 +13,15 @@ Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	5
+Release:	6
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
 # Source0-md5:	294899358ae2585a4030580d79a06ee8
-Source1:	%{name}.conf
-Source2:	%{name}.init
-Source3:	%{name}.sysconfig
+Source1:	%{name}.init
+Source2:	%{name}.sysconfig
+Source3:	%{name}-apache.conf
+Source4:	%{name}-httpd.conf
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 Patch2:		%{name}-smarty.patch
@@ -46,6 +47,7 @@ Requires:	webapps
 Requires:	webserver(access)
 Requires:	webserver(alias)
 Requires:	webserver(php)
+Conflicts:	apache-base < 2.4.0-1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/%{name}
@@ -235,8 +237,8 @@ cp -a bin/* $RPM_BUILD_ROOT%{_sbindir}
 
 %{__mv} $RPM_BUILD_ROOT{%{_lmsdir}/sample/%{name}.ini,%{_sysconfdir}}
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/apache.conf
-install %{SOURCE1} $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/httpd.conf
+install %{SOURCE3} $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/apache.conf
+install %{SOURCE4} $RPM_BUILD_ROOT%{_webapps}/%{_webapp}/httpd.conf
 
 # sqlpanel
 %{__mv} $RPM_BUILD_ROOT%{_lmsdir}/{contrib/sqlpanel/sql*.php,modules}
@@ -252,8 +254,8 @@ install daemon/modules/*/*.so $RPM_BUILD_ROOT%{_libdir}/%{name}
 for module in dns ggnotify notify; do
 	cp -a daemon/modules/$module/sample $RPM_BUILD_ROOT%{_sysconfdir}/modules/$module
 done
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/lmsd
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/lmsd
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 %endif
 
 #userpanel
@@ -288,10 +290,10 @@ fi
 %triggerun -- apache1 < 1.3.37-3, apache1-base
 %webapp_unregister apache %{_webapp}
 
-%triggerin -- apache < 2.2.0, apache-base
+%triggerin -- apache-base
 %webapp_register httpd %{_webapp}
 
-%triggerun -- apache < 2.2.0, apache-base
+%triggerun -- apache-base
 %webapp_unregister httpd %{_webapp}
 
 %files
