@@ -1,0 +1,10 @@
+--- lms/daemon/modules/parser/lib/tscript_parser.y~	2006-07-31 10:32:22.000000000 +0200
++++ lms/daemon/modules/parser/lib/tscript_parser.y	2013-05-17 12:09:12.547241774 +0200
+@@ -30,6 +30,7 @@
+ *****************************************************************************/
+ 
+ %{
++	#include <stdio.h>
+ 	#include <stdlib.h>
+ 	#include "tscript_ast.h"
+ 

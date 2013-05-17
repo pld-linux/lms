@@ -13,7 +13,7 @@ Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	6
+Release:	7
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
@@ -25,6 +25,7 @@ Source4:	%{name}-httpd.conf
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-amd64.patch
 Patch2:		%{name}-smarty.patch
+Patch3:		build.patch
 URL:		http://www.lms.org.pl/
 BuildRequires:	bison
 BuildRequires:	flex
@@ -187,6 +188,7 @@ formularza przelewu.
 %patch1 -p1
 %endif
 %patch2 -p1
+%patch3 -p1
 
 mkdir smarty-plugins
 %{__mv} \
