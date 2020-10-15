@@ -8,36 +8,35 @@
 %bcond_with	lmsd_debug	# with lmsd debugging
 
 %define		lmsver		1.11
-%define		lmssubver	13
+%define		lmssubver	23
 Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	11
+Release:	1
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
-# Source0-md5:	294899358ae2585a4030580d79a06ee8
+# Source0-md5:	708712da52e9817cb94e54779b6f3c1a
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}-apache.conf
 Source4:	%{name}-httpd.conf
 Patch0:		%{name}-PLD.patch
-Patch1:		%{name}-amd64.patch
 Patch2:		%{name}-smarty.patch
 Patch3:		build.patch
 URL:		http://www.lms.org.pl/
 BuildRequires:	bison
 BuildRequires:	flex
 %{?with_lmsd:BuildRequires:	libgadu-devel}
-%{?with_lmsd:BuildRequires:	mysql-devel}
+%{?with_lmsd:BuildRequires:	mysql-devel >= 5}
 BuildRequires:	net-snmp-devel
-%{?with_lmsd:BuildRequires:	postgresql-devel >= 8.2}
+%{?with_lmsd:BuildRequires:	postgresql-devel >= 8.4}
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.461
 BuildRequires:	yacc
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
-Requires:	Smarty >= 2.6.18-2
+Requires:	php-Smarty >= 3.1.29
 Requires:	php(gd)
 Requires:	php(iconv)
 Requires:	php(mbstring)
@@ -47,7 +46,7 @@ Requires:	php(posix)
 Requires:	webapps
 Requires:	webserver(access)
 Requires:	webserver(alias)
-Requires:	webserver(php)
+Requires:	webserver(php) >= 5.2
 Conflicts:	apache-base < 2.4.0-1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -182,11 +181,8 @@ zgłaszanie błędów oraz awarii do Helpdesku, wydruk faktur oraz
 formularza przelewu.
 
 %prep
-%setup -q -n %{name}
+%setup -q -n %{name}-LMS_011123
 %patch0 -p1
-%if "%{_lib}" == "lib64"
-%patch1 -p1
-%endif
 %patch2 -p1
 %patch3 -p1
 
@@ -204,20 +200,24 @@ find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 %{__rm}
 %build
 %if %{with lmsd}
 cd daemon
+%configure \
+	--with-mysql \
+	%{?with_lmsd_debug:--enable-debug0 --enable-debug1}
+%{__make}
+#	CC='%{__cc}' \
+#	CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
+%{__mv} lmsd lmsd-mysql
 
-./configure --with-mysql %{?with_lmsd_debug:--enable-debug0 --enable-debug1}
-%{__make} \
-	CC='%{__cc}' \
-	CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
-mv lmsd lmsd-mysql
+%configure \
+	--with-pgsql \
+	%{?with_lmsd_debug:--enable-debug0 --enable-debug1}
+%{__make} lmsd
+#	CC='%{__cc}' \
+#	CFLAGS='%{rpmcflags} -fPIC -DUSE_PGSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
+%{__mv} lmsd lmsd-pgsql
 
-./configure --with-pgsql %{?with_lmsd_debug:--enable-debug0 --enable-debug1}
-%{__make} lmsd \
-	CC='%{__cc}' \
-	CFLAGS='%{rpmcflags} -fPIC -DUSE_PGSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
-mv lmsd lmsd-pgsql
-
-CFLAGS="%{rpmcflags}" %{__make} -j1 -C modules/parser \
+CFLAGS="%{rpmcflags}" \
+%{__make} -j1 -C modules/parser \
 	CC='%{__cc}'
 
 cd ..

@@ -1,23 +1,23 @@
---- lms-orig/index.php	2011-03-18 09:59:23.000000000 +0100
-+++ lms/index.php	2011-03-20 15:11:25.781918286 +0100
-@@ -47,13 +47,13 @@
- $CONFIG = (array) parse_ini_file($CONFIG_FILE, true);
+--- lms-LMS_011123/index.php.orig	2020-10-14 21:12:31.427420702 +0200
++++ lms-LMS_011123/index.php	2020-10-14 21:21:05.207970647 +0200
+@@ -49,13 +49,13 @@
+ $CONFIG = (array) parse_ini_file(CONFIG_FILE, true);
  
  // Check for configuration vars and set default values
 -$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? getcwd() : $CONFIG['directories']['sys_dir']);
 +$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? '/usr/share/lms' : $CONFIG['directories']['sys_dir']);
- $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'].'/lib' : $CONFIG['directories']['lib_dir']);
--$CONFIG['directories']['doc_dir'] = (!isset($CONFIG['directories']['doc_dir']) ? $CONFIG['directories']['sys_dir'].'/documents' : $CONFIG['directories']['doc_dir']);
-+$CONFIG['directories']['doc_dir'] = (!isset($CONFIG['directories']['doc_dir']) ? '/var/lib/lms/documents': $CONFIG['directories']['doc_dir']);
- $CONFIG['directories']['modules_dir'] = (!isset($CONFIG['directories']['modules_dir']) ? $CONFIG['directories']['sys_dir'].'/modules' : $CONFIG['directories']['modules_dir']);
--$CONFIG['directories']['backup_dir'] = (!isset($CONFIG['directories']['backup_dir']) ? $CONFIG['directories']['sys_dir'].'/backups' : $CONFIG['directories']['backup_dir']);
+ $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'lib' : $CONFIG['directories']['lib_dir']);
+-$CONFIG['directories']['doc_dir'] = (!isset($CONFIG['directories']['doc_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'documents' : $CONFIG['directories']['doc_dir']);
++$CONFIG['directories']['doc_dir'] = (!isset($CONFIG['directories']['doc_dir']) ? '/var/lib/lms/documents' : $CONFIG['directories']['doc_dir']);
+ $CONFIG['directories']['modules_dir'] = (!isset($CONFIG['directories']['modules_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'modules' : $CONFIG['directories']['modules_dir']);
+-$CONFIG['directories']['backup_dir'] = (!isset($CONFIG['directories']['backup_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'backups' : $CONFIG['directories']['backup_dir']);
 +$CONFIG['directories']['backup_dir'] = (!isset($CONFIG['directories']['backup_dir']) ? '/var/lib/lms/backups' : $CONFIG['directories']['backup_dir']);
- $CONFIG['directories']['config_templates_dir'] = (!isset($CONFIG['directories']['config_templates_dir']) ? $CONFIG['directories']['sys_dir'].'/config_templates' : $CONFIG['directories']['config_templates_dir']);
--$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? $CONFIG['directories']['sys_dir'].'/templates_c' : $CONFIG['directories']['smarty_compile_dir']);
-+$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? '/var/lib/lms/templates_c' : $CONFIG['directories']['smarty_compile_dir']);
- $CONFIG['directories']['smarty_templates_dir'] = (!isset($CONFIG['directories']['smarty_templates_dir']) ? $CONFIG['directories']['sys_dir'].'/templates' : $CONFIG['directories']['smarty_templates_dir']);
- 
- define('SYS_DIR', $CONFIG['directories']['sys_dir']);
+ $CONFIG['directories']['config_templates_dir'] = (!isset($CONFIG['directories']['config_templates_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'config_templates' : $CONFIG['directories']['config_templates_dir']);
+-$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'templates_c' : $CONFIG['directories']['smarty_compile_dir']);
++$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? '/var/lib/lms/templaces_c' : $CONFIG['directories']['smarty_compile_dir']);
+ $CONFIG['directories']['smarty_templates_dir'] = (!isset($CONFIG['directories']['smarty_templates_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'templates' : $CONFIG['directories']['smarty_templates_dir']);
+ $CONFIG['directories']['plugin_dir'] = (!isset($CONFIG['directories']['plugin_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'plugins' : $CONFIG['directories']['plugin_dir']);
+ $CONFIG['directories']['plugins_dir'] = $CONFIG['directories']['plugin_dir'];
 --- lms-orig/sample/lms.ini	2009-04-08 13:59:42.000000000 +0200
 +++ lms/sample/lms.ini	2011-03-20 15:11:25.785251771 +0100
 @@ -228,7 +228,7 @@
@@ -59,60 +59,37 @@
  
  [mail]
  
---- lms-orig/contrib/customer/index.php	2011-03-18 09:59:23.000000000 +0100
-+++ lms/contrib/customer/index.php	2011-03-20 15:12:00.340164058 +0100
-@@ -36,11 +36,11 @@
+--- lms-LMS_011123/contrib/customer/index.php.orig	2020-10-14 21:21:28.771176328 +0200
++++ lms-LMS_011123/contrib/customer/index.php	2020-10-14 21:25:03.180014775 +0200
+@@ -46,11 +46,11 @@
  $CONFIG = (array) parse_ini_file($CONFIG_FILE, true);
  
  // Check for configuration vars and set default values
--$CONFIG['directories']['sys_dir'] = (! $CONFIG['directories']['sys_dir'] ? getcwd() : $CONFIG['directories']['sys_dir']);
--$CONFIG['directories']['backup_dir'] = (! $CONFIG['directories']['backup_dir'] ? $CONFIG['directories']['sys_dir'].'/backups' : $CONFIG['directories']['backup_dir']);
-+$CONFIG['directories']['sys_dir'] = (! $CONFIG['directories']['sys_dir'] ? '/usr/share/lms' : $CONFIG['directories']['sys_dir']);
-+$CONFIG['directories']['backup_dir'] = (! $CONFIG['directories']['backup_dir'] ? '/var/lib/lms/backups' : $CONFIG['directories']['backup_dir']);
- $CONFIG['directories']['lib_dir'] = (! $CONFIG['directories']['lib_dir'] ? $CONFIG['directories']['sys_dir'].'/lib' : $CONFIG['directories']['lib_dir']);
- $CONFIG['directories']['modules_dir'] = (! $CONFIG['directories']['modules_dir'] ? $CONFIG['directories']['sys_dir'].'/modules' : $CONFIG['directories']['modules_dir']);
--$CONFIG['directories']['smarty_compile_dir'] = (! $CONFIG['directories']['smarty_compile_dir'] ? $CONFIG['directories']['sys_dir'].'/templates_c' : $CONFIG['directories']['smarty_compile_dir']);
-+$CONFIG['directories']['smarty_compile_dir'] = (! $CONFIG['directories']['smarty_compile_dir'] ? '/var/lib/lms/templates_c' : $CONFIG['directories']['smarty_compile_dir']);
- $CONFIG['directories']['smarty_templates_dir'] = (! $CONFIG['directories']['smarty_templates_dir'] ? $CONFIG['directories']['sys_dir'].'/templates' : $CONFIG['directories']['smarty_templates_dir']);
+-$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? getcwd() : $CONFIG['directories']['sys_dir']);
+-$CONFIG['directories']['backup_dir'] = (!isset($CONFIG['directories']['backup_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'backups' : $CONFIG['directories']['backup_dir']);
++$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? '/usr/share/lms' : $CONFIG['directories']['sys_dir']);
++$CONFIG['directories']['backup_dir'] = (!isset($CONFIG['directories']['backup_dir']) ? '/var/lib/lms/backups' : $CONFIG['directories']['backup_dir']);
+ $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'lib' : $CONFIG['directories']['lib_dir']);
+ $CONFIG['directories']['modules_dir'] = (!isset($CONFIG['directories']['modules_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'modules' : $CONFIG['directories']['modules_dir']);
+-$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'templates_c' : $CONFIG['directories']['smarty_compile_dir']);
++$CONFIG['directories']['smarty_compile_dir'] = (!isset($CONFIG['directories']['smarty_compile_dir']) ? '/var/lib/lms/templates_c' : $CONFIG['directories']['smarty_compile_dir']);
+ $CONFIG['directories']['smarty_templates_dir'] = (!isset($CONFIG['directories']['smarty_templates_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'templates' : $CONFIG['directories']['smarty_templates_dir']);
+ $CONFIG['directories']['plugin_dir'] = (!isset($CONFIG['directories']['plugin_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'plugins' : $CONFIG['directories']['plugin_dir']);
+ $CONFIG['directories']['plugins_dir'] = $CONFIG['directories']['plugin_dir'];
+--- lms-LMS_011123/userpanel/index.php.orig	2020-10-14 21:21:28.771176328 +0200
++++ lms-LMS_011123/userpanel/index.php	2020-10-14 21:30:34.258221170 +0200
+@@ -51,11 +51,11 @@
+ $CONFIG = (array) parse_ini_file($CONFIG_FILE, true);
  
- define('SYS_DIR', $CONFIG['directories']['sys_dir']);
-@@ -74,7 +74,7 @@
- 
- // Initialize templates engine
- 
--require_once(LIB_DIR.'/Smarty/Smarty.class.php');
-+require_once(LIB_DIR.'/Smarty/Smarty.class.php');
- 
- $SMARTY = new Smarty;
- 
-@@ -98,7 +98,7 @@
- $SMARTY->assign_by_ref('LANGDEFS', $LANGDEFS);
- $SMARTY->assign_by_ref('_ui_language', $LMS->ui_lang);
- $SMARTY->assign_by_ref('_language', $LMS->lang);
--$SMARTY->template_dir = getcwd();
-+$SMARTY->template_dir = getcwd();
- $SMARTY->compile_dir = SMARTY_COMPILE_DIR;
- @include('locale/'.$LMS->ui_lang.'/strings.php');
- 
---- lms-orig/userpanel/index.php	2011-03-18 09:59:24.000000000 +0100
-+++ lms/userpanel/index.php	2011-03-20 15:11:25.788585257 +0100
-@@ -45,8 +45,8 @@
- 	$CONFIG['directories']['sys_dir'] = $CONFIG['directories']['sys_dir'];
- $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'].'/lib' : $CONFIG['directories']['lib_dir']);
- $CONFIG['directories']['modules_dir'] = (!isset($CONFIG['directories']['modules_dir']) ? $CONFIG['directories']['sys_dir'].'/modules' : $CONFIG['directories']['modules_dir']);
+ // Check for configuration vars and set default values
+-$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? getcwd() : $CONFIG['directories']['sys_dir']);
++$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? '/usr/share/lms/userpanel' : $CONFIG['directories']['sys_dir']);
+ $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'lib' : $CONFIG['directories']['lib_dir']);
 -$CONFIG['directories']['userpanel_dir'] = (!isset($CONFIG['directories']['userpanel_dir']) ? getcwd() : $CONFIG['directories']['userpanel_dir']);
--$CONFIG['directories']['smarty_compile_dir'] = $CONFIG['directories']['userpanel_dir'].'/templates_c';
-+$CONFIG['directories']['userpanel_dir'] = (!isset($CONFIG['directories']['userpanel_dir']) ? '/usr/share/lms/userpanel'  : $CONFIG['directories']['userpanel_dir']);
++$CONFIG['directories']['userpanel_dir'] = (!isset($CONFIG['directories']['userpanel_dir']) ? '/usr/share/lms/userpanel' : $CONFIG['directories']['userpanel_dir']);
+ $CONFIG['directories']['modules_dir'] = (!isset($CONFIG['directories']['modules_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'modules' : $CONFIG['directories']['modules_dir']);
+-$CONFIG['directories']['smarty_compile_dir'] = $CONFIG['directories']['userpanel_dir'] . DIRECTORY_SEPARATOR . 'templates_c';
 +$CONFIG['directories']['smarty_compile_dir'] = '/var/lib/lms/userpanel/templates_c';
- 
- define('USERPANEL_DIR', $CONFIG['directories']['userpanel_dir']);
- define('USERPANEL_LIB_DIR', USERPANEL_DIR.'/lib/');
-@@ -77,7 +77,7 @@
- 
- // Initialize templates engine (must be before locale settings)
- 
--require_once(LIB_DIR.'/Smarty/Smarty.class.php');
-+require_once('/usr/share/php/Smarty/Smarty.class.php');
- 
- $SMARTY = new Smarty;
- 
+ $CONFIG['directories']['plugin_dir'] = (!isset($CONFIG['directories']['plugin_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'plugins' : $CONFIG['directories']['plugin_dir']);
+ $CONFIG['directories']['plugins_dir'] = $CONFIG['directories']['plugin_dir'];
+ $CONFIG['directories']['doc_dir'] = (!isset($CONFIG['directories']['doc_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'documents' : $CONFIG['directories']['doc_dir']);
