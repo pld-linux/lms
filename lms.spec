@@ -13,7 +13,7 @@ Summary:	LAN Managment System
 Summary(pl.UTF-8):	System Zarządzania Siecią Lokalną
 Name:		lms
 Version:	%{lmsver}.%{lmssubver}
-Release:	11
+Release:	12
 License:	GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.lms.org.pl/download/%{lmsver}/%{name}-%{version}.tar.gz
@@ -35,7 +35,7 @@ BuildRequires:	net-snmp-devel
 %{?with_lmsd:BuildRequires:	postgresql-devel >= 8.2}
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.461
-BuildRequires:	yacc
+BuildRequires:	sed >= 4.0
 %{?with_lmsd:Requires(post,preun):	/sbin/chkconfig}
 Requires:	Smarty >= 2.6.18-2
 Requires:	php(gd)
@@ -190,6 +190,8 @@ formularza przelewu.
 %patch2 -p1
 %patch3 -p1
 
+%{__sed} -i -e '1s,/usr/bin/python$,%{__python},' contrib/LMS2Nagios/nagios-v6-{check,gen}.py
+
 mkdir smarty-plugins
 %{__mv} \
 	lib/Smarty/plugins/block.t.php \
@@ -209,13 +211,13 @@ cd daemon
 %{__make} \
 	CC='%{__cc}' \
 	CFLAGS='%{rpmcflags} -fPIC -DUSE_MYSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
-mv lmsd lmsd-mysql
+%{__mv} lmsd lmsd-mysql
 
 ./configure --with-pgsql %{?with_lmsd_debug:--enable-debug0 --enable-debug1}
 %{__make} lmsd \
 	CC='%{__cc}' \
 	CFLAGS='%{rpmcflags} -fPIC -DUSE_PGSQL -DLMS_LIB_DIR=\"%{_libdir}/lms/\" -I../..'
-mv lmsd lmsd-pgsql
+%{__mv} lmsd lmsd-pgsql
 
 CFLAGS="%{rpmcflags}" %{__make} -j1 -C modules/parser \
 	CC='%{__cc}'
